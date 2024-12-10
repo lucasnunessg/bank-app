@@ -16,13 +16,15 @@ public class Client {
   private String contact;
   private String address;
   private String email;
+  private String password;
 
-  public Client(Long id, String name, String cpf, String contact, String address, String email) {
+  public Client(String name, String cpf, String contact, String address, String email, String password) {
     this.name = name;
     this.cpf = cpf;
     this.contact = contact;
     this.address = address;
     this.email = email;
+    this.password = password;
   }
 
   public Long getId() {
@@ -31,6 +33,14 @@ public class Client {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public String getName() {
