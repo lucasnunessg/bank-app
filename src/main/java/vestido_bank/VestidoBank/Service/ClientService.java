@@ -44,4 +44,23 @@ public class ClientService {
     return clientId.get();
   }
 
+  public Client deleteById(Long id) {
+  Client client = getById(id);
+
+  clientRepository.deleteById(id);
+
+  return client;
+  }
+
+  public Client updateClient(Long id, Client client) {
+    Client clientDb = getById(id);
+
+    clientDb.setAddress(client.getAddress());
+    clientDb.setContact(client.getContact());
+    clientDb.setCpf(client.getCpf());
+    clientDb.setName(client.getName());
+
+    return clientRepository.save(clientDb);
+  }
+
 }
