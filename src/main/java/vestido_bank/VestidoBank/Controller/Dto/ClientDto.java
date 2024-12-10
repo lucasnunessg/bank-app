@@ -1,5 +1,13 @@
 package vestido_bank.VestidoBank.Controller.Dto;
 
-public class ClientDto {
+import vestido_bank.VestidoBank.Entity.Client;
 
+public record ClientDto(String name, String address, String contact) {
+  public static ClientDto fromEntity(Client client) {
+    return new ClientDto(
+        client.getName(),
+        client.getAddress(),
+        client.getContact()
+    );
+  }
 }
