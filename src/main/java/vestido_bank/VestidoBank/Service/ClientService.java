@@ -25,12 +25,10 @@ public class ClientService {
   }
 
   public Client createClient(Client client) {
-    if(clientRepository.existeByname(client.getName())) {
-      throw new ClientDuplicateException("Cliente já existe.");
-    }
 
-    if(clientRepository.existeByemail(client.getEmail())) {
-      throw new ClientDuplicateException("E-mail já em uso.");
+    List<Client> existingClient = clientRepository.findByEmail(client.getEmail());
+    if(!existingClient.isEmpty()) {
+      throw new ClientDuplicateException("E-mail já em uso!"); //criar a versao do name, uma nova exception.
     }
 
     return clientRepository.save(client);
