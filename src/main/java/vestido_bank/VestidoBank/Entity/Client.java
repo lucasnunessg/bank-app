@@ -26,6 +26,7 @@ public class Client {
     this.email = email;
     this.password = password;
   }
+  public Client(){}
 
   public Long getId() {
     return id;
