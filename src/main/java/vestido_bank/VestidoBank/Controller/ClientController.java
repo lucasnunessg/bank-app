@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import vestido_bank.VestidoBank.Controller.Dto.ClientDto;
 import vestido_bank.VestidoBank.Controller.Dto.CreateClientDto;
 import vestido_bank.VestidoBank.Entity.Client;
+import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
 import vestido_bank.VestidoBank.Service.ClientService;
 import java.util.List;
 
@@ -45,12 +47,12 @@ public class ClientController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ClientDto createClient(@RequestBody CreateClientDto createClientDto)
-      throws ClientNotFoundException {
+      throws ClientNotFoundException, EmailDuplicateException, ClientDuplicateException {
     return ClientDto.fromEntity(clientService.createClient(createClientDto.toEntity()));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<String> deleteById(@PathVariable Long id) {
+  public ResponseEntity<String> deleteById(@PathVariable Long id) throws ClientNotFoundException {
     clientService.deleteById(id);
 
     return ResponseEntity.ok("Usuário deletado com sucesso!");

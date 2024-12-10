@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import java.util.List;
 
@@ -26,10 +27,15 @@ public class ClientService {
 
   public Client createClient(Client client) {
 
-    List<Client> existingClient = clientRepository.findByEmail(client.getEmail());
-    if(!existingClient.isEmpty()) {
-      throw new ClientDuplicateException("E-mail já em uso!"); //criar a versao do name, uma nova exception.
+
+    if(clientRepository.existsByemail(client.getEmail())) {
+      throw new EmailDuplicateException("E-mail já utilizado.");
     }
+
+    if(clientRepository.existsByName(client.getName())){
+      throw new ClientDuplicateException("Cliente já existe.");
+    }
+
 
     return clientRepository.save(client);
   }
