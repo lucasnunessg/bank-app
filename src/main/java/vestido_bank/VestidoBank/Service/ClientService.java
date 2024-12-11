@@ -7,6 +7,7 @@ import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
+import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import java.util.List;
 
@@ -27,33 +28,34 @@ public class ClientService {
 
   public Client createClient(Client client) {
 
-
-    if(clientRepository.existsByemail(client.getEmail())) {
-      throw new EmailDuplicateException("E-mail já utilizado.");
+    if (clientRepository.existsByEmailOrName(client.getEmail(), client.getName())) {
+      throw new NameOrEmailDuplicateException("Já utilizado");
     }
 
-    if(clientRepository.existsByName(client.getName())){
-      throw new ClientDuplicateException("Cliente já existe.");
-    }
+    //  if(clientRepository.existsByemail(client.getEmail())) {
+    //  throw new EmailDuplicateException("E-mail já utilizado.");
+    // }
 
-
+    // if(clientRepository.existsByName(client.getName())){
+    //   throw new ClientDuplicateException("Cliente já existe.");
+    // }
     return clientRepository.save(client);
   }
 
   public Client getById(Long id) {
     Optional<Client> clientId = clientRepository.findById(id);
-  if(clientId.isEmpty()) {
-     throw new ClientNotFoundException("Cliente não encontrado.");
-  }
+    if (clientId.isEmpty()) {
+      throw new ClientNotFoundException("Cliente não encontrado.");
+    }
     return clientId.get();
   }
 
   public Client deleteById(Long id) {
-  Client client = getById(id);
+    Client client = getById(id);
 
-  clientRepository.deleteById(id);
+    clientRepository.deleteById(id);
 
-  return client;
+    return client;
   }
 
   public Client updateClient(Long id, Client client) {
