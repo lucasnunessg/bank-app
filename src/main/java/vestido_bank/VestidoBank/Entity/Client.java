@@ -1,8 +1,10 @@
 package vestido_bank.VestidoBank.Entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Client {
@@ -18,7 +20,11 @@ public class Client {
   private String email;
   private String password;
 
-  public Client(String name, String cpf, String contact, String address, String email, String password) {
+  @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
+  private ContaCorrente contaCorrente;
+
+  public Client(String name, String cpf, String contact, String address, String email,
+      String password) {
     this.name = name;
     this.cpf = cpf;
     this.contact = contact;
@@ -26,7 +32,9 @@ public class Client {
     this.email = email;
     this.password = password;
   }
-  public Client(){}
+
+  public Client() {
+  }
 
   public Long getId() {
     return id;
@@ -58,6 +66,14 @@ public class Client {
 
   public void setCpf(String cpf) {
     this.cpf = cpf;
+  }
+
+  public ContaCorrente getContaCorrente() {
+    return contaCorrente;
+  }
+
+  public void setContaCorrente(ContaCorrente contaCorrente) {
+    this.contaCorrente = contaCorrente;
   }
 
   public String getContact() {

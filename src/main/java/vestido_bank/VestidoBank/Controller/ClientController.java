@@ -18,6 +18,7 @@ import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
+import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Service.ClientService;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class ClientController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ClientDto createClient(@RequestBody CreateClientDto createClientDto)
-      throws ClientNotFoundException, EmailDuplicateException, ClientDuplicateException {
+      throws ClientNotFoundException, NameOrEmailDuplicateException {
     return ClientDto.fromEntity(clientService.createClient(createClientDto.toEntity()));
   }
 
@@ -59,7 +60,8 @@ public class ClientController {
   }
 
   @PutMapping("/{id}")
-  public ClientDto updateClient(@PathVariable Long id, @RequestBody CreateClientDto createClientDto) {
+  public ClientDto updateClient(@PathVariable Long id,
+      @RequestBody CreateClientDto createClientDto) {
     return ClientDto.fromEntity(clientService.updateClient(id, createClientDto.toEntity()));
   }
 
