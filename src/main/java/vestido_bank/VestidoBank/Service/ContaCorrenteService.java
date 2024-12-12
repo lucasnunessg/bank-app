@@ -53,6 +53,7 @@ public class ContaCorrenteService {
     contaCorrente.setClient(client);
 
     return contaCorrente;
+
   }
 
   public ContaCorrente depositar(Long contaId, float valor) {
