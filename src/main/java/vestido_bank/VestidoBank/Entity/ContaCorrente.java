@@ -14,8 +14,8 @@ public class ContaCorrente {
   @Id
   @GeneratedValue
   private Long id;
-  private float saldo;
-  private float limite;
+  private float saldo = 0;
+  private float limite = 10000;
   private LocalDateTime data_criacao;
 
   @OneToOne
@@ -68,5 +68,13 @@ public class ContaCorrente {
 
   public void setClient(Client client) {
     this.client = client;
+  }
+
+  public void depositar(float valor) {
+    if(valor <= 0) {
+      throw new IllegalArgumentException();
+    }
+
+    this.saldo =+ valor;
   }
 }

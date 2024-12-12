@@ -4,22 +4,26 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vestido_bank.VestidoBank.Entity.Client;
+import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import java.util.List;
+import vestido_bank.VestidoBank.Repository.ContaCorrenteRepository;
 
 @Service
 public class ClientService {
 
   ClientRepository clientRepository;
+  ContaCorrenteRepository contaCorrenteRepository;
 
   @Autowired
-  public ClientService(ClientRepository clientRepository) {
-    this.clientRepository = clientRepository;
+  public ClientService(ClientRepository clientRepository, ContaCorrenteRepository contaCorrenteRepository) {
 
+    this.clientRepository = clientRepository;
+    this.contaCorrenteRepository = contaCorrenteRepository;
   }
 
   public List<Client> getAllClients() {
@@ -67,6 +71,12 @@ public class ClientService {
     clientDb.setName(client.getName());
 
     return clientRepository.save(clientDb);
+  }
+
+  public ContaCorrente createContaCorrenteClient(Long clientId, ContaCorrente contaCorrente) {
+    Client client = getById(clientId);
+    contaCorrente.setClient(client);
+    return contaCorrenteRepository.save(contaCorrente);
   }
 
 }
