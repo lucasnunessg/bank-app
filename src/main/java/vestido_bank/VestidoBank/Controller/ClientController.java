@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import vestido_bank.VestidoBank.Controller.Dto.ClientDto;
+import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteCreateDto;
+import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteDto;
 import vestido_bank.VestidoBank.Controller.Dto.CreateClientDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
@@ -63,6 +65,13 @@ public class ClientController {
   public ClientDto updateClient(@PathVariable Long id,
       @RequestBody CreateClientDto createClientDto) {
     return ClientDto.fromEntity(clientService.updateClient(id, createClientDto.toEntity()));
+  }
+
+  @PostMapping("/clientId/conta-corrente")
+  @ResponseStatus(HttpStatus.CREATED)
+  public ContaCorrenteDto createContaCorrente(@PathVariable Long clientId, @RequestBody ContaCorrenteCreateDto contaCorrenteCreateDto) {
+    return ContaCorrenteDto.fromEntity(clientService.createContaCorrenteClient(clientId, contaCorrenteCreateDto.toEntity()));
+
   }
 
 }
