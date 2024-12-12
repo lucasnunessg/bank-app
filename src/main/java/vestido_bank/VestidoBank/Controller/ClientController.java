@@ -67,9 +67,9 @@ public class ClientController {
     return ClientDto.fromEntity(clientService.updateClient(id, createClientDto.toEntity()));
   }
 
-  @PostMapping("/clientId/conta-corrente")
+  @PostMapping("/{clientId}/conta-corrente")
   @ResponseStatus(HttpStatus.CREATED)
-  public ContaCorrenteDto createContaCorrente(@PathVariable Long clientId, @RequestBody ContaCorrenteCreateDto contaCorrenteCreateDto) {
+  public ContaCorrenteDto createContaCorrente(@PathVariable Long clientId, @RequestBody ContaCorrenteCreateDto contaCorrenteCreateDto) throws ClientNotFoundException {
     return ContaCorrenteDto.fromEntity(clientService.createContaCorrenteClient(clientId, contaCorrenteCreateDto.toEntity()));
 
   }
