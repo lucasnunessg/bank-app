@@ -6,44 +6,38 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 @Entity
-public class ContaCorrente {
+public class ContaCorrente extends Account {
 
   @Id
   @GeneratedValue
   private Long id;
-  private float saldo = 0;
-  private float limite = 10000;
-  private LocalDateTime data_criacao;
+  private float limite;
 
   @OneToOne
   @JoinColumn(name = "client_id")
   private Client client;
 
-  public ContaCorrente(float saldo, float limite, LocalDateTime data_criacao) {
-    this.saldo = saldo;
+  public ContaCorrente(float saldo, LocalDateTime dataCriacao, float limite) {
+    super(saldo, dataCriacao);
     this.limite = limite;
-    this.data_criacao = data_criacao;
   }
 
-  public ContaCorrente(){}
+  public ContaCorrente() {
+    super(0.0f, LocalDateTime.now());
+    this.limite = 10000;
+  }
 
+  @Override
   public Long getId() {
     return id;
   }
 
+  @Override
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public float getSaldo() {
-    return saldo;
-  }
-
-  public void setSaldo(float saldo) {
-    this.saldo = saldo;
   }
 
   public float getLimite() {
@@ -54,27 +48,11 @@ public class ContaCorrente {
     this.limite = limite;
   }
 
-  public LocalDateTime getData_criacao() {
-    return data_criacao;
-  }
-
-  public void setData_criacao(LocalDateTime data_criacao) {
-    this.data_criacao = data_criacao;
-  }
-
   public Client getClient() {
     return client;
   }
 
   public void setClient(Client client) {
     this.client = client;
-  }
-
-  public void depositar(float valor) {
-    if(valor <= 0) {
-      throw new IllegalArgumentException();
-    }
-
-    this.saldo =+ valor;
   }
 }

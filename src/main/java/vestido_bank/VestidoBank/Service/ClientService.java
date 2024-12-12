@@ -20,7 +20,8 @@ public class ClientService {
   ContaCorrenteRepository contaCorrenteRepository;
 
   @Autowired
-  public ClientService(ClientRepository clientRepository, ContaCorrenteRepository contaCorrenteRepository) {
+  public ClientService(ClientRepository clientRepository,
+      ContaCorrenteRepository contaCorrenteRepository) {
 
     this.clientRepository = clientRepository;
     this.contaCorrenteRepository = contaCorrenteRepository;
