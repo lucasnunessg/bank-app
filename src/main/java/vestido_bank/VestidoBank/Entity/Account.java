@@ -3,6 +3,8 @@ package vestido_bank.VestidoBank.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
@@ -15,15 +17,28 @@ public abstract class Account {
   private float saldo;
   private LocalDateTime data_criacao;
 
-  public Account(float saldo, LocalDateTime data_criacao) {
+  @ManyToOne
+  @JoinColumn(name = "client_id")
+  Client client;
+
+  public Account(float saldo, LocalDateTime data_criacao, Client client) {
     this.saldo = saldo;
     this.data_criacao = data_criacao;
+    this.client = client;
 
   }
 
   public Account() {
     this.saldo = 0;
     this.data_criacao = LocalDateTime.now();
+  }
+
+  public Client getClient() {
+    return client;
+  }
+
+  public void setClient(Client client) {
+    this.client = client;
   }
 
   public void depositar(float valor) {
