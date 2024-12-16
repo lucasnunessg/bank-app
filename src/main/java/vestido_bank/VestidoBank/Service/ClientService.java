@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import vestido_bank.VestidoBank.Entity.Account;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
-import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
-import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import java.util.List;
@@ -85,7 +83,7 @@ public class ClientService {
     Client client = clientRepository.findById(contaId)
         .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
 
-    return client.getAccounts();
+    return client.getAccount();
   }
 
 }

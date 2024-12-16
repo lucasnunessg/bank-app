@@ -1,15 +1,21 @@
 package vestido_bank.VestidoBank.Entity;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
-@MappedSuperclass
-public abstract class Account {
+@Entity
+@Table(name = "account")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Account {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,11 +25,12 @@ public abstract class Account {
 
   @ManyToOne
   @JoinColumn(name = "client_id")
-  Client client;
+  private Client client;
 
   public Account(float saldo, LocalDateTime data_criacao, Client client) {
     this.saldo = saldo;
-    this.data_criacao = data_criacao;
+    this.data_criacao = data_criacao != null ? data_criacao
+        : LocalDateTime.now(); // Garantir que a data não seja nula
     this.client = client;
 
   }
@@ -32,8 +39,7 @@ public abstract class Account {
 
   }
 
-  public Account(float saldo, LocalDateTime dataCriacao) {
-  }
+
 
   public Client getClient() {
     return client;

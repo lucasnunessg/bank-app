@@ -18,7 +18,8 @@ public class ContaCorrenteService {
   ClientRepository clientRepository;
 
   @Autowired
-  public ContaCorrenteService(ContaCorrenteRepository contaCorrenteRepository, ClientRepository clientRepository) {
+  public ContaCorrenteService(ContaCorrenteRepository contaCorrenteRepository,
+      ClientRepository clientRepository) {
     this.contaCorrenteRepository = contaCorrenteRepository;
     this.clientRepository = clientRepository;
   }
@@ -44,15 +45,9 @@ public class ContaCorrenteService {
     return contaCorrente;
   }
 
-  public ContaCorrente criarContaCorrente(Long clientId, float saldo, float limite) {
-    Client client = clientRepository.findById(clientId)
-        .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+  public ContaCorrente criarContaCorrente(ContaCorrente contaCorrente) {
 
-    LocalDateTime dataCriacao = LocalDateTime.now();
-    ContaCorrente contaCorrente = new ContaCorrente(saldo, dataCriacao, limite, client);
-    contaCorrente.setClient(client);
-
-    return contaCorrente;
+    return contaCorrenteRepository.save(contaCorrente);
   }
 
   public ContaCorrente depositar(Long contaId, float valor) {

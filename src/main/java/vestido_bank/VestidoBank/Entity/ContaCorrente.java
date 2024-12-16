@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 
@@ -20,13 +21,14 @@ public class ContaCorrente extends Account {
   @JoinColumn(name = "client_id")
   private Client client;
 
-  public ContaCorrente(float saldo, LocalDateTime dataCriacao, float limite, Client client) {
-    super(saldo, dataCriacao);
+  public ContaCorrente(float saldo, float limite, LocalDateTime dataCriacao, Client client) {
+    super(saldo, dataCriacao, client); //sempre q tiver uma classe mae, a filha deve receber todos os parametros da mae pelo "super".
     this.limite = limite;
     this.client = client;
   }
 
   public ContaCorrente() {
+    super(); // Chamar o construtor padrão da classe base
   }
 
 

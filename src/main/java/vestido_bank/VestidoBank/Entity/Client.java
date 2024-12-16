@@ -6,9 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.List;
 
 @Entity
+@Table(name = "client")
 public class Client {
 
   @Id
@@ -25,8 +27,8 @@ public class Client {
   @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
   private ContaCorrente contaCorrente;
 
-  @OneToMany(mappedBy = "client_id")
-  List<Account> accounts;
+  @OneToMany(mappedBy = "client")
+  private List<Account> account;
 
   public Client(String name, String cpf, String contact, String address, String email,
       String password) {
@@ -41,12 +43,12 @@ public class Client {
   public Client() {
   }
 
-  public List<Account> getAccounts() {
-    return accounts;
+  public List<Account> getAccount() {
+    return account;
   }
 
-  public void setAccounts(List<Account> accounts) {
-    this.accounts = accounts;
+  public void setAccount(List<Account> account) {
+    this.account = account;
   }
 
   public Long getId() {
