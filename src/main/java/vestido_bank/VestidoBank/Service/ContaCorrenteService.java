@@ -49,7 +49,7 @@ public class ContaCorrenteService {
         .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
 
     LocalDateTime dataCriacao = LocalDateTime.now();
-    ContaCorrente contaCorrente = new ContaCorrente(saldo, dataCriacao, limite);
+    ContaCorrente contaCorrente = new ContaCorrente(saldo, dataCriacao, limite, client);
     contaCorrente.setClient(client);
 
     return contaCorrente;

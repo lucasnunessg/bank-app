@@ -29,8 +29,10 @@ public abstract class Account {
   }
 
   public Account() {
-    this.saldo = 0;
-    this.data_criacao = LocalDateTime.now();
+
+  }
+
+  public Account(float saldo, LocalDateTime dataCriacao) {
   }
 
   public Client getClient() {

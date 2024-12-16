@@ -3,6 +3,7 @@ package vestido_bank.VestidoBank.Service;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vestido_bank.VestidoBank.Entity.Account;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
@@ -78,6 +79,13 @@ public class ClientService {
     Client client = getById(clientId);
     contaCorrente.setClient(client);
     return contaCorrenteRepository.save(contaCorrente);
+  }
+
+  public List<Account> buscarContas(Long contaId) {
+    Client client = clientRepository.findById(contaId)
+        .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
+
+    return client.getAccounts();
   }
 
 }

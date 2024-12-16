@@ -20,25 +20,15 @@ public class ContaCorrente extends Account {
   @JoinColumn(name = "client_id")
   private Client client;
 
-  public ContaCorrente(float saldo, LocalDateTime dataCriacao, float limite) {
+  public ContaCorrente(float saldo, LocalDateTime dataCriacao, float limite, Client client) {
     super(saldo, dataCriacao);
     this.limite = limite;
+    this.client = client;
   }
 
   public ContaCorrente() {
-    super(0.0f, LocalDateTime.now());
-    this.limite = 10000;
   }
 
-  @Override
-  public Long getId() {
-    return id;
-  }
-
-  @Override
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public float getLimite() {
     return limite;
