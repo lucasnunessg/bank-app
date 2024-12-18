@@ -50,7 +50,7 @@ public class ContaCorrenteService {
     return contaCorrenteRepository.save(contaCorrente);
   }
 
-  public ContaCorrente depositar(Long contaId, float valor) {
+  public ContaCorrente depositarSaldo(Long contaId, float valor) {
     ContaCorrente contaCorrente = contaCorrenteRepository.findById(contaId)
         .orElseThrow(() -> new IllegalArgumentException("Não foi possível encontrar a conta!"));
     contaCorrente.depositar(valor);
@@ -64,6 +64,11 @@ public class ContaCorrenteService {
     contaCorrente.sacar(valor);
     return contaCorrenteRepository.save(contaCorrente);
   }
+
+  public ContaCorrente salvar(ContaCorrente contaCorrente) {
+    return contaCorrenteRepository.save(contaCorrente); //fiz pra poder salvar apos deposito/saque
+  }
+
 
 
 }

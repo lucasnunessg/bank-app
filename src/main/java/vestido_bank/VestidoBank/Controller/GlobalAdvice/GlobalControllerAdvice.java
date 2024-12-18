@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
+import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 
@@ -36,4 +38,17 @@ public class GlobalControllerAdvice {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(ex.getMessage());
   }
+
+  @ExceptionHandler({ClientNotFoundException.class})
+  public ResponseEntity<String> handleNotFoundClient(RuntimeException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(ex.getMessage());
+  }
+
+  @ExceptionHandler({ContaCorrentNotFoundException.class})
+  public ResponseEntity<String> handleContaNotFound(RuntimeException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(ex.getMessage());
+  }
+
 }

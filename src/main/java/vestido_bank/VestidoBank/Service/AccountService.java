@@ -1,6 +1,7 @@
 package vestido_bank.VestidoBank.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,12 @@ public class AccountService {
     } else {
       throw new IllegalArgumentException("A conta não é do tipo ContaCorrente");
     }
+  }
+
+  public List<Account> getAllContasCorrentes() {
+
+
+    return accountRepository.findAll();
   }
 
 
