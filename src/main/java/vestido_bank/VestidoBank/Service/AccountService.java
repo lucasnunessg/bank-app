@@ -3,6 +3,7 @@ package vestido_bank.VestidoBank.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import javax.security.auth.login.AccountNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteCreateDto;
@@ -14,17 +15,20 @@ import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Repository.AccountRepository;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
+import vestido_bank.VestidoBank.Repository.ContaCorrenteRepository;
 
 @Service
 public class AccountService {
 
   AccountRepository accountRepository;
   ClientRepository clientRepository;
+  ContaCorrenteRepository contaCorrenteRepository;
 
   @Autowired
-  public AccountService(AccountRepository accountRepository, ClientRepository clientRepository) {
+  public AccountService(AccountRepository accountRepository, ClientRepository clientRepository, ContaCorrenteRepository contaCorrenteRepository) {
     this.accountRepository = accountRepository;
     this.clientRepository = clientRepository;
+    this.contaCorrenteRepository = contaCorrenteRepository;
   }
 
   public ContaCorrente criarContaCorrent(Long clientId,
@@ -39,35 +43,32 @@ public class AccountService {
 
   }
 
-  public ContaCorrente depositar(Long clientId, Long contaCorrenteId, float valor) {
-    Optional<Client> client = clientRepository.findById(clientId);
-    if (client.isEmpty()) {
-      throw new ClientNotFoundException("Cliente não encontrado");
-    }
 
-    Optional<Account> account = accountRepository.findById(contaCorrenteId);
-    if (account.isEmpty()) {
-      throw new ContaCorrentNotFoundException("Conta Corrente não encontrada");
-    }
 
-    if (valor <= 0) {
-      throw new IllegalArgumentException("O valor do depósito deve ser positivo");
-    }
-
-    if (account.get() instanceof ContaCorrente) {
-      ContaCorrente conta = (ContaCorrente) account.get();
-      conta.depositar(valor);
-      accountRepository.save(conta);
-      return conta;
-    } else {
-      throw new IllegalArgumentException("A conta não é do tipo ContaCorrente");
-    }
+  public List<ContaCorrente> getAllContasCorrentes() {
+    return contaCorrenteRepository.findAll();
   }
 
-  public List<Account> getAllContasCorrentes() {
+  public Account getAccountById(Long clientId, Long accountId) throws AccountNotFoundException {
+    // Verifica se o cliente existe
+    Client client = clientRepository.findById(clientId)
+        .orElseThrow(() -> new ClientNotFoundException("Cliente não encontrado"));
+
+    // Verifica se a conta existe
+    Account account = accountRepository.findById(accountId)
+        .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada"));
 
 
-    return accountRepository.findAll();
+    if(account.getClient() == null) {
+      throw new IllegalArgumentException("A conta não possui um cliente");
+    }
+
+    // Verifica se a conta pertence ao cliente
+    if (!account.getClient().getId().equals(clientId)) {
+      throw new IllegalArgumentException("A conta não pertence ao cliente informado");
+    }
+
+    return account;
   }
 
 

@@ -1,9 +1,11 @@
 package vestido_bank.VestidoBank.Entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -17,7 +19,7 @@ public class ContaCorrente extends Account {
   private Long id;
   private float limite;
 
-  @OneToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "client_id")
   private Client client;
 
@@ -40,11 +42,5 @@ public class ContaCorrente extends Account {
     this.limite = limite;
   }
 
-  public Client getClient() {
-    return client;
-  }
 
-  public void setClient(Client client) {
-    this.client = client;
-  }
 }

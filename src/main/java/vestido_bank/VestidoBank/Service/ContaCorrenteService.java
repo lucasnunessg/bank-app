@@ -53,6 +53,14 @@ public class ContaCorrenteService {
   public ContaCorrente depositarSaldo(Long contaId, float valor) {
     ContaCorrente contaCorrente = contaCorrenteRepository.findById(contaId)
         .orElseThrow(() -> new IllegalArgumentException("Não foi possível encontrar a conta!"));
+
+    if (valor <= 0) {
+      throw new IllegalArgumentException("O valor do depósito deve ser positivo");
+    }
+
+    if(valor > contaCorrente.getLimite()) {
+      throw new IllegalArgumentException("Não pode depositar valor maior que o limite");
+    }
     contaCorrente.depositar(valor);
 
     return contaCorrenteRepository.save(contaCorrente);
@@ -61,7 +69,16 @@ public class ContaCorrenteService {
   public ContaCorrente sacarSaldo(Long contaId, float valor) {
     ContaCorrente contaCorrente = contaCorrenteRepository.findById(contaId)
         .orElseThrow(() -> new IllegalArgumentException("Não foi possível sacar, tente novamente"));
+
+    if (valor <= 0) {
+      throw new IllegalArgumentException("O valor do saque deve ser positivo");
+    }
+
+    if(valor > contaCorrente.getSaldo()) {
+      throw new IllegalArgumentException("Valor de saque não pode ser menor que o saldo");
+    }
     contaCorrente.sacar(valor);
+
     return contaCorrenteRepository.save(contaCorrente);
   }
 

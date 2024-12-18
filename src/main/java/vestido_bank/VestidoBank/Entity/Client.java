@@ -24,8 +24,8 @@ public class Client {
   private String email;
   private String password;
 
-  @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
-  private ContaCorrente contaCorrente;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
+  private List<ContaCorrente> contaCorrente;
 
   @OneToMany(mappedBy = "client")
   private List<Account> account;
@@ -83,11 +83,11 @@ public class Client {
     this.cpf = cpf;
   }
 
-  public ContaCorrente getContaCorrente() {
+  public List<ContaCorrente> getContaCorrente() {
     return contaCorrente;
   }
 
-  public void setContaCorrente(ContaCorrente contaCorrente) {
+  public void setContaCorrente(List<ContaCorrente> contaCorrente) {
     this.contaCorrente = contaCorrente;
   }
 

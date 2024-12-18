@@ -1,5 +1,6 @@
 package vestido_bank.VestidoBank.Controller;
 
+import javax.security.auth.login.AccountNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +59,12 @@ public class AccountController {
     return ContaCorrenteDto.fromEntity(novaConta);
   }
 
+  @GetMapping("/contas-correntes")
+  public List<ContaCorrenteDto> getAllAccounts() {
+    List<ContaCorrente> conta = contaCorrenteService.getAllContasCorrentes();
+    return conta.stream().map(ContaCorrenteDto::fromEntity).toList();
+  }
+
   @PostMapping("/{clientId}/conta-corrente/{contaCorrenteId}/depositar")
   @ResponseStatus(HttpStatus.CREATED)
   public ClientAndCorrentDto depositar(@PathVariable Long clientId, @PathVariable Long contaCorrenteId, @RequestBody DepositAndSakeDto deposit) {
@@ -99,14 +106,5 @@ public class AccountController {
     contaCorrenteService.salvar(contaCorrente);
     return ClientAndCorrentDto.fromEntities(client, contaCorrente);
   }
-
-  @GetMapping
-  public List<AccountDto> getAllAcconts() throws ClientNotFoundException{
-    List<Account> accounts = accountService.getAllContasCorrentes();
-    return accounts.stream()
-        .map(AccountDto::fromEntity)
-        .toList();
-  }
-
 
 }
