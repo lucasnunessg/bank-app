@@ -27,8 +27,6 @@ public class Client {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
   private List<ContaCorrente> contaCorrente;
 
-  @OneToMany(mappedBy = "client")
-  private List<Account> account;
 
   public Client(String name, String cpf, String contact, String address, String email,
       String password) {
@@ -41,14 +39,6 @@ public class Client {
   }
 
   public Client() {
-  }
-
-  public List<Account> getAccount() {
-    return account;
-  }
-
-  public void setAccount(List<Account> account) {
-    this.account = account;
   }
 
   public Long getId() {

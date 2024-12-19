@@ -49,19 +49,7 @@ public class Account {
     this.client = client;
   }
 
-  public void depositar(float valor) {
-    if (valor < 0) {
-      throw new IllegalArgumentException("O valor do depósito está vazio");
-    }
-    this.saldo += valor;
-  }
 
-  public void sacar(float valor) {
-    if (valor <= 0 || valor > this.saldo) {
-      throw new IllegalArgumentException("Saldo insuficiente");
-    }
-    this.saldo -= valor;
-  }
 
   public Long getId() {
     return id;

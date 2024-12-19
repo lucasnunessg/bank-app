@@ -79,11 +79,6 @@ public class ClientService {
     return contaCorrenteRepository.save(contaCorrente);
   }
 
-  public List<Account> buscarContas(Long contaId) {
-    Client client = clientRepository.findById(contaId)
-        .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
 
-    return client.getAccount();
-  }
 
 }

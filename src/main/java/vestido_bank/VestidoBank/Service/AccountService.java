@@ -39,7 +39,7 @@ public class AccountService {
 
     ContaCorrente contaCorrente = contaCorrenteCreateDto.toEntity(client);
     contaCorrente.setClient(client);
-    return accountRepository.save(contaCorrente);
+    return contaCorrenteRepository.save(contaCorrente);
 
   }
 
