@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
+import vestido_bank.VestidoBank.Exceptions.SakeInvalid;
 
 @RestControllerAdvice
 public class GlobalControllerAdvice {
@@ -48,6 +50,18 @@ public class GlobalControllerAdvice {
   @ExceptionHandler({ContaCorrentNotFoundException.class})
   public ResponseEntity<String> handleContaNotFound(RuntimeException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(ex.getMessage());
+  }
+
+  @ExceptionHandler({DepositInvalid.class})
+  public ResponseEntity<String> handleDepositInvalid(IllegalArgumentException ex) {
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+        .body(ex.getMessage());
+  }
+
+  @ExceptionHandler({SakeInvalid.class})
+  public ResponseEntity<String> handleSakeInvalid(IllegalArgumentException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(ex.getMessage());
   }
 

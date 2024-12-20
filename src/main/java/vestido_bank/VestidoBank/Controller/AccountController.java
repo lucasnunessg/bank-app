@@ -41,70 +41,13 @@ public class AccountController {
     this.accountService = accountService;
   }
 
-  @PostMapping("/{clientId}/conta-corrente")
-  @ResponseStatus(HttpStatus.CREATED)
-  public ContaCorrenteDto criandoConta(
-      @PathVariable Long clientId,
-      @RequestBody ContaCorrenteCreateDto contaCorrenteCreateDto) {
-
-    Client client = clientService.getById(clientId);
-
-    // Criar a nova conta a partir do DTO
-    ContaCorrente novaConta = contaCorrenteCreateDto.toEntity(client);
-
-    // Chamar o serviço para salvar a conta
-    novaConta = contaCorrenteService.criarContaCorrente(novaConta);
-
-    // Retornar o DTO da conta criada
-    return ContaCorrenteDto.fromEntity(novaConta);
-  }
-
-  @GetMapping("/contas-correntes")
-  public List<ContaCorrenteDto> getAllAccounts() {
-    List<ContaCorrente> conta = contaCorrenteService.getAllContasCorrentes();
-    return conta.stream().map(ContaCorrenteDto::fromEntity).toList();
-  }
-
-  @PostMapping("/{clientId}/conta-corrente/{contaCorrenteId}/depositar")
-  @ResponseStatus(HttpStatus.CREATED)
-  public ClientAndCorrentDto depositar(@PathVariable Long clientId, @PathVariable Long contaCorrenteId, @RequestBody DepositAndSakeDto deposit) {
-
-    float valor = deposit.valor();
-
-    Client client = clientService.getById(clientId);
-    if(client == null) {
-      throw new ClientNotFoundException("Não encontrado");
-    }
-    ContaCorrente contaCorrente = contaCorrenteService.getContaCorrenteById(contaCorrenteId);
-    if(contaCorrente == null) {
-      throw new ContaCorrentNotFoundException("Não encontrada");
-    }
-
-    contaCorrente.depositar(valor);
-    contaCorrenteService.salvar(contaCorrente);
-
-    return ClientAndCorrentDto.fromEntities(client, contaCorrente);
-  }
 
 
-  @PutMapping("/{clientId}/conta-corrente/{contaCorrenteId}/sacar")
-  public ClientAndCorrentDto sacar(@PathVariable Long clientId, @PathVariable Long contaCorrenteId, @RequestBody DepositAndSakeDto sake) {
-    Client client = clientService.getById(clientId);
 
-    float valor = sake.valor();
 
-    if(client == null) {
-      throw new ClientNotFoundException("Não encontrado!");
-    }
 
-    ContaCorrente contaCorrente = contaCorrenteService.getContaCorrenteById(contaCorrenteId);
-    if(contaCorrente == null) {
-      throw new ContaCorrentNotFoundException("Não encontrado!");
-    }
 
-    contaCorrente.sacar(valor);
-    contaCorrenteService.salvar(contaCorrente);
-    return ClientAndCorrentDto.fromEntities(client, contaCorrente);
-  }
+
+
 
 }

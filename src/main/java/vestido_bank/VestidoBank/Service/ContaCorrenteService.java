@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
+import vestido_bank.VestidoBank.Exceptions.SakeInvalid;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import vestido_bank.VestidoBank.Repository.ContaCorrenteRepository;
 import java.util.List;
@@ -58,24 +60,26 @@ public class ContaCorrenteService {
       throw new IllegalArgumentException("O valor do depósito deve ser positivo");
     }
 
-    if(valor > contaCorrente.getLimite()) {
-      throw new IllegalArgumentException("Não pode depositar valor maior que o limite");
+    // Verifica se o saldo após o depósito ultrapassa o limite
+    if (contaCorrente.getSaldo() + valor > contaCorrente.getLimite()) {
+      throw new DepositInvalid("O depósito excede o limite permitido de " + contaCorrente.getLimite());
     }
-    contaCorrente.depositar(valor);
 
+    contaCorrente.depositar(valor); // Adiciona o valor ao saldo da conta
     return contaCorrenteRepository.save(contaCorrente);
   }
+
 
   public ContaCorrente sacarSaldo(Long contaId, float valor) {
     ContaCorrente contaCorrente = contaCorrenteRepository.findById(contaId)
         .orElseThrow(() -> new IllegalArgumentException("Não foi possível sacar, tente novamente"));
 
     if (valor <= 0) {
-      throw new IllegalArgumentException("O valor do saque deve ser positivo");
+      throw new SakeInvalid("O valor do saque deve ser positivo");
     }
 
     if(valor > contaCorrente.getSaldo()) {
-      throw new IllegalArgumentException("Valor de saque não pode ser menor que o saldo");
+      throw new SakeInvalid("Valor de saque não pode ser menor que o saldo");
     }
     contaCorrente.sacar(valor);
 

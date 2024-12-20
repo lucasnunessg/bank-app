@@ -12,26 +12,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import vestido_bank.VestidoBank.Controller.Dto.ClientAndCorrentDto;
 import vestido_bank.VestidoBank.Controller.Dto.ClientDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.CreateClientDto;
+import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
 import vestido_bank.VestidoBank.Entity.Client;
+import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Service.ClientService;
 import java.util.List;
+import vestido_bank.VestidoBank.Service.ContaCorrenteService;
 
 @RestController
 @RequestMapping("/clients-bank")
 public class ClientController {
 
   ClientService clientService;
+  ContaCorrenteService contaCorrenteService;
 
   @Autowired
-  public ClientController(ClientService clientService) {
+  public ClientController(ClientService clientService, ContaCorrenteService contaCorrenteService) {
     this.clientService = clientService;
+    this.contaCorrenteService = contaCorrenteService;
   }
 
   @GetMapping
@@ -65,6 +72,7 @@ public class ClientController {
       @RequestBody CreateClientDto createClientDto) {
     return ClientDto.fromEntity(clientService.updateClient(id, createClientDto.toEntity()));
   }
+
 
 
 }

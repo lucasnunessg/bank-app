@@ -10,6 +10,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
+import vestido_bank.VestidoBank.Exceptions.SakeInvalid;
 
 
 @Entity
@@ -41,12 +43,16 @@ public class ContaCorrente {
     if (valor < 0) {
       throw new IllegalArgumentException("O valor do depósito está vazio");
     }
+
+    if (this.saldo + valor > getLimite()) {
+      throw new DepositInvalid("O depósito excede o limite permitido de " + getLimite());
+    }
     this.saldo += valor;
   }
 
   public void sacar(float valor) {
     if (valor <= 0 || valor > this.saldo) {
-      throw new IllegalArgumentException("Saldo insuficiente");
+      throw new SakeInvalid("Saldo insuficiente");
     }
     this.saldo -= valor;
   }
