@@ -27,6 +27,9 @@ public class Client {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
   private List<ContaCorrente> contaCorrente;
 
+  @OneToOne(mappedBy = "client")
+  private List<ContaPoupanca> contaPoupanca;
+
 
   public Client(String name, String cpf, String contact, String address, String email,
       String password) {

@@ -42,7 +42,7 @@ public class ContaCorrenteController {
     return conta.stream().map(ContaCorrenteDto::fromEntity).toList();
   }
 
-  @PostMapping("/{clientId}/conta-corrente")
+  @PostMapping("/{clientId}/create-account")
   @ResponseStatus(HttpStatus.CREATED)
   public ContaCorrenteDto criandoConta(
       @PathVariable Long clientId,
