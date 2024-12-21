@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
+import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import vestido_bank.VestidoBank.Repository.ContaPoupancaRepository;
@@ -36,4 +37,22 @@ public class ContaPoupancaService {
   }
 
 
+public ContaPoupanca createContaPoupanca(Long clientId, ContaPoupanca contaPoupanca) {
+Optional<Client> client = clientRepository.findById(clientId);
+if(client.isEmpty()) {
+  throw new ClientNotFoundException("Não encontrado");
 }
+
+contaPoupanca.setClient(client.get()); //precisa passar o .get aqui pq o optional esta so no findById, nao na resposta
+return contaPoupancaRepository.save(contaPoupanca);
+}
+
+public ContaPoupanca deleteRelationship(Long clientId, ContaPoupanca contaPoupanca) {
+    Optional<Client> client = clientRepository.findById(clientId);
+    if(client.isEmpty()) {
+      throw new ClientNotFoundException("Não encontrado");
+    }
+
+    contaPoupanca.setClient(null);
+    return contaPoupancaRepository.save(contaPoupanca);
+}}

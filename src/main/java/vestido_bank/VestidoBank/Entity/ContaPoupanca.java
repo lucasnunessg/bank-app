@@ -31,6 +31,10 @@ public class ContaPoupanca {
     this.client = client;
   }
 
+  public float aplicarRendimento() {
+    return this.saldo += saldo * rendimentoMensal;
+  }
+
   public Long getId() {
     return id;
   }
