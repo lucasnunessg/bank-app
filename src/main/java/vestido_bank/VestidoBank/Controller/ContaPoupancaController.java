@@ -23,7 +23,7 @@ import vestido_bank.VestidoBank.Service.ContaCorrenteService;
 import vestido_bank.VestidoBank.Service.ContaPoupancaService;
 
 @RestController
-@RequestMapping("/conta-corrente")
+@RequestMapping("/conta-poupanca")
 public class ContaPoupancaController {
 
   ContaPoupancaService contaPoupancaService;
@@ -37,7 +37,7 @@ public class ContaPoupancaController {
   }
 
   @GetMapping
-  public List<ContaPoupancaDto> getAllPoupancas() {
+  public List<ContaPoupancaDto> getAllContasPoupancas() {
     List<ContaPoupanca> contas = contaPoupancaService.getAllPoupancas();
     return contas.stream().map(ContaPoupancaDto::fromEntity)
         .toList();
