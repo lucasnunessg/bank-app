@@ -31,7 +31,8 @@ public class ContaCorrenteController {
   ClientService clientService;
 
   @Autowired
-  public ContaCorrenteController(ContaCorrenteService contaCorrenteService, ClientService clientService) {
+  public ContaCorrenteController(ContaCorrenteService contaCorrenteService,
+      ClientService clientService) {
     this.contaCorrenteService = contaCorrenteService;
     this.clientService = clientService;
   }
@@ -62,19 +63,20 @@ public class ContaCorrenteController {
 
   @PostMapping("/{contaCorrenteId}/client/{clientId}/depositar")
   @ResponseStatus(HttpStatus.CREATED)
-  public ClientAndCorrentDto depositar(@PathVariable Long clientId, @PathVariable Long contaCorrenteId, @RequestBody DepositAndSakeDto deposit) throws DepositInvalid {
+  public ClientAndCorrentDto depositar(@PathVariable Long clientId,
+      @PathVariable Long contaCorrenteId, @RequestBody DepositAndSakeDto deposit)
+      throws DepositInvalid {
 
     float valor = deposit.valor();
 
     Client client = clientService.getById(clientId);
-    if(client == null) {
+    if (client == null) {
       throw new ClientNotFoundException("Não encontrado");
     }
     ContaCorrente contaCorrente = contaCorrenteService.getContaCorrenteById(contaCorrenteId);
-    if(contaCorrente == null) {
+    if (contaCorrente == null) {
       throw new ContaCorrentNotFoundException("Não encontrada");
     }
-
 
     contaCorrente.depositar(valor);
     contaCorrenteService.salvar(contaCorrente);
@@ -82,19 +84,20 @@ public class ContaCorrenteController {
     return ClientAndCorrentDto.fromEntities(client, contaCorrente);
   }
 
-  @PutMapping ("/{contaCorrenteId}/client/{clientId}/sacar")
+  @PutMapping("/{contaCorrenteId}/client/{clientId}/sacar")
 
-  public ClientAndCorrentDto sacar(@PathVariable Long clientId, @PathVariable Long contaCorrenteId, @RequestBody DepositAndSakeDto sake) {
+  public ClientAndCorrentDto sacar(@PathVariable Long clientId, @PathVariable Long contaCorrenteId,
+      @RequestBody DepositAndSakeDto sake) {
     Client client = clientService.getById(clientId);
 
     float valor = sake.valor();
 
-    if(client == null) {
+    if (client == null) {
       throw new ClientNotFoundException("Não encontrado!");
     }
 
     ContaCorrente contaCorrente = contaCorrenteService.getContaCorrenteById(contaCorrenteId);
-    if(contaCorrente == null) {
+    if (contaCorrente == null) {
       throw new ContaCorrentNotFoundException("Não encontrado!");
     }
 

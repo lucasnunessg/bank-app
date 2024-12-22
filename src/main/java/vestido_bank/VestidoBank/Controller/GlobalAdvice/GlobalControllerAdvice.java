@@ -67,9 +67,9 @@ public class GlobalControllerAdvice {
   }
 
   @ExceptionHandler({ContaPoupancaNotFoundException.class})
-    public ResponseEntity<String> handleNotFoundCountaPoupanca(RuntimeException ex) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body(ex.getMessage());
+  public ResponseEntity<String> handleNotFoundCountaPoupanca(RuntimeException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(ex.getMessage());
 
   }
 

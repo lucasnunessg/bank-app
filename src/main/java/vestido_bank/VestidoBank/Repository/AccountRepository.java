@@ -6,4 +6,5 @@ import vestido_bank.VestidoBank.Entity.Account;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
+
 }

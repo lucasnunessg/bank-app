@@ -1,12 +1,23 @@
 package vestido_bank.VestidoBank.Controller;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaDto;
+import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
+import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
 import vestido_bank.VestidoBank.Service.ClientService;
 import vestido_bank.VestidoBank.Service.ContaCorrenteService;
 import vestido_bank.VestidoBank.Service.ContaPoupancaService;
@@ -19,7 +30,8 @@ public class ContaPoupancaController {
   ClientService clientService;
 
   @Autowired
-  public ContaPoupancaController(ContaPoupancaService contaPoupancaService, ClientService clientService){
+  public ContaPoupancaController(ContaPoupancaService contaPoupancaService,
+      ClientService clientService) {
     this.contaPoupancaService = contaPoupancaService;
     this.clientService = clientService;
   }
@@ -27,8 +39,42 @@ public class ContaPoupancaController {
   @GetMapping
   public List<ContaPoupancaDto> getAllPoupancas() {
     List<ContaPoupanca> contas = contaPoupancaService.getAllPoupancas();
-       return contas.stream().map(ContaPoupancaDto::fromEntity)
+    return contas.stream().map(ContaPoupancaDto::fromEntity)
         .toList();
   }
+
+  @GetMapping("/{clientId}/conta/{contaPoupancaId}")
+  public ContaPoupancaDto getContaPoupancaById(@PathVariable Long clientId,
+      @PathVariable Long contaPoupancaId) {
+
+    Client client = clientService.getById(clientId);
+    if (client == null) {
+      throw new ClientNotFoundException("Nao encontrado!");
+    }
+
+    ContaPoupanca poupanca = contaPoupancaService.getPoupancaById(contaPoupancaId);
+    if (poupanca == null) {
+      throw new ContaPoupancaNotFoundException("Não encontrado!");
+    }
+
+    return ContaPoupancaDto.fromEntity(poupanca);
+  }
+
+  @PostMapping("/{clientId}/create-poupanca")
+  @ResponseStatus(HttpStatus.CREATED)
+  public ContaPoupancaDto createContaPoupanca(@PathVariable Long clientId, @RequestBody ContaPoupancaCreateDto contaPoupancaCreateDto) {
+    Client client = clientService.getById(clientId);
+    if(client == null) {
+      throw new ClientNotFoundException("Não encontrado");
+    }
+
+    ContaPoupanca newConta = contaPoupancaCreateDto.toEntity(client);
+
+    newConta = contaPoupancaService.createContaPoupanca(clientId, newConta);
+    return ContaPoupancaDto.fromEntity(newConta);
+  }
+
+
+
 
 }

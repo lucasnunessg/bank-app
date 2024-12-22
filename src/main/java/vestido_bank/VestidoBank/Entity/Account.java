@@ -40,7 +40,6 @@ public class Account {
   }
 
 
-
   public Client getClient() {
     return client;
   }
@@ -48,7 +47,6 @@ public class Account {
   public void setClient(Client client) {
     this.client = client;
   }
-
 
 
   public Long getId() {

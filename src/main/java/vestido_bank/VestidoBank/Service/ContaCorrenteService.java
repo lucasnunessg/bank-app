@@ -62,7 +62,8 @@ public class ContaCorrenteService {
 
     // Verifica se o saldo após o depósito ultrapassa o limite
     if (contaCorrente.getSaldo() + valor > contaCorrente.getLimite()) {
-      throw new DepositInvalid("O depósito excede o limite permitido de " + contaCorrente.getLimite());
+      throw new DepositInvalid(
+          "O depósito excede o limite permitido de " + contaCorrente.getLimite());
     }
 
     contaCorrente.depositar(valor); // Adiciona o valor ao saldo da conta
@@ -78,7 +79,7 @@ public class ContaCorrenteService {
       throw new SakeInvalid("O valor do saque deve ser positivo");
     }
 
-    if(valor > contaCorrente.getSaldo()) {
+    if (valor > contaCorrente.getSaldo()) {
       throw new SakeInvalid("Valor de saque não pode ser menor que o saldo");
     }
     contaCorrente.sacar(valor);
@@ -89,7 +90,6 @@ public class ContaCorrenteService {
   public ContaCorrente salvar(ContaCorrente contaCorrente) {
     return contaCorrenteRepository.save(contaCorrente); //fiz pra poder salvar apos deposito/saque
   }
-
 
 
 }

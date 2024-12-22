@@ -25,7 +25,8 @@ public class AccountService {
   ContaCorrenteRepository contaCorrenteRepository;
 
   @Autowired
-  public AccountService(AccountRepository accountRepository, ClientRepository clientRepository, ContaCorrenteRepository contaCorrenteRepository) {
+  public AccountService(AccountRepository accountRepository, ClientRepository clientRepository,
+      ContaCorrenteRepository contaCorrenteRepository) {
     this.accountRepository = accountRepository;
     this.clientRepository = clientRepository;
     this.contaCorrenteRepository = contaCorrenteRepository;
@@ -36,13 +37,11 @@ public class AccountService {
     Client client = clientRepository.findById(clientId)
         .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
 
-
     ContaCorrente contaCorrente = contaCorrenteCreateDto.toEntity(client);
     contaCorrente.setClient(client);
     return contaCorrenteRepository.save(contaCorrente);
 
   }
-
 
 
   public List<ContaCorrente> getAllContasCorrentes() {
@@ -58,8 +57,7 @@ public class AccountService {
     Account account = accountRepository.findById(accountId)
         .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada"));
 
-
-    if(account.getClient() == null) {
+    if (account.getClient() == null) {
       throw new IllegalArgumentException("A conta não possui um cliente");
     }
 
@@ -70,9 +68,6 @@ public class AccountService {
 
     return account;
   }
-
-
-
 
 
 }

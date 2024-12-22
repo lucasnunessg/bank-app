@@ -18,7 +18,8 @@ public class ContaPoupancaService {
   ClientRepository clientRepository;
 
   @Autowired
-  public ContaPoupancaService(ContaPoupancaRepository contaPoupancaRepository, ClientRepository clientRepository) {
+  public ContaPoupancaService(ContaPoupancaRepository contaPoupancaRepository,
+      ClientRepository clientRepository) {
     this.contaPoupancaRepository = contaPoupancaRepository;
     this.clientRepository = clientRepository;
   }
@@ -30,29 +31,31 @@ public class ContaPoupancaService {
 
   public ContaPoupanca getPoupancaById(Long id) {
     Optional<ContaPoupanca> poupanca = contaPoupancaRepository.findById(id);
-    if(poupanca.isEmpty()) {
+    if (poupanca.isEmpty()) {
       throw new ContaPoupancaNotFoundException("Não encontrada");
     }
     return poupanca.get();
   }
 
 
-public ContaPoupanca createContaPoupanca(Long clientId, ContaPoupanca contaPoupanca) {
-Optional<Client> client = clientRepository.findById(clientId);
-if(client.isEmpty()) {
-  throw new ClientNotFoundException("Não encontrado");
-}
-
-contaPoupanca.setClient(client.get()); //precisa passar o .get aqui pq o optional esta so no findById, nao na resposta
-return contaPoupancaRepository.save(contaPoupanca);
-}
-
-public ContaPoupanca deleteRelationship(Long clientId, ContaPoupanca contaPoupanca) {
+  public ContaPoupanca createContaPoupanca(Long clientId, ContaPoupanca contaPoupanca) {
     Optional<Client> client = clientRepository.findById(clientId);
-    if(client.isEmpty()) {
+    if (client.isEmpty()) {
+      throw new ClientNotFoundException("Não encontrado");
+    }
+
+    contaPoupanca.setClient(
+        client.get()); //precisa passar o .get aqui pq o optional esta so no findById, nao na resposta
+    return contaPoupancaRepository.save(contaPoupanca);
+  }
+
+  public ContaPoupanca deleteRelationship(Long clientId, ContaPoupanca contaPoupanca) {
+    Optional<Client> client = clientRepository.findById(clientId);
+    if (client.isEmpty()) {
       throw new ClientNotFoundException("Não encontrado");
     }
 
     contaPoupanca.setClient(null);
     return contaPoupancaRepository.save(contaPoupanca);
-}}
+  }
+}

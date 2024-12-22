@@ -35,19 +35,12 @@ public class AccountController {
   AccountService accountService;
 
   @Autowired
-  public AccountController(ClientService clientService, ContaCorrenteService contaCorrenteService, AccountService accountService) {
+  public AccountController(ClientService clientService, ContaCorrenteService contaCorrenteService,
+      AccountService accountService) {
     this.clientService = clientService;
     this.contaCorrenteService = contaCorrenteService;
     this.accountService = accountService;
   }
-
-
-
-
-
-
-
-
 
 
 }
