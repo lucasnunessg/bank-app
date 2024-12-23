@@ -28,6 +28,10 @@ public class Client {
   private List<ContaCorrente> contaCorrente;
 
   @OneToMany(mappedBy = "client")
+  private List<Transaction> transactions;
+
+
+  @OneToMany(mappedBy = "client")
   private List<ContaPoupanca> contaPoupanca;
 
 
@@ -112,7 +116,17 @@ public class Client {
     return contaPoupanca;
   }
 
+  public List<Transaction> getTransactions() {
+    return transactions;
+  }
+
+  public void setTransactions(List<Transaction> transactions) {
+    this.transactions = transactions;
+  }
+
   public void setContaPoupanca(List<ContaPoupanca> contaPoupanca) {
     this.contaPoupanca = contaPoupanca;
+
+
   }
 }
