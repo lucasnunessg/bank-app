@@ -7,6 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
 
 @Entity
 @Table(name = "conta_poupanca")
@@ -29,6 +30,10 @@ public class ContaPoupanca {
     this.rendimentoMensal = rendimentoMensal;
     this.data_criacao = data_criacao;
     this.client = client;
+  }
+
+  public ContaPoupanca(){
+
   }
 
   public float aplicarRendimento() {
@@ -74,4 +79,13 @@ public class ContaPoupanca {
   public void setClient(Client client) {
     this.client = client;
   }
+
+  public void depositar(float valor) {
+    if(valor < 0) {
+      throw new DepositInvalid("Valor de depósito não pode ser 0");
+    }
+    this.saldo += valor;
+  }
+
+
 }
