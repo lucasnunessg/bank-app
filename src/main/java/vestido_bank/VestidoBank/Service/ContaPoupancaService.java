@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import vestido_bank.VestidoBank.Entity.Client;
+import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
+import vestido_bank.VestidoBank.Exceptions.SakeInvalid;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import vestido_bank.VestidoBank.Repository.ContaPoupancaRepository;
 
@@ -57,5 +60,37 @@ public class ContaPoupancaService {
 
     contaPoupanca.setClient(null);
     return contaPoupancaRepository.save(contaPoupanca);
+  }
+
+  public ContaPoupanca depositar(Long contaId, float valor) {
+    ContaPoupanca contaPoupanca = contaPoupancaRepository.findById(contaId)
+        .orElseThrow(() -> new ContaPoupancaNotFoundException("Conta não encontrada!"));
+
+    if (valor < 0) {
+      throw new DepositInvalid("Não é possível depositar valor menor que zero.");
+    }
+
+    contaPoupanca.depositar(valor);
+    return contaPoupancaRepository.save(contaPoupanca);
+  }
+
+  public ContaPoupanca sacar(Long contaId, float valor) {
+    ContaPoupanca contaPoupanca = contaPoupancaRepository.findById(contaId)
+        .orElseThrow(() -> new ContaPoupancaNotFoundException("Não foi encontrada!"));
+
+    if (valor > contaPoupanca.getSaldo()) {
+      throw new SakeInvalid("Não é possível sacar valor acima do saldo");
+    }
+
+    if (valor <= 0) {
+      throw new SakeInvalid("Não é possível sacar 0");
+    }
+
+    contaPoupanca.saque(valor);
+    return contaPoupancaRepository.save(contaPoupanca);
+  }
+
+  public ContaPoupanca salvar(ContaPoupanca contaPoupanca) {
+    return contaPoupancaRepository.save(contaPoupanca); //fiz pra poder salvar apos deposito/saque
   }
 }

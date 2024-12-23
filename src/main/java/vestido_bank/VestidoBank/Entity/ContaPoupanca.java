@@ -8,6 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
+import vestido_bank.VestidoBank.Exceptions.SakeInvalid;
 
 @Entity
 @Table(name = "conta_poupanca")
@@ -32,7 +33,7 @@ public class ContaPoupanca {
     this.client = client;
   }
 
-  public ContaPoupanca(){
+  public ContaPoupanca() {
 
   }
 
@@ -81,10 +82,18 @@ public class ContaPoupanca {
   }
 
   public void depositar(float valor) {
-    if(valor < 0) {
+    if (valor < 0) {
       throw new DepositInvalid("Valor de depósito não pode ser 0");
     }
     this.saldo += valor;
+  }
+
+  public void saque(float valor) {
+    if (valor > this.saldo || valor <= 0) {
+      throw new SakeInvalid("Não permitido");
+    }
+    this.saldo -= valor;
+
   }
 
 

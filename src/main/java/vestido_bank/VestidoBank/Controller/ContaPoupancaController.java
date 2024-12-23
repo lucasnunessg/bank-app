@@ -4,16 +4,19 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaDto;
+import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
@@ -62,9 +65,10 @@ public class ContaPoupancaController {
 
   @PostMapping("/{clientId}/create-poupanca")
   @ResponseStatus(HttpStatus.CREATED)
-  public ContaPoupancaDto createContaPoupanca(@PathVariable Long clientId, @RequestBody ContaPoupancaCreateDto contaPoupancaCreateDto) {
+  public ContaPoupancaDto createContaPoupanca(@PathVariable Long clientId,
+      @RequestBody ContaPoupancaCreateDto contaPoupancaCreateDto) {
     Client client = clientService.getById(clientId);
-    if(client == null) {
+    if (client == null) {
       throw new ClientNotFoundException("Não encontrado");
     }
 
@@ -74,7 +78,47 @@ public class ContaPoupancaController {
     return ContaPoupancaDto.fromEntity(newConta);
   }
 
+  @PostMapping("/{contaPoupancaId}/client/{clientId}/deposit")
+  public ResponseEntity<ContaPoupancaDto> deposito(@PathVariable Long contaPoupancaId,
+      @PathVariable Long clientId, @RequestBody
+  DepositAndSakeDto depositAndSakeDto) {
+    float valor = depositAndSakeDto.valor();
 
+    Client client = clientService.getById(clientId);
+    if (client == null) {
+      throw new ClientNotFoundException("Não foi possível encontrar cliente!");
+    }
 
+    ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(contaPoupancaId);
+    if (contaPoupanca == null) {
+      throw new ContaPoupancaNotFoundException("Não foi possível encontrar conta poupança!");
+    }
+
+    contaPoupanca.depositar(valor);
+    contaPoupancaService.salvar(contaPoupanca);
+    ContaPoupancaDto contaDto = ContaPoupancaDto.fromEntity(contaPoupanca);
+    return ResponseEntity.ok().body(contaDto);
+  }
+
+  @PutMapping("/{contaPoupancaId}/client/{clientId}/sake")
+  public ResponseEntity<ContaPoupancaDto> saque(@PathVariable Long contaPoupancaId, @PathVariable Long clientId, @RequestBody DepositAndSakeDto depositAndSakeDto) {
+
+    float valor = depositAndSakeDto.valor();
+
+    Client client = clientService.getById(clientId);
+    if (client == null) {
+      throw new ClientNotFoundException("Não encontrado!");
+    }
+
+    ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(contaPoupancaId);
+    if (contaPoupanca == null) {
+      throw new ContaPoupancaNotFoundException("Conta não encontrada");
+    }
+
+    contaPoupanca.saque(valor);
+    contaPoupancaService.salvar(contaPoupanca);
+    ContaPoupancaDto contaPoupancaDto = ContaPoupancaDto.fromEntity(contaPoupanca);
+    return ResponseEntity.ok().body(contaPoupancaDto);
+  }
 
 }
