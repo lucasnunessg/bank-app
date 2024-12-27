@@ -32,7 +32,7 @@ public class TransactionService {
     this.transactionsRepository = transactionsRepository;
   }
 
-  List<Transaction> getAllTransactions() {
+  public List<Transaction> getAllTransactions() {
     return transactionsRepository.findAll();
   }
 
