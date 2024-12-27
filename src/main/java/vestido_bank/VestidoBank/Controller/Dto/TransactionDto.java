@@ -13,7 +13,7 @@ public record TransactionDto(
 ) {
   public static TransactionDto fromEntity(Transaction transaction) {
     return new TransactionDto(
-        transaction.getClient().getName() != null ? transaction.getClient().getName() : null,
+        transaction.getClient() != null ? transaction.getClient().getName() : null,
         transaction.getContaCorrenteDestino() != null ? transaction.getContaCorrenteDestino().getId() : null,
         transaction.getContaCorrenteOrigem() != null ? transaction.getContaCorrenteOrigem().getId() : null,
         transaction.getValor(),

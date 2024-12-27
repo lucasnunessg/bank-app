@@ -32,7 +32,7 @@ public class TransactionsController {
   ClientService clientService;
 
   @Autowired
-  public TransactionsController(TransactionService transactionService, ContaPoupancaService contaPoupancaService, ContaCorrenteService, ClientService clientService) {
+  public TransactionsController(TransactionService transactionService, ContaPoupancaService contaPoupancaService, ContaCorrenteService contaCorrenteService, ClientService clientService) {
     this.transactionService = transactionService;
     this.contaPoupancaService = contaPoupancaService;
     this.contaCorrenteService = contaCorrenteService;
@@ -41,7 +41,7 @@ public class TransactionsController {
 
   @GetMapping
   public List<TransactionDto> getAllTransactions() {
-    List<Transaction> transactions = transactionService.getAllTransactions()
+    List<Transaction> transactions = transactionService.getAllTransactions();
       return transactions.stream().map(TransactionDto::fromEntity)
         .toList();
 
