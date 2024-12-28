@@ -101,7 +101,8 @@ public class ContaPoupancaController {
   }
 
   @PutMapping("/{contaPoupancaId}/client/{clientId}/sake")
-  public ResponseEntity<ContaPoupancaDto> saque(@PathVariable Long contaPoupancaId, @PathVariable Long clientId, @RequestBody DepositAndSakeDto depositAndSakeDto) {
+  public ResponseEntity<ContaPoupancaDto> saque(@PathVariable Long contaPoupancaId,
+      @PathVariable Long clientId, @RequestBody DepositAndSakeDto depositAndSakeDto) {
 
     float valor = depositAndSakeDto.valor();
 

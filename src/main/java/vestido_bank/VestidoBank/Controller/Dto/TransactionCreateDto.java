@@ -10,8 +10,10 @@ public record TransactionCreateDto(
     float valor,
     String descricao
 ) {
+
   // Converte o DTO em uma entidade Transaction
-  public Transaction toEntity(ContaPoupanca contaPoupancaOrigem, ContaCorrente contaCorrenteDestino) {
+  public Transaction toEntity(ContaPoupanca contaPoupancaOrigem,
+      ContaCorrente contaCorrenteDestino) {
     Transaction transaction = new Transaction();
     transaction.setContaPoupancaOrigem(contaPoupancaOrigem);
     transaction.setContaCorrenteDestino(contaCorrenteDestino);

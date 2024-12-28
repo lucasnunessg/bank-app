@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.ResourceAccessException;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.ConnectionFailedException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
@@ -71,6 +73,12 @@ public class GlobalControllerAdvice {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(ex.getMessage());
 
+  }
+
+  @ExceptionHandler({ConnectionFailedException.class})
+  public ResponseEntity<String> handleConnectionFailed(ResourceAccessException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(ex.getMessage());
   }
 
 }

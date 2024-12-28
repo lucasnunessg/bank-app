@@ -11,11 +11,14 @@ public record TransactionDto(
     LocalDateTime dataHora,
     String descricao
 ) {
+
   public static TransactionDto fromEntity(Transaction transaction) {
     return new TransactionDto(
         transaction.getClient() != null ? transaction.getClient().getName() : null,
-        transaction.getContaCorrenteDestino() != null ? transaction.getContaCorrenteDestino().getId() : null,
-        transaction.getContaCorrenteOrigem() != null ? transaction.getContaCorrenteOrigem().getId() : null,
+        transaction.getContaCorrenteDestino() != null ? transaction.getContaCorrenteDestino()
+            .getId() : null,
+        transaction.getContaCorrenteOrigem() != null ? transaction.getContaCorrenteOrigem().getId()
+            : null,
         transaction.getValor(),
         transaction.getData_hora() != null ? transaction.getData_hora() : LocalDateTime.now(),
         transaction.getDescricao()

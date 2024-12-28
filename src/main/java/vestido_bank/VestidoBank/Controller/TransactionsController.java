@@ -32,7 +32,9 @@ public class TransactionsController {
   ClientService clientService;
 
   @Autowired
-  public TransactionsController(TransactionService transactionService, ContaPoupancaService contaPoupancaService, ContaCorrenteService contaCorrenteService, ClientService clientService) {
+  public TransactionsController(TransactionService transactionService,
+      ContaPoupancaService contaPoupancaService, ContaCorrenteService contaCorrenteService,
+      ClientService clientService) {
     this.transactionService = transactionService;
     this.contaPoupancaService = contaPoupancaService;
     this.contaCorrenteService = contaCorrenteService;
@@ -42,29 +44,31 @@ public class TransactionsController {
   @GetMapping
   public List<TransactionDto> getAllTransactions() {
     List<Transaction> transactions = transactionService.getAllTransactions();
-      return transactions.stream().map(TransactionDto::fromEntity)
+    return transactions.stream().map(TransactionDto::fromEntity)
         .toList();
 
   }
 
   @PostMapping("/{contaOrigemId}/transfer/{contaDestinoId}")
-  public ResponseEntity<TransactionDto> transferBetweenAccounts(@PathVariable Long contaOrigemId, @PathVariable Long contaDestinoId, @RequestBody
-      TransactionCreateDto transactionCreateDto) {
+  public ResponseEntity<TransactionDto> transferBetweenAccounts(@PathVariable Long contaOrigemId,
+      @PathVariable Long contaDestinoId, @RequestBody
+  TransactionCreateDto transactionCreateDto) {
 
     ContaPoupanca contaOrigem = contaPoupancaService.getPoupancaById(contaOrigemId);
-        if(contaOrigem == null) {
-          throw new ContaPoupancaNotFoundException("Não encontrada");
-        }
+    if (contaOrigem == null) {
+      throw new ContaPoupancaNotFoundException("Não encontrada");
+    }
 
     ContaCorrente contaDestino = contaCorrenteService.getContaCorrenteById(contaDestinoId);
-        if(contaDestino == null) {
-          throw new ContaCorrentNotFoundException("Não encontrada");
-        }
+    if (contaDestino == null) {
+      throw new ContaCorrentNotFoundException("Não encontrada");
+    }
 
-        Transaction transaction = transactionCreateDto.toEntity(contaOrigem, contaDestino);
+    Transaction transaction = transactionCreateDto.toEntity(contaOrigem, contaDestino);
 
-        Transaction createTransaction = transactionService.createTransactionWithPoupancaAndCorrente(contaOrigemId, contaDestinoId, transaction.getValor(), transaction);
-        return ResponseEntity.ok(TransactionDto.fromEntity(createTransaction));
+    Transaction createTransaction = transactionService.createTransactionWithPoupancaAndCorrente(
+        contaOrigemId, contaDestinoId, transaction.getValor(), transaction);
+    return ResponseEntity.ok(TransactionDto.fromEntity(createTransaction));
   }
 
 }

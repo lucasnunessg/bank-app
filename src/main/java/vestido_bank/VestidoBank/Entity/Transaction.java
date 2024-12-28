@@ -43,11 +43,13 @@ public class Transaction {
 
   private String descricao;
 
-  public Transaction(){}
+  public Transaction() {
+  }
 
-  public Transaction(Client client, ContaCorrente contaCorrenteOrigem, ContaCorrente contaCorrenteDestino,
+  public Transaction(Client client, ContaCorrente contaCorrenteOrigem,
+      ContaCorrente contaCorrenteDestino,
       ContaPoupanca contaPoupancaDestino, ContaPoupanca contaPoupancaOrigem, float valor,
-      LocalDateTime data_hora, String descricao ) {
+      LocalDateTime data_hora, String descricao) {
     this.client = client;
     this.contaCorrenteOrigem = contaCorrenteOrigem;
     this.contaCorrenteDestino = contaCorrenteDestino;
