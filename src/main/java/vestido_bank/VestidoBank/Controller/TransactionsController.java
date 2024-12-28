@@ -17,6 +17,7 @@ import vestido_bank.VestidoBank.Entity.ContaPoupanca;
 import vestido_bank.VestidoBank.Entity.Transaction;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.InvalidTransaction;
 import vestido_bank.VestidoBank.Service.ClientService;
 import vestido_bank.VestidoBank.Service.ContaCorrenteService;
 import vestido_bank.VestidoBank.Service.ContaPoupancaService;
@@ -52,7 +53,7 @@ public class TransactionsController {
   @PostMapping("/{contaOrigemId}/transfer/{contaDestinoId}")
   public ResponseEntity<TransactionDto> transferBetweenAccounts(@PathVariable Long contaOrigemId,
       @PathVariable Long contaDestinoId, @RequestBody
-  TransactionCreateDto transactionCreateDto) {
+  TransactionCreateDto transactionCreateDto) throws InvalidTransaction {
 
     ContaPoupanca contaOrigem = contaPoupancaService.getPoupancaById(contaOrigemId);
     if (contaOrigem == null) {
@@ -63,6 +64,11 @@ public class TransactionsController {
     if (contaDestino == null) {
       throw new ContaCorrentNotFoundException("Não encontrada");
     }
+
+    if(contaOrigem.getSaldo() < transactionCreateDto.valor()) {
+      throw new InvalidTransaction("Saldo insuficiente");
+    }
+
 
     Transaction transaction = transactionCreateDto.toEntity(contaOrigem, contaDestino);
 

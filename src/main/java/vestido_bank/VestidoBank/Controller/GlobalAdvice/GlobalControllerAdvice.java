@@ -13,6 +13,7 @@ import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
+import vestido_bank.VestidoBank.Exceptions.InvalidTransaction;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.SakeInvalid;
 
@@ -77,6 +78,12 @@ public class GlobalControllerAdvice {
 
   @ExceptionHandler({ConnectionFailedException.class})
   public ResponseEntity<String> handleConnectionFailed(ResourceAccessException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(ex.getMessage());
+  }
+
+  @ExceptionHandler({InvalidTransaction.class})
+  public ResponseEntity<String> handleInvalidTransaction(RuntimeException ex) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(ex.getMessage());
   }
