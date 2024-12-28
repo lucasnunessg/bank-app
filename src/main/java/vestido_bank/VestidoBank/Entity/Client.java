@@ -7,11 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.Collection;
 import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "client")
-public class Client {
+public class Client implements UserDetails {
 
   @Id
   @GeneratedValue
@@ -56,8 +59,18 @@ public class Client {
     this.id = id;
   }
 
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of();
+  }
+
   public String getPassword() {
     return password;
+  }
+
+  @Override
+  public String getUsername() {
+    return "";
   }
 
   public void setPassword(String password) {

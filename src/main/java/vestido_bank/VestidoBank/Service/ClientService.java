@@ -2,6 +2,9 @@ package vestido_bank.VestidoBank.Service;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import vestido_bank.VestidoBank.Entity.Account;
 import vestido_bank.VestidoBank.Entity.Client;
@@ -13,7 +16,7 @@ import java.util.List;
 import vestido_bank.VestidoBank.Repository.ContaCorrenteRepository;
 
 @Service
-public class ClientService {
+public class ClientService implements UserDetailsService {
 
   ClientRepository clientRepository;
   ContaCorrenteRepository contaCorrenteRepository;
@@ -31,6 +34,11 @@ public class ClientService {
   }
 
   public Client createClient(Client client) {
+
+    String hashedpassword = new BCryptPasswordEncoder()
+        .encode(client.getPassword());
+
+    client.setPassword(hashedpassword);
 
     if (clientRepository.existsByEmailOrName(client.getEmail(), client.getName())) {
       throw new NameOrEmailDuplicateException("Já utilizado");
@@ -77,6 +85,10 @@ public class ClientService {
     Client client = getById(clientId);
     contaCorrente.setClient(client);
     return contaCorrenteRepository.save(contaCorrente);
+  }
+  @Override
+  public UserDetails loadUserByUsername(String email) throws ClientNotFoundException {
+    return clientRepository.findByEmail(email)
   }
 
 
