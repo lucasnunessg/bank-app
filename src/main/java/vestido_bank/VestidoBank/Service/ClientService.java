@@ -88,7 +88,12 @@ public class ClientService implements UserDetailsService {
   }
   @Override
   public UserDetails loadUserByUsername(String email) throws ClientNotFoundException {
-    return clientRepository.findByEmail(email)
+    Client client = clientRepository.findByEmail(email);
+    if(client == null) {
+    throw new ClientNotFoundException("Não encontrado");
+    }
+
+    return client;
   }
 
 
