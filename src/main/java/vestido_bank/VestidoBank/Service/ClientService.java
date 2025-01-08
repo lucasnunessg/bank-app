@@ -2,6 +2,7 @@ package vestido_bank.VestidoBank.Service;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,8 +19,15 @@ import vestido_bank.VestidoBank.Repository.ContaCorrenteRepository;
 @Service
 public class ClientService implements UserDetailsService {
 
+  @Value("${aws.cognito.userPoolId}")
+      private String userPoolId;
+
+  @Value("${aws.cognito.clientId")
+      private String clientId;
+
   ClientRepository clientRepository;
   ContaCorrenteRepository contaCorrenteRepository;
+  private final CognitoIdentityProviderClient cognitoIdentityProviderClient;
 
   @Autowired
   public ClientService(ClientRepository clientRepository,
