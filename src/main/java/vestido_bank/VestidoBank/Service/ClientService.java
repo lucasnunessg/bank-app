@@ -1,12 +1,18 @@
 package vestido_bank.VestidoBank.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminCreateUserRequest;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.AttributeType;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.CognitoIdentityProviderException;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.MessageActionType;
 import vestido_bank.VestidoBank.Entity.Account;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
@@ -27,14 +33,15 @@ public class ClientService implements UserDetailsService {
 
   ClientRepository clientRepository;
   ContaCorrenteRepository contaCorrenteRepository;
-  private final CognitoIdentityProviderClient cognitoIdentityProviderClient;
+  private final CognitoIdentityProviderClient cognitoClient;
 
   @Autowired
   public ClientService(ClientRepository clientRepository,
-      ContaCorrenteRepository contaCorrenteRepository) {
+      ContaCorrenteRepository contaCorrenteRepository, CognitoIdentityProviderClient cognitoClient) {
 
     this.clientRepository = clientRepository;
     this.contaCorrenteRepository = contaCorrenteRepository;
+    this.cognitoClient = cognitoClient;
   }
 
   public List<Client> getAllClients() {
@@ -59,7 +66,32 @@ public class ClientService implements UserDetailsService {
     // if(clientRepository.existsByName(client.getName())){
     //   throw new ClientDuplicateException("Cliente já existe.");
     // }
-    return clientRepository.save(client);
+
+    Client savedClient = clientRepository.save(client);
+    createUserInCognito(client);
+
+    return savedClient;
+  }
+
+  public void createUserInCognito(Client client) {
+    String temporaryPassword = UUID.randomUUID().toString();
+
+    AdminCreateUserRequest createUserRequest = AdminCreateUserRequest.builder()
+        .userPoolId(userPoolId)
+        .username(client.getEmail())
+        .userAttributes(
+            AttributeType.builder().name("email").value(client.getEmail()).build(),
+            AttributeType.builder().name("given_name").value(client.getName()).build()
+        )
+        .temporaryPassword(temporaryPassword)
+        .messageAction(MessageActionType.SUPPRESS)
+        .build();
+    try{
+      cognitoClient.adminCreateUser(createUserRequest);
+    } catch (CognitoIdentityProviderException e) {
+      e.printStackTrace();
+      throw new RuntimeException("Erro ao criar usuário");
+    }
   }
 
   public Client getById(Long id) {
