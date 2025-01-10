@@ -1,5 +1,6 @@
 package vestido_bank.VestidoBank.Controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class ClientController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ClientDto createClient(@RequestBody CreateClientDto createClientDto)
+  public ClientDto createClient(@RequestBody @Valid CreateClientDto createClientDto)
       throws ClientNotFoundException, NameOrEmailDuplicateException {
     return ClientDto.fromEntity(clientService.createClient(createClientDto.toEntity()));
   }
