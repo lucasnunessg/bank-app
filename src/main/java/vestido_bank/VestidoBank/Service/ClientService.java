@@ -29,7 +29,7 @@ public class ClientService implements UserDetailsService {
   @Value("${aws.cognito.userPoolId}")
       private String userPoolId;
 
-  @Value("${aws.cognito.clientId")
+  @Value("${aws.cognito.clientId}")
       private String clientId;
 
   ClientRepository clientRepository;
