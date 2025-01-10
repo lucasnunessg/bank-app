@@ -17,6 +17,7 @@ import vestido_bank.VestidoBank.Entity.Account;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.CognitoErrorCreateException;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import java.util.List;
@@ -81,7 +82,10 @@ public class ClientService implements UserDetailsService {
         .username(client.getEmail())
         .userAttributes(
             AttributeType.builder().name("email").value(client.getEmail()).build(),
-            AttributeType.builder().name("given_name").value(client.getName()).build()
+            AttributeType.builder().name("given_name").value(client.getName()).build(),
+            AttributeType.builder().name("custom:contact").value(client.getContact()).build(),
+            AttributeType.builder().name("custom:address").value(client.getAddress()).build(),
+            AttributeType.builder().name("custom:cpf").value(client.getCpf()).build()
         )
         .temporaryPassword(temporaryPassword)
         .messageAction(MessageActionType.SUPPRESS)
@@ -90,7 +94,7 @@ public class ClientService implements UserDetailsService {
       cognitoClient.adminCreateUser(createUserRequest);
     } catch (CognitoIdentityProviderException e) {
       e.printStackTrace();
-      throw new RuntimeException("Erro ao criar usuário");
+      throw new CognitoErrorCreateException("Erro ao criar usuário");
     }
   }
 
