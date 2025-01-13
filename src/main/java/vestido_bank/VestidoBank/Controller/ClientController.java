@@ -24,6 +24,7 @@ import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
+import vestido_bank.VestidoBank.Exceptions.InvalidPassword;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Service.ClientService;
 import java.util.List;
@@ -57,7 +58,7 @@ public class ClientController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ClientDto createClient(@RequestBody @Valid CreateClientDto createClientDto)
-      throws ClientNotFoundException, NameOrEmailDuplicateException {
+      throws ClientNotFoundException, NameOrEmailDuplicateException, InvalidPassword {
     return ClientDto.fromEntity(clientService.createUserInCognito(createClientDto.toEntity()));
   }
 

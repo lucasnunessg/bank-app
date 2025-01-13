@@ -2,6 +2,7 @@ package vestido_bank.VestidoBank.Service;
 
 import java.util.Optional;
 import java.util.UUID;
+import middlewares.RegexPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -74,7 +75,7 @@ public class ClientService implements UserDetailsService {
   }
 
   public Client createUserInCognito(Client client) {
-    String temporaryPassword = UUID.randomUUID().toString();
+
 
     AdminCreateUserRequest createUserRequest = AdminCreateUserRequest.builder()
         .userPoolId(userPoolId)
@@ -84,9 +85,9 @@ public class ClientService implements UserDetailsService {
             AttributeType.builder().name("given_name").value(client.getName()).build(),
             AttributeType.builder().name("custom:contact").value(client.getContact()).build(),
             AttributeType.builder().name("custom:address").value(client.getAddress()).build(),
-            AttributeType.builder().name("custom:cpf").value(client.getCpf()).build()
+            AttributeType.builder().name("custom:cpf").value(client.getCpf()).build(),
+            AttributeType.builder().name("custom:password").value(client.getPassword()).build()
         )
-        .temporaryPassword(temporaryPassword)
         .messageAction(MessageActionType.SUPPRESS)
         .build();
     try{
