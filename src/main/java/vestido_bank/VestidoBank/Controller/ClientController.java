@@ -58,7 +58,7 @@ public class ClientController {
   @ResponseStatus(HttpStatus.CREATED)
   public ClientDto createClient(@RequestBody @Valid CreateClientDto createClientDto)
       throws ClientNotFoundException, NameOrEmailDuplicateException {
-    return ClientDto.fromEntity(clientService.createClient(createClientDto.toEntity()));
+    return ClientDto.fromEntity(clientService.createUserInCognito(createClientDto.toEntity()));
   }
 
   @DeleteMapping("/{id}")

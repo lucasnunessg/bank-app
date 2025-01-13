@@ -13,7 +13,6 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminCreate
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AttributeType;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.CognitoIdentityProviderException;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.MessageActionType;
-import vestido_bank.VestidoBank.Entity.Account;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
@@ -74,7 +73,7 @@ public class ClientService implements UserDetailsService {
     return savedClient;
   }
 
-  public void createUserInCognito(Client client) {
+  public Client createUserInCognito(Client client) {
     String temporaryPassword = UUID.randomUUID().toString();
 
     AdminCreateUserRequest createUserRequest = AdminCreateUserRequest.builder()
@@ -96,6 +95,7 @@ public class ClientService implements UserDetailsService {
       e.printStackTrace();
       throw new CognitoErrorCreateException("Erro ao criar usuário");
     }
+    return client;
   }
 
   public Client getById(Long id) {
