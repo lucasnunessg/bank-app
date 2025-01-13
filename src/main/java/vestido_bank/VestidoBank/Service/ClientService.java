@@ -1,8 +1,7 @@
 package vestido_bank.VestidoBank.Service;
 
 import java.util.Optional;
-import java.util.UUID;
-import middlewares.RegexPassword;
+import org.springframework.beans.MethodInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +17,7 @@ import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.CognitoErrorCreateException;
+import vestido_bank.VestidoBank.Exceptions.InvalidPassword;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import java.util.List;
@@ -74,7 +74,7 @@ public class ClientService implements UserDetailsService {
     return savedClient;
   }
 
-  public Client createUserInCognito(Client client) {
+  public Client createUserInCognito(Client client){
 
 
     AdminCreateUserRequest createUserRequest = AdminCreateUserRequest.builder()

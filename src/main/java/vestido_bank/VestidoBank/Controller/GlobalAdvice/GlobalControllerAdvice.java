@@ -3,6 +3,8 @@ package vestido_bank.VestidoBank.Controller.GlobalAdvice;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.ResourceAccessException;
@@ -89,10 +91,13 @@ public class GlobalControllerAdvice {
         .body(ex.getMessage());
   }
 
-  @ExceptionHandler({InvalidPassword.class})
-  public ResponseEntity<String> handlePasswordInvalid(RuntimeException ex) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-        .body(ex.getMessage());
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    StringBuilder errorMessage = new StringBuilder();
+    for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+      errorMessage.append(error.getField()).append(": ").append(error.getDefaultMessage()).append(" ");
+    }
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage.toString());
   }
 
 }
