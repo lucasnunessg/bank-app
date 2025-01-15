@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
+import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteDto;
+import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaDto;
 import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
@@ -74,10 +76,11 @@ public class TransactionService {
       contaCorrente1.setSaldo(contaCorrente1.getSaldo() + valor);
 
       transaction.setContaPoupancaOrigem(contaPoupanca1);
-      transaction.setContaCorrenteOrigem(contaCorrente1);
+      transaction.setContaCorrenteDestino(contaCorrente1);
       transaction.setValor(valor);
       transaction.setData_hora(LocalDateTime.now());
       transaction.setDescricao("Transferência entre conta poupança e conta corrente!");
+
 
       return transactionsRepository.save(transaction);
     } catch (ResourceAccessException e) {
