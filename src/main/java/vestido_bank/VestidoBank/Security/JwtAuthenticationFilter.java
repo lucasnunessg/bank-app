@@ -22,13 +22,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
+    String path = request.getRequestURI();
+    if(path.equals("/auth/login") || path.equals("/clients-bank")) { //para liberar o acesso, mesmo q no securityConfig esteja setado.
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
     if(authHeader == null || !authHeader.startsWith("Bearer ")) {
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
-    String token = authHeader.substring(7);
+    String token = authHeader.substring(7); //remove o bearer
 
     try {
       Claims claims = Jwts.parser()
