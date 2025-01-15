@@ -43,5 +43,4 @@ public record TransactionDto(
         transaction.getDescricao()
     );
   }
-
 }
