@@ -3,6 +3,7 @@ package vestido_bank.VestidoBank.Entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -17,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class Client implements UserDetails {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String name;
@@ -26,6 +27,8 @@ public class Client implements UserDetails {
   private String address;
   private String email;
   private String password;
+  private String cognitoId;
+
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
   private List<ContaCorrente> contaCorrente;
@@ -49,6 +52,14 @@ public class Client implements UserDetails {
   }
 
   public Client() {
+  }
+
+  public String getCognitoId() {
+    return cognitoId;
+  }
+
+  public void setCognitoId(String cognitoId) {
+    this.cognitoId = cognitoId;
   }
 
   public Long getId() {

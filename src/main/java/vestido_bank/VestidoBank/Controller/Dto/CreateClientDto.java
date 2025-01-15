@@ -20,6 +20,7 @@ public record CreateClientDto(
     @NotBlank
     String address,
 
+
     @Email(message = "Digite um e-mail válido!")
     String email,
 

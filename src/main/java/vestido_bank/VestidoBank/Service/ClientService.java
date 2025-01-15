@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminCreateUserRequest;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminCreateUserResponse;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AttributeType;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.CognitoIdentityProviderException;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.MessageActionType;
@@ -60,14 +61,6 @@ public class ClientService implements UserDetailsService {
       throw new NameOrEmailDuplicateException("Já utilizado");
     }
 
-    //  if(clientRepository.existsByemail(client.getEmail())) {
-    //  throw new EmailDuplicateException("E-mail já utilizado.");
-    // }
-
-    // if(clientRepository.existsByName(client.getName())){
-    //   throw new ClientDuplicateException("Cliente já existe.");
-    // }
-
     Client savedClient = clientRepository.save(client);
     createUserInCognito(client);
 
@@ -91,7 +84,15 @@ public class ClientService implements UserDetailsService {
         .messageAction(MessageActionType.SUPPRESS)
         .build();
     try{
-      cognitoClient.adminCreateUser(createUserRequest);
+      AdminCreateUserResponse response = cognitoClient.adminCreateUser(createUserRequest);
+          String cognitoClientId = response.user().attributes().stream()
+              .filter(attribute -> attribute.name().equals("sub"))
+              .map(AttributeType::value)
+              .findFirst()
+              .orElseThrow(() -> new RuntimeException("ID do cognito não encontrado"));
+
+          client.setCognitoId(cognitoClientId);
+          clientRepository.save(client);
     } catch (CognitoIdentityProviderException e) {
       e.printStackTrace();
       throw new CognitoErrorCreateException("Erro ao criar usuário");
