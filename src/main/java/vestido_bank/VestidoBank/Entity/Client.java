@@ -27,7 +27,6 @@ public class Client implements UserDetails {
   private String address;
   private String email;
   private String password;
-  private String cognitoId;
 
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
@@ -54,13 +53,7 @@ public class Client implements UserDetails {
   public Client() {
   }
 
-  public String getCognitoId() {
-    return cognitoId;
-  }
 
-  public void setCognitoId(String cognitoId) {
-    this.cognitoId = cognitoId;
-  }
 
   public Long getId() {
     return id;

@@ -59,7 +59,7 @@ public class ClientController {
   @ResponseStatus(HttpStatus.CREATED)
   public ClientDto createClient(@RequestBody @Valid CreateClientDto createClientDto)
       throws ClientNotFoundException, NameOrEmailDuplicateException, InvalidPassword {
-    return ClientDto.fromEntity(clientService.createUserInCognito(createClientDto.toEntity()));
+    return ClientDto.fromEntity(clientService.createClient(createClientDto.toEntity()));
   }
 
   @DeleteMapping("/{id}")
