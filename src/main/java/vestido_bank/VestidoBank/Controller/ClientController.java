@@ -18,6 +18,7 @@ import vestido_bank.VestidoBank.Controller.Dto.ClientDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.CreateClientDto;
 import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
+import vestido_bank.VestidoBank.Controller.Dto.UpdatePasswordDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Exceptions.ClientDuplicateException;
@@ -73,6 +74,13 @@ public class ClientController {
   public ClientDto updateClient(@PathVariable Long id,
       @RequestBody CreateClientDto createClientDto) {
     return ClientDto.fromEntity(clientService.updateClient(id, createClientDto.toEntity()));
+  }
+
+  @PostMapping("/{id}/update-password")
+  public ResponseEntity<String> updatePassword(@PathVariable Long id, @RequestBody
+      UpdatePasswordDto updatePasswordDto) {
+    clientService.updatePassword(id, updatePasswordDto.newPassword());
+        return ResponseEntity.ok("Senha alterada com sucesso.");
   }
 
 

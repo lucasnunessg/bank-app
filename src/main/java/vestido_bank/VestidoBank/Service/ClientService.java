@@ -78,6 +78,18 @@ public class ClientService implements UserDetailsService {
     return clientRepository.save(clientDb);
   }
 
+  public Client updatePassword(Long id, String newPassword) {
+    Client client1 = getById(id);
+
+    String hashedpassword = new BCryptPasswordEncoder()
+        .encode(newPassword);
+
+    client1.setPassword(hashedpassword);
+
+    return clientRepository.save(client1);
+  }
+
+
   public ContaCorrente createContaCorrenteClient(Long clientId, ContaCorrente contaCorrente) {
     Client client = getById(clientId);
     contaCorrente.setClient(client);
