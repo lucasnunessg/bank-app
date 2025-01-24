@@ -28,7 +28,7 @@ public class TokenService {
         .plus(2, ChronoUnit.HOURS);
   }
 
-  private String validateToken(String token) {
+  public String validateToken(String token) {
     return JWT.require(algorithm)
         .build()
         .verify(token)
