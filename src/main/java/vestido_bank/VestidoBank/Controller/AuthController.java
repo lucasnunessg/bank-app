@@ -36,7 +36,10 @@ public class AuthController {
 
       Authentication auth = authenticationManager.authenticate(emailPassword);
 
-      String token = tokenService.generateToken(auth.getName());
+      Client client = (Client) auth.getPrincipal();
+      Long clientId = client.getId();
+
+      String token = tokenService.generateToken(auth.getName(), clientId);
 
       return new TokenDto(token);
 

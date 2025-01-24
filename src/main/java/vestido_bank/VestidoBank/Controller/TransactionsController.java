@@ -1,9 +1,10 @@
 package vestido_bank.VestidoBank.Controller;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vestido_bank.VestidoBank.Controller.Dto.TransactionCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.TransactionDto;
+import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
 import vestido_bank.VestidoBank.Entity.Transaction;
+import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.InvalidTransaction;
@@ -52,7 +55,7 @@ public class TransactionsController {
 
   @PostMapping("/{contaOrigemId}/transfer/{contaDestinoId}")
   public ResponseEntity<TransactionDto> transferBetweenAccounts(@PathVariable Long contaOrigemId,
-      @PathVariable Long contaDestinoId, @RequestBody
+      @PathVariable Long contaDestinoId, @AuthenticationPrincipal UserDetails userDetails, @RequestBody
   TransactionCreateDto transactionCreateDto) throws InvalidTransaction {
 
     ContaPoupanca contaOrigem = contaPoupancaService.getPoupancaById(contaOrigemId);
@@ -71,6 +74,7 @@ public class TransactionsController {
 
 
     Transaction transaction = transactionCreateDto.toEntity(contaOrigem, contaDestino);
+
 
     Transaction createTransaction = transactionService.createTransactionWithPoupancaAndCorrente(
         contaOrigemId, contaDestinoId, transaction.getValor(), transaction);

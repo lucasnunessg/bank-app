@@ -128,7 +128,7 @@ public class Transaction {
     return client;
   }
 
-  public void setClient(Client client) {
+  public void setClient() {
     this.client = client;
   }
 }

@@ -1,5 +1,6 @@
 package vestido_bank.VestidoBank.Controller.Dto;
 
+import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.Transaction;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
