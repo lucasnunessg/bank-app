@@ -10,6 +10,7 @@ public record TransactionCreateDto(
     Long contaCorrenteId,
     float valor,
     String descricao
+
 ) {
 
   // Converte o DTO em uma entidade Transaction
@@ -21,6 +22,8 @@ public record TransactionCreateDto(
     transaction.setValor(this.valor);
     transaction.setDescricao(this.descricao);
     transaction.setData_hora(java.time.LocalDateTime.now()); // Define a data/hora atual
+    transaction.getSaldoRestante();
+
     return transaction;
   }
 }

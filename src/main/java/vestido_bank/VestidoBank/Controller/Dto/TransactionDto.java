@@ -10,7 +10,8 @@ public record TransactionDto(
     String nomeDonoOrigem,
     float valor,
     LocalDateTime dataHora,
-    String descricao
+    String descricao,
+    float saldoRestante
 ) {
 
   public static TransactionDto fromEntity(Transaction transaction) {
@@ -40,7 +41,14 @@ public record TransactionDto(
         // Outros campos
         transaction.getValor(),
         transaction.getData_hora() != null ? transaction.getData_hora() : LocalDateTime.now(),
-        transaction.getDescricao()
+        transaction.getDescricao(),
+
+        transaction.getContaCorrenteOrigem() != null
+            ? transaction.getContaCorrenteOrigem().getSaldo()
+            : (transaction.getContaPoupancaOrigem() != null
+                ? transaction.getContaPoupancaOrigem().getSaldo()
+                : 0.0f)
+
     );
   }
 }

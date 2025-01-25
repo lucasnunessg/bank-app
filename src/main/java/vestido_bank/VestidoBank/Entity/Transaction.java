@@ -43,13 +43,16 @@ public class Transaction {
 
   private String descricao;
 
+  private  float saldoRestante;
+
+
   public Transaction() {
   }
 
   public Transaction(Client client, ContaCorrente contaCorrenteOrigem,
       ContaCorrente contaCorrenteDestino,
       ContaPoupanca contaPoupancaDestino, ContaPoupanca contaPoupancaOrigem, float valor,
-      LocalDateTime data_hora, String descricao) {
+      LocalDateTime data_hora, String descricao, float saldoRestante) {
     this.client = client;
     this.contaCorrenteOrigem = contaCorrenteOrigem;
     this.contaCorrenteDestino = contaCorrenteDestino;
@@ -58,6 +61,7 @@ public class Transaction {
     this.valor = valor;
     this.data_hora = data_hora;
     this.descricao = descricao;
+    this.saldoRestante = saldoRestante;
   }
 
   public Long getId() {
@@ -130,5 +134,13 @@ public class Transaction {
 
   public void setClient() {
     this.client = client;
+  }
+
+  public float getSaldoRestante() {
+    return saldoRestante;
+  }
+
+  public void setSaldoRestante(float saldoRestante) {
+    this.saldoRestante = saldoRestante;
   }
 }

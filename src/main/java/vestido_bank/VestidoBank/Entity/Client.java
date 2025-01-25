@@ -27,6 +27,7 @@ public class Client implements UserDetails {
   private String address;
   private String email;
   private String password;
+  private String imgUrl;
 
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
@@ -61,6 +62,14 @@ public class Client implements UserDetails {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getImgUrl() {
+    return imgUrl;
+  }
+
+  public void setImgUrl(String imgUrl) {
+    this.imgUrl = imgUrl;
   }
 
   @Override
