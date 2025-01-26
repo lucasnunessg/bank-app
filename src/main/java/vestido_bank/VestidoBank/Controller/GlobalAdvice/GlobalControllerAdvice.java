@@ -95,7 +95,8 @@ public class GlobalControllerAdvice {
   public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
     StringBuilder errorMessage = new StringBuilder();
     for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-      errorMessage.append(error.getField()).append(": ").append(error.getDefaultMessage()).append(" ");
+      errorMessage.append(error.getField()).append(": ").append(error.getDefaultMessage())
+          .append(" ");
     }
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage.toString());
   }

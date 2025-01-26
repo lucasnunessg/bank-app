@@ -43,7 +43,7 @@ public class Transaction {
 
   private String descricao;
 
-  private  float saldoRestante;
+  private float saldoRestante;
 
 
   public Transaction() {

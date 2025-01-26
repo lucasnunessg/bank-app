@@ -55,8 +55,9 @@ public class TransactionsController {
 
   @PostMapping("/{contaOrigemId}/transfer/{contaDestinoId}")
   public ResponseEntity<TransactionDto> transferBetweenAccounts(@PathVariable Long contaOrigemId,
-      @PathVariable Long contaDestinoId, @AuthenticationPrincipal UserDetails userDetails, @RequestBody
-  TransactionCreateDto transactionCreateDto) throws InvalidTransaction {
+      @PathVariable Long contaDestinoId, @AuthenticationPrincipal UserDetails userDetails,
+      @RequestBody
+      TransactionCreateDto transactionCreateDto) throws InvalidTransaction {
 
     ContaPoupanca contaOrigem = contaPoupancaService.getPoupancaById(contaOrigemId);
     if (contaOrigem == null) {
@@ -68,13 +69,11 @@ public class TransactionsController {
       throw new ContaCorrentNotFoundException("Não encontrada");
     }
 
-    if(contaOrigem.getSaldo() < transactionCreateDto.valor()) {
+    if (contaOrigem.getSaldo() < transactionCreateDto.valor()) {
       throw new InvalidTransaction("Saldo insuficiente");
     }
 
-
     Transaction transaction = transactionCreateDto.toEntity(contaOrigem, contaDestino);
-
 
     Transaction createTransaction = transactionService.createTransactionWithPoupancaAndCorrente(
         contaOrigemId, contaDestinoId, transaction.getValor(), transaction);

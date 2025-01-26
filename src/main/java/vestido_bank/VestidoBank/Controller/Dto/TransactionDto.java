@@ -22,9 +22,11 @@ public record TransactionDto(
             : (transaction.getContaPoupancaDestino() != null
                 ? transaction.getContaPoupancaDestino().getId()
                 : null),
-        transaction.getContaCorrenteDestino() != null && transaction.getContaCorrenteDestino().getClient() != null
+        transaction.getContaCorrenteDestino() != null
+            && transaction.getContaCorrenteDestino().getClient() != null
             ? transaction.getContaCorrenteDestino().getClient().getName()
-            : (transaction.getContaPoupancaDestino() != null && transaction.getContaPoupancaDestino().getClient() != null
+            : (transaction.getContaPoupancaDestino() != null
+                && transaction.getContaPoupancaDestino().getClient() != null
                 ? transaction.getContaPoupancaDestino().getClient().getName()
                 : null),
         // Conta Origem
@@ -33,9 +35,11 @@ public record TransactionDto(
             : (transaction.getContaPoupancaOrigem() != null
                 ? transaction.getContaPoupancaOrigem().getId()
                 : null),
-        transaction.getContaCorrenteOrigem() != null && transaction.getContaCorrenteOrigem().getClient() != null
+        transaction.getContaCorrenteOrigem() != null
+            && transaction.getContaCorrenteOrigem().getClient() != null
             ? transaction.getContaCorrenteOrigem().getClient().getName()
-            : (transaction.getContaPoupancaOrigem() != null && transaction.getContaPoupancaOrigem().getClient() != null
+            : (transaction.getContaPoupancaOrigem() != null
+                && transaction.getContaPoupancaOrigem().getClient() != null
                 ? transaction.getContaPoupancaOrigem().getClient().getName()
                 : null),
         // Outros campos

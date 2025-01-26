@@ -6,4 +6,5 @@ public record TransactionResponseDto(
     String descricao,
     float saldoAtualizado
 ) {
+
 }

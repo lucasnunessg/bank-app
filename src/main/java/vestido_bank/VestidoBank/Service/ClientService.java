@@ -28,13 +28,14 @@ public class ClientService implements UserDetailsService {
 
   @Autowired
   public ClientService(ClientRepository clientRepository,
-      ContaCorrenteRepository contaCorrenteRepository ) {
+      ContaCorrenteRepository contaCorrenteRepository) {
 
     this.clientRepository = clientRepository;
     this.contaCorrenteRepository = contaCorrenteRepository;
   }
 
-  public ClientService(){}
+  public ClientService() {
+  }
 
   public List<Client> getAllClients() {
     return clientRepository.findAll();
@@ -44,7 +45,6 @@ public class ClientService implements UserDetailsService {
 
     String hashedpassword = new BCryptPasswordEncoder()
         .encode(client.getPassword());
-
 
     client.setPassword(hashedpassword);
     return clientRepository.save(client);
@@ -95,11 +95,12 @@ public class ClientService implements UserDetailsService {
     contaCorrente.setClient(client);
     return contaCorrenteRepository.save(contaCorrente);
   }
+
   @Override
   public UserDetails loadUserByUsername(String email) throws ClientNotFoundException {
     Client client = clientRepository.findByEmail(email);
-    if(client == null) {
-    throw new ClientNotFoundException("Não encontrado");
+    if (client == null) {
+      throw new ClientNotFoundException("Não encontrado");
     }
 
     return client;

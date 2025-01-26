@@ -17,12 +17,12 @@ public class TokenService {
   private final ClientService clientService;
 
 
-
   public Client clientId(Long id) {
-  return clientService.getById(id);
+    return clientService.getById(id);
   }
 
-  public TokenService(@Value("${api.security.token.secret}") String secret, ClientService clientService) {
+  public TokenService(@Value("${api.security.token.secret}") String secret,
+      ClientService clientService) {
     this.algorithm = Algorithm.HMAC256(secret);
     this.clientService = clientService;
   }

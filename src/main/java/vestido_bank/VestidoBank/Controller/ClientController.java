@@ -44,7 +44,8 @@ public class ClientController {
   ClientRepository clientRepository;
 
   @Autowired
-  public ClientController(ClientService clientService, ContaCorrenteService contaCorrenteService, ClientRepository clientRepository) {
+  public ClientController(ClientService clientService, ContaCorrenteService contaCorrenteService,
+      ClientRepository clientRepository) {
     this.clientService = clientService;
     this.contaCorrenteService = contaCorrenteService;
     this.clientRepository = clientRepository;
@@ -84,23 +85,23 @@ public class ClientController {
 
   @PostMapping("/{id}/update-password")
   public ResponseEntity<String> updatePassword(@PathVariable Long id, @RequestBody
-      UpdatePasswordDto updatePasswordDto) {
+  UpdatePasswordDto updatePasswordDto) {
     clientService.updatePassword(id, updatePasswordDto.newPassword());
-        return ResponseEntity.ok("Senha alterada com sucesso.");
+    return ResponseEntity.ok("Senha alterada com sucesso.");
   }
 
   @PostMapping("/{id}/upload-photo")
   public ResponseEntity<String> uploadClientPhoto(@PathVariable Long id, @RequestParam("file")
-      MultipartFile file) throws IOException {
+  MultipartFile file) throws IOException {
     Client client = clientService.getById(id);
-        if(client == null) {
-          throw new ClientNotFoundException("Não encontrado");
-        }
+    if (client == null) {
+      throw new ClientNotFoundException("Não encontrado");
+    }
 
-        String uploadDir = "uploads/client-photos";
+    String uploadDir = "uploads/client-photos";
 
     File dir = new File(uploadDir);
-    if(!dir.exists()) {
+    if (!dir.exists()) {
       dir.mkdirs();
     }
 
@@ -112,7 +113,7 @@ public class ClientController {
     String fotoUrl = "/uploas/client-photos/" + fileName;
     client.setImgUrl(fotoUrl);
     clientRepository.save(client);
-  return ResponseEntity.ok("Foto carregada com sucesso!");
+    return ResponseEntity.ok("Foto carregada com sucesso!");
   }
 
 

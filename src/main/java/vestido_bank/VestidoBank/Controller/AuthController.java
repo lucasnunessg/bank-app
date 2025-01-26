@@ -19,29 +19,29 @@ import vestido_bank.VestidoBank.Service.TokenService;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final TokenService tokenService;
+  private final AuthenticationManager authenticationManager;
+  private final TokenService tokenService;
 
-    @Autowired
-    public AuthController(AuthenticationManager authenticationManager, TokenService tokenService) {
-      this.authenticationManager = authenticationManager;
-      this.tokenService = tokenService;
-    }
+  @Autowired
+  public AuthController(AuthenticationManager authenticationManager, TokenService tokenService) {
+    this.authenticationManager = authenticationManager;
+    this.tokenService = tokenService;
+  }
 
 
-    @PostMapping("/login")
+  @PostMapping("/login")
   public TokenDto loginAuth(@RequestBody AuthDto authDto) {
-      UsernamePasswordAuthenticationToken emailPassword =
-          new UsernamePasswordAuthenticationToken(authDto.email(), authDto.password());
+    UsernamePasswordAuthenticationToken emailPassword =
+        new UsernamePasswordAuthenticationToken(authDto.email(), authDto.password());
 
-      Authentication auth = authenticationManager.authenticate(emailPassword);
+    Authentication auth = authenticationManager.authenticate(emailPassword);
 
-      Client client = (Client) auth.getPrincipal();
-      Long clientId = client.getId();
+    Client client = (Client) auth.getPrincipal();
+    Long clientId = client.getId();
 
-      String token = tokenService.generateToken(auth.getName(), clientId);
+    String token = tokenService.generateToken(auth.getName(), clientId);
 
-      return new TokenDto(token);
+    return new TokenDto(token);
 
-    }
+  }
 }

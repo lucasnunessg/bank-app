@@ -17,6 +17,7 @@ import vestido_bank.VestidoBank.Service.TokenService;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
   private final TokenService tokenService;
   private final ClientService clientService;
 
@@ -27,23 +28,25 @@ public class JwtFilter extends OncePerRequestFilter {
   }
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-  Optional<String> token = extractToken(request);
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+      FilterChain filterChain) throws ServletException, IOException {
+    Optional<String> token = extractToken(request);
 
-  if(token.isPresent()) {
-    String subject = tokenService.validateToken(token.get());
-    UserDetails userDetails = clientService.loadUserByUsername(subject);
-    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-        userDetails, null, userDetails.getAuthorities());
-    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    if (token.isPresent()) {
+      String subject = tokenService.validateToken(token.get());
+      UserDetails userDetails = clientService.loadUserByUsername(subject);
+      UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+          userDetails, null, userDetails.getAuthorities());
+      SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-  }
+    }
     filterChain.doFilter(request, response);
   }
 
-  private Optional<String> extractToken(HttpServletRequest request) { //o request é uma classe q representa uma requisição
+  private Optional<String> extractToken(
+      HttpServletRequest request) { //o request é uma classe q representa uma requisição
     String authHeader = request.getHeader("Authorization");
-    if(authHeader == null) {
+    if (authHeader == null) {
       return Optional.empty();
     }
 

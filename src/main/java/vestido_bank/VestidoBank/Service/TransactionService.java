@@ -81,10 +81,10 @@ public class TransactionService {
       transaction.setData_hora(LocalDateTime.now());
       transaction.setDescricao("Transferência entre conta poupança e conta corrente!");
 
-
       return transactionsRepository.save(transaction);
     } catch (ResourceAccessException e) {
-      throw new ConnectionFailedException("Ocorreu um erro em sua solicitação, tente novamente mais tarde");
+      throw new ConnectionFailedException(
+          "Ocorreu um erro em sua solicitação, tente novamente mais tarde");
     }
 
 
