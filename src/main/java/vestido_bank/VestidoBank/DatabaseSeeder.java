@@ -1,5 +1,6 @@
 package vestido_bank.VestidoBank;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
@@ -36,10 +37,15 @@ public class DatabaseSeeder implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    List<ContaCorrente> contaCorrente = seedProducts();
-    List<ContaPoupanca> contaPoupanca = seedProducts();
-    List<Transaction> transactions = seedProduct();
+    // Cria os clientes
     List<Client> clients = seedClient();
+
+    // Cria as contas correntes e poupanças para cada cliente
+    List<ContaCorrente> contasCorrentes = seedContaCorrente(clients);
+    List<ContaPoupanca> contasPoupancas = seedContaPoupanca(clients);
+
+    // Cria transações entre as contas
+    List<Transaction> transactions = seedTransaction(contasCorrentes, contasPoupancas);
   }
 
   private List<Client> seedClient() {
@@ -78,7 +84,77 @@ public class DatabaseSeeder implements CommandLineRunner {
     return clientRepository.saveAll(clients);
   }
 
-  private List<ContaCorrente> seedContaCorrente() {
+  private List<ContaCorrente> seedContaCorrente(List<Client> clients) {
+    List<ContaCorrente> contasCorrentes = new ArrayList<>();
 
+    // Cria uma conta corrente para cada cliente com saldo inicial de 5000
+    for (Client client : clients) {
+      ContaCorrente contaCorrente = new ContaCorrente(
+          5000.0f, // Saldo inicial
+          1000.0f, // Limite
+          LocalDateTime.now().minusDays(clients.indexOf(client) * 2), // Data de criação variável
+          client
+      );
+      contasCorrentes.add(contaCorrente);
+    }
+
+    return contaCorrenteRepository.saveAll(contasCorrentes);
+  }
+
+  private List<ContaPoupanca> seedContaPoupanca(List<Client> clients) {
+    List<ContaPoupanca> contasPoupancas = new ArrayList<>();
+
+    // Cria uma conta poupança para cada cliente com saldo inicial de 5000
+    for (Client client : clients) {
+      ContaPoupanca contaPoupanca = new ContaPoupanca(
+          5000.0f, // Saldo inicial
+          0.5f, // Rendimento mensal
+          LocalDateTime.now().minusDays(clients.indexOf(client) * 3), // Data de criação variável
+          client
+      );
+      contasPoupancas.add(contaPoupanca);
+    }
+
+    return contaPoupancaRepository.saveAll(contasPoupancas);
+  }
+
+  private List<Transaction> seedTransaction(List<ContaCorrente> contasCorrentes, List<ContaPoupanca> contasPoupancas) {
+    List<Transaction> transactions = new ArrayList<>();
+
+    // Cria transações entre contas correntes e poupanças
+    for (int i = 0; i < contasCorrentes.size(); i++) {
+      ContaCorrente contaCorrente = contasCorrentes.get(i);
+      ContaPoupanca contaPoupanca = contasPoupancas.get(i);
+
+      // Transação da conta corrente para a poupança
+      Transaction transaction1 = new Transaction(
+          contaCorrente.getClient(), // Cliente associado à transação
+          contaCorrente, // Conta corrente como origem
+          null, // Conta corrente como destino (não se aplica)
+          contaPoupanca, // Conta poupança como destino
+          null, // Conta poupança como origem (não se aplica)
+          100.0f, // Valor da transação
+          LocalDateTime.now().minusHours(i * 2), // Data/hora variável
+          "Transferência para poupança", // Descrição
+          contaCorrente.getSaldo() - 100.0f // Saldo restante na conta de origem
+      );
+      transactions.add(transaction1);
+
+      // Transação da conta poupança para a corrente
+      Transaction transaction2 = new Transaction(
+          contaPoupanca.getClient(), // Cliente associado à transação
+          null, // Conta corrente como origem (não se aplica)
+          contaCorrente, // Conta corrente como destino
+          null, // Conta poupança como destino (não se aplica)
+          contaPoupanca, // Conta poupança como origem
+          50.0f, // Valor da transação
+          LocalDateTime.now().minusHours(i * 3), // Data/hora variável
+          "Transferência para corrente", // Descrição
+          contaPoupanca.getSaldo() - 50.0f // Saldo restante na conta de origem
+      );
+      transactions.add(transaction2);
+    }
+
+    return transactionsRepository.saveAll(transactions);
   }
 }
