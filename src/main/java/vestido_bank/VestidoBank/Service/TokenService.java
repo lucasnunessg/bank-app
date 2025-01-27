@@ -27,9 +27,10 @@ public class TokenService {
     this.clientService = clientService;
   }
 
-  public String generateToken(String email, Long clientId) {
+  public String generateToken(String email, Long clientId, String name) {
     return JWT.create()
         .withSubject(email)
+        .withClaim("name", name)
         .withExpiresAt(generateExpiration())
         .withClaim("clientId", clientId)
         .sign(algorithm);

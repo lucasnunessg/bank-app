@@ -38,8 +38,9 @@ public class AuthController {
 
     Client client = (Client) auth.getPrincipal();
     Long clientId = client.getId();
+    String name = client.getName();
 
-    String token = tokenService.generateToken(auth.getName(), clientId);
+    String token = tokenService.generateToken(auth.getName(), clientId, name);
 
     return new TokenDto(token);
 
