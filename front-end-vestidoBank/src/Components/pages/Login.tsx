@@ -6,6 +6,7 @@ import api from "../FetchApi";
 interface DecodedToken {
   sub: string;
   name?: string;
+  clientId: number;
 }
 
 function Login() {
@@ -13,12 +14,20 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
+  const [clientId, setClientId] = useState<string | number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedClientName = localStorage.getItem("name");
     if (storedClientName) {
       setWelcomeMessage(storedClientName);
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedClientId = localStorage.getItem("clientId");
+    if (storedClientId) {
+      setClientId(JSON.parse(storedClientId));
     }
   }, []);
 
@@ -47,8 +56,7 @@ function Login() {
         email: email,
         password: password,
       });
-      console.log("dados", email)
-      console.log("dados", password)
+
 
 
       if (response.status === 200) {
@@ -56,9 +64,16 @@ function Login() {
         localStorage.setItem("token", token);
 
         const decodedToken = jwtDecode<DecodedToken>(token);
+        console.log("decodificador de token:           ", decodedToken)
         const clientName = decodedToken.name || decodedToken.sub;
+        const getCliendId = decodedToken.clientId || decodedToken.sub;
+        console.log("verificar aqui:          ", getCliendId)
+
         setWelcomeMessage(clientName);
+        setClientId(getCliendId);
         localStorage.setItem("name", clientName);
+        localStorage.setItem("clientId", JSON.stringify(clientId)); 
+
 
         navigate("/home/auth/client");
       }
@@ -72,7 +87,7 @@ function Login() {
     <div className="login-container min-h-screen bg-[#14141F]">
       {welcomeMessage ? (
         <div className="welcome-message">
-          <p className="text-white font-urbanist text-lg">
+          <p className="text-[white]  font-urbanist text-lg">
             Bem-vindo, {welcomeMessage}!
           </p>
           <button

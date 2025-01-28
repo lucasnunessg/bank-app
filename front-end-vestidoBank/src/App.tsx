@@ -3,6 +3,7 @@ import "./App.css";
 import Header from "./Components/Header";
 import Home from "./Components/pages/Home";
 import Login from './Components/pages/Login';
+import HomeAuthClient from './Components/pages/HomeAuthClient';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/home/auth/client" element={< HomeAuthClient />} />
       </Routes>
     </div>
   </div>

@@ -75,7 +75,6 @@ function Home() {
       </header>
 
       <div className="relative w-full max-w-4xl">
-        {/* Card */}
         <div className="p-12 bg-white/10 backdrop-blur-md rounded-lg shadow-lg transition-all duration-500 flex justify-center items-center">
           <div className="flex flex-col items-center space-y-4">
             <span className="text-6xl text-[44px]">{cards[currentCard].icon}</span>
