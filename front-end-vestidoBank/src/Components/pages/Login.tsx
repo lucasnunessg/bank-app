@@ -47,6 +47,9 @@ function Login() {
         email: email,
         password: password,
       });
+      console.log("dados", email)
+      console.log("dados", password)
+
 
       if (response.status === 200) {
         const token = response.data.token;
@@ -138,7 +141,7 @@ function Login() {
               <a
                 type="button"
                 className="text-sm font-urbanist text-[white] hover:underline point"
-                onClick={() => navigate("/recovery")}
+                onClick={() => navigate("/auth/client")}
               >
                 Esqueci a senha
               </a>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaDto;
 import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
+import vestido_bank.VestidoBank.Controller.Dto.ResponseAccountSaldo;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
@@ -76,6 +77,21 @@ public class ContaPoupancaController {
 
     newConta = contaPoupancaService.createContaPoupanca(clientId, newConta);
     return ContaPoupancaDto.fromEntity(newConta);
+  }
+
+
+  @GetMapping("/{clientId}/saldo")
+  public ResponseAccountSaldo getSaldoAccount(@PathVariable Long clientId) {
+    Client client = clientService.getById(clientId);
+        if(client == null) {
+          throw new ClientNotFoundException("Não encontrado!");
+        }
+  ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(clientId);
+        if(contaPoupanca == null) {
+          throw new ContaPoupancaNotFoundException("Não encontrada!");
+        }
+
+        return new ResponseAccountSaldo(contaPoupanca.getSaldo());
   }
 
   @PostMapping("/{contaPoupancaId}/client/{clientId}/deposit")

@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import vestido_bank.VestidoBank.Controller.Dto.ResponseAccountSaldo;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
@@ -31,6 +32,8 @@ public class ContaPoupancaService {
   public List<ContaPoupanca> getAllPoupancas() {
     return contaPoupancaRepository.findAll();
   }
+
+
 
   public ContaPoupanca getPoupancaById(Long id) {
     Optional<ContaPoupanca> poupanca = contaPoupancaRepository.findById(id);
