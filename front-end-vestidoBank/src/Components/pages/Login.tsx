@@ -5,7 +5,7 @@ import api from "../FetchApi";
 
 interface DecodedToken {
   sub: string;
-  name?: string; // Adicione isso se o token contiver o nome do usuário
+  name?: string;
 }
 
 function Login() {
@@ -15,13 +15,18 @@ function Login() {
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Carrega o nome do cliente do localStorage quando o componente é montado
   useEffect(() => {
     const storedClientName = localStorage.getItem("name");
     if (storedClientName) {
       setWelcomeMessage(storedClientName);
     }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    setWelcomeMessage(null);
+  };
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -48,7 +53,7 @@ function Login() {
         localStorage.setItem("token", token);
 
         const decodedToken = jwtDecode<DecodedToken>(token);
-        const clientName = decodedToken.name || decodedToken.sub; 
+        const clientName = decodedToken.name || decodedToken.sub;
         setWelcomeMessage(clientName);
         localStorage.setItem("name", clientName);
 
@@ -61,33 +66,81 @@ function Login() {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={handleEmail}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Senha:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={handlePassword}
-        />
-      </div>
-      {welcomeMessage && (
-        <h3 className="welcome-message-text">
-          Seja bem-vindo(a), {welcomeMessage}!
-        </h3>
+    <div className="login-container">
+      {welcomeMessage ? (
+        <div className="welcome-message">
+          <p className="text-white font-urbanist text-lg">Bem-vindo, {welcomeMessage}!</p>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white font-urbanist rounded-full px-4 py-2 mt-4 hover:bg-red-600 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
+      ) : (
+        <form
+          className="login-input-form w-full max-w-[690px] h-auto top-[315px] left-[615px] opacity-100 p-6 bg-primary rounded-lg mx-auto sm:top-[150px] sm:left-0"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
+          <div className="text-center mb-4 w-full">
+            <div className="flex items-center justify-center w-full mb-2 space-x-2">
+              <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
+              <p className="font-urbanist text-[rgb(235,235,235)] text-[18px]">
+                Insira email e senha para continuar
+              </p>
+              <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
+            </div>
+          </div>
+
+          <div className="input-container mb-4 flex flex-col gap-y-[32px] sm:gap-y-4">
+            <input
+              type="email"
+              placeholder="Email"
+              className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-primary placeholder-[rgb(138,138,160)] focus:font-normal font-urbanist text-[rgb(235,235,235)] placeholder:font-normal placeholder:text-[14px] font-normal"
+              name="email"
+              value={email}
+              onChange={handleEmail}
+            />
+            <input
+              type="password"
+              placeholder="Senha"
+              className="password-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-primary placeholder-[rgb(138,138,160)] focus:font-normal font-urbanist text-[rgb(235,235,235)] placeholder:font-normal placeholder:text-[14px] font-normal"
+              name="password"
+              value={password}
+              onChange={handlePassword}
+            />
+          </div>
+
+          {error && <div className="text-red-500 text-sm text-center mt-4">{error}</div>}
+
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <label className="text-sm font-urbanist text-[rgb(235,235,235)]">Lembrar-me</label>
+            </div>
+
+            <button
+              type="button"
+              className="text-sm font-urbanist text-white hover:underline"
+              onClick={() => navigate('/recovery')}
+            >
+              Esqueci a senha
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-y-[32px] sm:gap-y-4">
+            <button
+              type="submit"
+              className="bg-primary border border-[rgb(150,0,255)] text-white font-urbanist rounded-full px-4 py-3 h-[54px] w-full hover:bg-[rgb(150,0,255)] font-light transition-colors"
+            >
+              Entrar
+            </button>
+          </div>
+        </form>
       )}
-      <button onClick={handleLogin}>Entrar</button>
     </div>
   );
 }
