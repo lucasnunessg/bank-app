@@ -1,112 +1,94 @@
+import { useState, useEffect, useCallback } from "react";
+
 function Home() {
+  const cards = [
+    {
+      icon: "🔒",
+      text: "Segurança para sua conta",
+    },
+    {
+      icon: "📊",
+      text: "Gráfico de análise de sua conta",
+    },
+    {
+      icon: "💸",
+      text: "Depósito e saque imediato sem taxas",
+    },
+    {
+      icon: "🏦",
+      text: "Conta depósito e corrente",
+    },
+    {
+      icon: "💳",
+      text: "Cartão de crédito sem anuidade",
+    },
+    {
+      icon: "📱",
+      text: "App moderno e intuitivo",
+    },
+    {
+      icon: "🌍",
+      text: "Atendimento global 24/7",
+    },
+    {
+      icon: "💼",
+      text: "Investimentos com retorno garantido",
+    },
+    {
+      icon: "🎁",
+      text: "Benefícios exclusivos para clientes",
+    },
+    {
+      icon: "📈",
+      text: "Consultoria financeira personalizada",
+    },
+    {
+      icon: "💡",
+      text: "Soluções inovadoras para seu dinheiro",
+    },
+    {
+      icon: "🛡️",
+      text: "Proteção contra fraudes",
+    },
+  ];
+
+  const [currentCard, setCurrentCard] = useState(0);
+
+  // Wrap nextCard in useCallback to memoize it
+  const nextCard = useCallback(() => {
+    setCurrentCard((prev) => (prev + 1) % cards.length);
+  }, [cards.length]);
+
+  // Wrap prevCard in useCallback to memoize it
+
+  // Automatic slide every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(nextCard, 5000);
+    return () => clearInterval(interval);
+  }, [nextCard]);
+
   return (
-    <div className="min-h-screen h-screen background-[whitesmoke] from-blue-900 to-blue-700 text-white font-sans">
-      <div>
-        <header className="text-center pt-10">
-          <h1 className="text-4xl font-bold intense-glow">
-            Escolha o banco VestidoBank
-          </h1>
-          <p className="mt-2 text-lg text-blue-200 text-[22px]">
-            Sua segurança e confiança são nossa prioridade.
-          </p>
-        </header>
+    <div className="min-h-screen h-screen bg-[#14141F] text-[white] font-sans flex flex-col items-center justify-center overflow-hidden">
+      <header className="text-center mt-[-250px]">
+        <h1 className="text-4xl font-bold mb-4 text-[white]">Escolha o banco VestidoBank</h1>
+        <p className="text-lg text-gray-400">Sua segurança e confiança são nossa prioridade.</p>
+      </header>
 
-        <div className="mt-12 p-6 bg-white/10 backdrop-blur-md rounded-lg shadow-lg text-[22px]">
-          <ul className="space-y-4">
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">🔒</span>
-              <span className="text-lg">Segurança para sua conta</span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">📊</span>
-              <span className="text-lg">Gráfico de análise de sua conta</span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">💸</span>
-              <span className="text-lg">
-                Depósito e saque imediato sem taxas
-              </span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">🏦</span>
-              <span className="text-lg">Conta depósito e corrente</span>
-            </li>
-          </ul>
+      <div className="relative w-full max-w-4xl">
+        {/* Card */}
+        <div className="p-12 bg-white/10 backdrop-blur-md rounded-lg shadow-lg transition-all duration-500 flex justify-center items-center">
+          <div className="flex flex-col items-center space-y-4">
+            <span className="text-6xl text-[44px]">{cards[currentCard].icon}</span>
+            <span className="text-2xl text-[44px]">{cards[currentCard].text}</span>
+          </div>
         </div>
 
-        <div className="mt-8 p-6 bg-white/10 backdrop-blur-md rounded-lg shadow-lg text-[22px]">
-          <ul className="space-y-4">
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">💳</span>
-              <span className="text-lg">Cartão de crédito sem anuidade</span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">📱</span>
-              <span className="text-lg">App moderno e intuitivo</span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">🌍</span>
-              <span className="text-lg">Atendimento global 24/7</span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">💼</span>
-              <span className="text-lg">
-                Investimentos com retorno garantido
-              </span>
-            </li>
-          </ul>
-        </div>
 
-        <div className="mt-8 p-6 bg-white/10 backdrop-blur-md rounded-lg shadow-lg text-[22px]">
-          <ul className="space-y-4">
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">🎁</span>
-              <span className="text-lg">
-                Benefícios exclusivos para clientes
-              </span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">📈</span>
-              <span className="text-lg">
-                Consultoria financeira personalizada
-              </span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">💡</span>
-              <span className="text-lg">
-                Soluções inovadoras para seu dinheiro
-              </span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <span className="text-2xl text-blue-300">🛡️</span>
-              <span className="text-lg">Proteção contra fraudes</span>
-            </li>
-          </ul>
-        </div>
-
-        <div className="mt-8 p-6 bg-white/10 backdrop-blur-md rounded-lg shadow-lg text-[22px]">
-          <h2 className="text-2xl font-bold mb-4">
-            Por que escolher o VestidoBank?
-          </h2>
-          <p className="text-lg">
-            No VestidoBank, estamos comprometidos em oferecer a melhor
-            experiência bancária para você. Com tecnologia de ponta, segurança
-            avançada e uma equipe dedicada, garantimos que seu dinheiro esteja
-            sempre seguro e rendendo. Nossas soluções são projetadas para
-            atender às suas necessidades, seja para investimentos, transações
-            diárias ou planejamento financeiro. Junte-se a nós e descubra um
-            novo padrão de excelência em serviços bancários.
-          </p>
-        </div>
-
-        <div className="text-center mt-12">
-          <a className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all transform hover:scale-105 cursor-pointer">
-            Abra sua conta com a Vestido Bank
-          </a>
-        </div>
       </div>
 
+      <div className="text-center mt-12">
 
+      </div>
     </div>
   );
 }
