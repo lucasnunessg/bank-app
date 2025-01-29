@@ -6,6 +6,7 @@ import { DecodedToken } from "../decoder/DecodedToken";
 function HomeAuthClient() {
   const [saldo, setSaldo] = useState("");
   const [error, setError] = useState("");
+  const[name, setName] = useState<string | null>(null);
   const [clientId, setClientId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -13,9 +14,12 @@ function HomeAuthClient() {
     if (token) {
       const decodedToken = jwtDecode<DecodedToken>(token);
       const extractedClientId = decodedToken.clientId;
+      const extractName = decodedToken.name
       setClientId(extractedClientId);
+      setName(extractName);
     }
   }, []);
+
 
   useEffect(() => {
     const fetchSaldo = async () => {
@@ -44,13 +48,19 @@ function HomeAuthClient() {
 
   return (
     <div>
+      <p className="text-[28px] text-[white] text-urbanist">Seja bem vindo! {name}</p>
+
+
+
       {error && (
         <div className="text-red-500 text-sm text-center mt-4">{error}</div>
       )}
 
       <h1 className="text-[white]">
-        {saldo ? `Seu saldo é de: ${saldo}` : "Carregando saldo..."}
+        {saldo ? `Saldo atual R$: ${saldo}` : "Carregando saldo..."}
       </h1>
+
+
     </div>
   );
 }
