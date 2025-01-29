@@ -68,13 +68,10 @@ public class ContaCorrenteController {
 
     Client client = clientService.getById(clientId);
 
-    // Criar a nova conta a partir do DTO
     ContaCorrente novaConta = contaCorrenteCreateDto.toEntity(client);
 
-    // Chamar o serviço para salvar a conta
     novaConta = contaCorrenteService.criarContaCorrente(novaConta);
 
-    // Retornar o DTO da conta criada
     return ContaCorrenteDto.fromEntity(novaConta);
   }
 

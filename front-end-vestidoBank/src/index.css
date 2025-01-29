@@ -26,3 +26,32 @@
   animation: intenseGlow 1.5s infinite;
   color: black; 
 }
+
+
+/* Estilo da barra de rolagem */
+.custom-scrollbar {
+  scrollbar-width: thin; /* Para navegadores Firefox */
+  scrollbar-color: transparent transparent; /* Cor inicial transparente */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Largura da barra de rolagem */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Fundo transparente */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent; /* Cor inicial transparente */
+  border-radius: 4px; /* Bordas arredondadas */
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: fuchsia; /* Cor fuchsia ao passar o mouse */
+}
+
+/* Para Firefox */
+.custom-scrollbar:hover {
+  scrollbar-color: fuchsia transparent; /* Cor fuchsia ao passar o mouse */
+}
