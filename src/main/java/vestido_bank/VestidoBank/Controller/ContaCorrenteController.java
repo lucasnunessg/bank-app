@@ -15,10 +15,13 @@ import vestido_bank.VestidoBank.Controller.Dto.ClientAndCorrentDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteDto;
 import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
+import vestido_bank.VestidoBank.Controller.Dto.ResponseAccountSaldo;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
+import vestido_bank.VestidoBank.Entity.ContaPoupanca;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
 import vestido_bank.VestidoBank.Service.ClientService;
 import vestido_bank.VestidoBank.Service.ContaCorrenteService;
@@ -41,6 +44,20 @@ public class ContaCorrenteController {
   public List<ContaCorrenteDto> getAllAccounts() {
     List<ContaCorrente> conta = contaCorrenteService.getAllContasCorrentes();
     return conta.stream().map(ContaCorrenteDto::fromEntity).toList();
+  }
+
+  @GetMapping("/{clientId}/saldo")
+  public ResponseAccountSaldo getSaldoAccount(@PathVariable Long clientId) {
+    Client client = clientService.getById(clientId);
+    if(client == null) {
+      throw new ClientNotFoundException("Não encontrado!");
+    }
+    ContaCorrente contaCorrente = contaCorrenteService.getContaCorrenteById(clientId);
+    if(contaCorrente == null) {
+      throw new ContaPoupancaNotFoundException("Não encontrada!");
+    }
+
+    return new ResponseAccountSaldo(contaCorrente.getSaldo());
   }
 
   @PostMapping("/{clientId}/create-account")

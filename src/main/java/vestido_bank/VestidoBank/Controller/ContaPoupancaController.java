@@ -1,5 +1,6 @@
 package vestido_bank.VestidoBank.Controller;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -18,13 +19,17 @@ import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaDto;
 import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
 import vestido_bank.VestidoBank.Controller.Dto.ResponseAccountSaldo;
+import vestido_bank.VestidoBank.Controller.Dto.TransactionDto;
+import vestido_bank.VestidoBank.Controller.Dto.TransferDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
+import vestido_bank.VestidoBank.Entity.Transaction;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
 import vestido_bank.VestidoBank.Service.ClientService;
 import vestido_bank.VestidoBank.Service.ContaCorrenteService;
 import vestido_bank.VestidoBank.Service.ContaPoupancaService;
+import vestido_bank.VestidoBank.Service.TransactionService;
 
 @RestController
 @RequestMapping("/conta-poupanca")
@@ -32,12 +37,14 @@ public class ContaPoupancaController {
 
   ContaPoupancaService contaPoupancaService;
   ClientService clientService;
+  TransactionService transactionService;
 
   @Autowired
   public ContaPoupancaController(ContaPoupancaService contaPoupancaService,
-      ClientService clientService) {
+      ClientService clientService, TransactionService transactionService) {
     this.contaPoupancaService = contaPoupancaService;
     this.clientService = clientService;
+    this.transactionService = transactionService;
   }
 
   @GetMapping
@@ -93,6 +100,19 @@ public class ContaPoupancaController {
 
         return new ResponseAccountSaldo(contaPoupanca.getSaldo());
   }
+
+  @GetMapping("/{clientId}/transfers/send")
+  public List<TransferDto> getTransfersSendAccount(@PathVariable Long clientId) {
+    Client client = clientService.getById(clientId);
+    if(client == null) {
+      throw new ClientNotFoundException("Não encontrado");
+    }
+
+
+    List<Transaction> transaction = transactionService.getAllTransactions();
+
+    return transaction.stream().map(TransferDto::fromTransaction).toList();
+      }
 
   @PostMapping("/{contaPoupancaId}/client/{clientId}/deposit")
   public ResponseEntity<ContaPoupancaDto> deposito(@PathVariable Long contaPoupancaId,

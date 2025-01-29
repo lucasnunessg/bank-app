@@ -121,36 +121,41 @@ public class DatabaseSeeder implements CommandLineRunner {
   private List<Transaction> seedTransaction(List<ContaCorrente> contasCorrentes, List<ContaPoupanca> contasPoupancas) {
     List<Transaction> transactions = new ArrayList<>();
 
-    // Cria transações entre contas correntes e poupanças
+    // Cria transações entre contas correntes e poupanças de diferentes clientes
     for (int i = 0; i < contasCorrentes.size(); i++) {
-      ContaCorrente contaCorrente = contasCorrentes.get(i);
-      ContaPoupanca contaPoupanca = contasPoupancas.get(i);
+      ContaCorrente contaCorrenteOrigem = contasCorrentes.get(i);
+      ContaPoupanca contaPoupancaOrigem = contasPoupancas.get(i);
 
-      // Transação da conta corrente para a poupança
+      // O índice do cliente de destino é o próximo cliente na lista (circular)
+      int j = (i + 1) % contasCorrentes.size();
+      ContaCorrente contaCorrenteDestino = contasCorrentes.get(j);
+      ContaPoupanca contaPoupancaDestino = contasPoupancas.get(j);
+
+      // Transação da conta corrente do cliente i para a conta corrente do cliente j
       Transaction transaction1 = new Transaction(
-          contaCorrente.getClient(), // Cliente associado à transação
-          contaCorrente, // Conta corrente como origem
-          null, // Conta corrente como destino (não se aplica)
-          contaPoupanca, // Conta poupança como destino
+          contaCorrenteOrigem.getClient(), // Cliente associado à transação (origem)
+          contaCorrenteOrigem, // Conta corrente como origem
+          contaCorrenteDestino, // Conta corrente como destino
+          null, // Conta poupança como destino (não se aplica)
           null, // Conta poupança como origem (não se aplica)
           100.0f, // Valor da transação
           LocalDateTime.now().minusHours(i * 2), // Data/hora variável
-          "Transferência para poupança", // Descrição
-          contaCorrente.getSaldo() - 100.0f // Saldo restante na conta de origem
+          "Transferência para outro cliente (corrente)", // Descrição
+          contaCorrenteOrigem.getSaldo() - 100.0f // Saldo restante na conta de origem
       );
       transactions.add(transaction1);
 
-      // Transação da conta poupança para a corrente
+      // Transação da conta poupança do cliente i para a conta poupança do cliente j
       Transaction transaction2 = new Transaction(
-          contaPoupanca.getClient(), // Cliente associado à transação
+          contaPoupancaOrigem.getClient(), // Cliente associado à transação (origem)
           null, // Conta corrente como origem (não se aplica)
-          contaCorrente, // Conta corrente como destino
-          null, // Conta poupança como destino (não se aplica)
-          contaPoupanca, // Conta poupança como origem
+          null, // Conta corrente como destino (não se aplica)
+          contaPoupancaDestino, // Conta poupança como destino
+          contaPoupancaOrigem, // Conta poupança como origem
           50.0f, // Valor da transação
           LocalDateTime.now().minusHours(i * 3), // Data/hora variável
-          "Transferência para corrente", // Descrição
-          contaPoupanca.getSaldo() - 50.0f // Saldo restante na conta de origem
+          "Transferência para outro cliente (poupança)", // Descrição
+          contaPoupancaOrigem.getSaldo() - 50.0f // Saldo restante na conta de origem
       );
       transactions.add(transaction2);
     }
