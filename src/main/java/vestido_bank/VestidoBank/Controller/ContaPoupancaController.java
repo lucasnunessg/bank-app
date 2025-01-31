@@ -90,27 +90,27 @@ public class ContaPoupancaController {
   @GetMapping("/{clientId}/saldo")
   public ResponseAccountSaldo getSaldoAccount(@PathVariable Long clientId) {
     Client client = clientService.getById(clientId);
-        if(client == null) {
-          throw new ClientNotFoundException("Não encontrado!");
-        }
-  ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(clientId);
-        if(contaPoupanca == null) {
-          throw new ContaPoupancaNotFoundException("Não encontrada!");
-        }
+    if (client == null) {
+      throw new ClientNotFoundException("Não encontrado!");
+    }
+    ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(clientId);
+    if (contaPoupanca == null) {
+      throw new ContaPoupancaNotFoundException("Não encontrada!");
+    }
 
-        return new ResponseAccountSaldo(contaPoupanca.getSaldo());
+    return new ResponseAccountSaldo(contaPoupanca.getSaldo());
   }
 
   @GetMapping("/{clientId}/transfers/send")
   public List<TransferDto> getTransfersSendAccount(@PathVariable Long clientId) {
     Client client = clientService.getById(clientId);
-    if(client == null) {
+    if (client == null) {
       throw new ClientNotFoundException("Não encontrado");
     }
     List<Transaction> transaction = transactionService.getAllTransactionsById(clientId);
 
     return transaction.stream().map(TransferDto::fromTransaction).toList();
-      }
+  }
 
   @PostMapping("/{contaPoupancaId}/client/{clientId}/deposit")
   public ResponseEntity<ContaPoupancaDto> deposito(@PathVariable Long contaPoupancaId,

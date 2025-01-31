@@ -118,7 +118,8 @@ public class DatabaseSeeder implements CommandLineRunner {
     return contaPoupancaRepository.saveAll(contasPoupancas);
   }
 
-  private List<Transaction> seedTransaction(List<ContaCorrente> contasCorrentes, List<ContaPoupanca> contasPoupancas) {
+  private List<Transaction> seedTransaction(List<ContaCorrente> contasCorrentes,
+      List<ContaPoupanca> contasPoupancas) {
     List<Transaction> transactions = new ArrayList<>();
 
     // Cria transações entre contas correntes e poupanças de diferentes clientes

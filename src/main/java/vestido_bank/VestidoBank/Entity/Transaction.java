@@ -47,7 +47,6 @@ public class Transaction {
   private float saldoRestante;
 
 
-
   public Transaction() {
   }
 
@@ -92,7 +91,6 @@ public class Transaction {
   public void setClient(Client client) {
     this.client = client;
   }
-
 
 
   public ContaPoupanca getContaPoupancaDestino() {

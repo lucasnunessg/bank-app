@@ -17,6 +17,7 @@ public record TransferDto(
     LocalDateTime date
 
 ) {
+
   public static TransferDto fromTransaction(Transaction transaction) {
     return new TransferDto(
         // Conta Destino

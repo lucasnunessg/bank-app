@@ -26,7 +26,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
   private final JwtFilter jwtFilter;
 
-   @Autowired
+  @Autowired
   public SecurityConfig(JwtFilter jwtFilter) {
     this.jwtFilter = jwtFilter;
   }

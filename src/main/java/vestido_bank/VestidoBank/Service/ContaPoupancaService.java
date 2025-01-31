@@ -34,7 +34,6 @@ public class ContaPoupancaService {
   }
 
 
-
   public ContaPoupanca getPoupancaById(Long id) {
     Optional<ContaPoupanca> poupanca = contaPoupancaRepository.findById(id);
     if (poupanca.isEmpty()) {

@@ -1,6 +1,7 @@
 package vestido_bank.VestidoBank.Service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.MethodInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +40,13 @@ public class ClientService implements UserDetailsService {
 
   public List<Client> getAllClients() {
     return clientRepository.findAll();
+  }
+
+  public List<Client> getAllClientsWithoutMe(Long id) {
+    List<Client> allClients = clientRepository.findAll();
+    return allClients.stream()
+        .filter(client -> !client.getId().equals(id)) //filtra pra excluir o proprio id
+        .collect(Collectors.toList()); //converte de novo p lista
   }
 
   public Client createClient(Client client) {

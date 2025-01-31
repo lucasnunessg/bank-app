@@ -48,11 +48,11 @@ public class TransactionService {
   }
 
   public List<Transaction> getAllTransactionsById(Long clientId) {
-  Optional<Client> client = clientRepository.findById(clientId);
-      if(client.isEmpty()) {
-        throw new ClientNotFoundException("Não encontrado");
-      }
-      return transactionsRepository.findByClientId(clientId);
+    Optional<Client> client = clientRepository.findById(clientId);
+    if (client.isEmpty()) {
+      throw new ClientNotFoundException("Não encontrado");
+    }
+    return transactionsRepository.findByClientId(clientId);
   }
 
   public Transaction getTransactionById(Long id) {

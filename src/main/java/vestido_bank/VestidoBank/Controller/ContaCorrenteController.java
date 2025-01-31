@@ -49,11 +49,11 @@ public class ContaCorrenteController {
   @GetMapping("/{clientId}/saldo")
   public ResponseAccountSaldo getSaldoAccount(@PathVariable Long clientId) {
     Client client = clientService.getById(clientId);
-    if(client == null) {
+    if (client == null) {
       throw new ClientNotFoundException("Não encontrado!");
     }
     ContaCorrente contaCorrente = contaCorrenteService.getContaCorrenteById(clientId);
-    if(contaCorrente == null) {
+    if (contaCorrente == null) {
       throw new ContaPoupancaNotFoundException("Não encontrada!");
     }
 

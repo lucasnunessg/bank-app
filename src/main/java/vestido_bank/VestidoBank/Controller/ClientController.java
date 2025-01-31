@@ -58,6 +58,12 @@ public class ClientController {
         .toList();
   }
 
+  @GetMapping("/{clientId}/list-clients")
+  public List<ClientDto> getClientWithoutMe(@PathVariable Long clientId) {
+    List<Client> clients = clientService.getAllClientsWithoutMe(clientId);
+    return clients.stream().map(ClientDto::fromEntity).toList();
+  }
+
   @GetMapping("/{id}")
   public ClientDto getClientByid(@PathVariable Long id) {
     return ClientDto.fromEntity(clientService.getById(id));
