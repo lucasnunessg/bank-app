@@ -16,6 +16,7 @@ function HomeAuthClient() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [name, setName] = useState<string | null>(null);
   const [clientId, setClientId] = useState<number | null>(null);
+  const [showSaldo, setShowSaldo] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -41,6 +42,7 @@ function HomeAuthClient() {
           if (response.status === 200) {
             const saldo = response.data.saldo;
             setSaldo(saldo);
+            setShowSaldo(false);
             setError("");
           }
         } catch (error) {
@@ -65,11 +67,8 @@ function HomeAuthClient() {
             {
               headers: {
                 Authorization: `Bearer ${token}`,
-                
               },
-              
             }
-            
           );
           if ((await response).status === 200) {
             setTransactions((await response).data);
@@ -84,8 +83,10 @@ function HomeAuthClient() {
 
     fetchTransactions();
   }, [clientId]);
-  
-  
+
+  const handleShowSaldo = () => {
+    setShowSaldo((prev) => !prev);
+  };
 
   return (
     <div>
@@ -97,15 +98,22 @@ function HomeAuthClient() {
         <div className="text-red-500 text-sm text-center mt-4">{error}</div>
       )}
 
-      <h1 className="text-[white]">
-        {saldo ? `Saldo atual R$: ${saldo}` : "Carregando saldo..."}
-      </h1>
+      <div>
+        <button
+          onClick={handleShowSaldo}
+          className="bg-blue-500 text-white p-2 rounded"
+        >
+          {showSaldo ? "Esconder Saldo" : "Mostrar Saldo"}
+        </button>
+
+        {showSaldo && <h1 className="text-[white]">Saldo atual R$: {saldo}</h1>}
+      </div>
 
       <div className="absolute ml-[350px]  max-w-[450px] max-h-[650px]  rounded-[8px] p-[30px] overflow-y-auto custom-scrollbar">
         <h1 className="text-[white]">Histórico de transações:</h1>
         <ul>
           {transactions.map(
-            ({ nomeDonoDestino, nomeDonoOrigem, valor, descricao}, index) => (
+            ({ nomeDonoDestino, nomeDonoOrigem, valor, descricao }, index) => (
               <li key={index} className="text-[white] mb-4">
                 <p>
                   <strong>Origem:</strong> {nomeDonoOrigem}
