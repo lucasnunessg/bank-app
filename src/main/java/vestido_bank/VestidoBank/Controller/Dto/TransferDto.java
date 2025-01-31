@@ -1,5 +1,8 @@
 package vestido_bank.VestidoBank.Controller.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import vestido_bank.VestidoBank.Entity.Transaction;
 
 public record TransferDto(
@@ -8,7 +11,11 @@ public record TransferDto(
     Long contaOrigemId,
     String nomeDonoOrigem,
     float valor,
-    String descricao
+    String descricao,
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    LocalDateTime date
+
 ) {
   public static TransferDto fromTransaction(Transaction transaction) {
     return new TransferDto(
@@ -36,7 +43,8 @@ public record TransferDto(
                 : null),
         // Outros campos
         transaction.getValor(),
-        transaction.getDescricao()
+        transaction.getDescricao(),
+        transaction.getData_hora()
     );
   }
 }

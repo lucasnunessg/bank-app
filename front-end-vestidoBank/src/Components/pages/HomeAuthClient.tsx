@@ -94,7 +94,7 @@ function HomeAuthClient() {
         {saldo ? `Saldo atual R$: ${saldo}` : "Carregando saldo..."}
       </h1>
 
-      <div className="absolute ml-[350px] border-[1px] max-w-[450px] max-h-[650px] border-solid border-[fuchsia] rounded-[8px] p-[30px] overflow-y-auto custom-scrollbar">
+      <div className="absolute ml-[350px]  max-w-[450px] max-h-[650px]  rounded-[8px] p-[30px] overflow-y-auto custom-scrollbar">
         <h1 className="text-[white]">Histórico de transações:</h1>
         <ul>
           {transactions.map(

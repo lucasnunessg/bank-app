@@ -1,5 +1,6 @@
 package vestido_bank.VestidoBank.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,6 +47,7 @@ public class Transaction {
   private float saldoRestante;
 
 
+
   public Transaction() {
   }
 
@@ -61,7 +63,6 @@ public class Transaction {
     this.valor = valor;
     this.data_hora = data_hora;
     this.descricao = descricao;
-    this.saldoRestante = saldoRestante;
   }
 
   public Long getId() {
@@ -87,6 +88,12 @@ public class Transaction {
   public void setContaCorrenteDestino(ContaCorrente contaCorrenteDestino) {
     this.contaCorrenteDestino = contaCorrenteDestino;
   }
+
+  public void setClient(Client client) {
+    this.client = client;
+  }
+
+
 
   public ContaPoupanca getContaPoupancaDestino() {
     return contaPoupancaDestino;
