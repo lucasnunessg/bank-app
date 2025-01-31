@@ -107,9 +107,7 @@ public class ContaPoupancaController {
     if(client == null) {
       throw new ClientNotFoundException("Não encontrado");
     }
-
-
-    List<Transaction> transaction = transactionService.getAllTransactions();
+    List<Transaction> transaction = transactionService.getAllTransactionsById(clientId);
 
     return transaction.stream().map(TransferDto::fromTransaction).toList();
       }

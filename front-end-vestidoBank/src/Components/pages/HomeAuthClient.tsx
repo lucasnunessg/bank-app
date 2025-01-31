@@ -58,13 +58,18 @@ function HomeAuthClient() {
       if (clientId !== null) {
         try {
           const token = localStorage.getItem("token");
+          console.log(token);
+
           const response = api.get(
-            `/conta-poupanca/{clientId}/transfers/send`,
+            `/conta-poupanca/${clientId}/transfers/send`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
+                
               },
+              
             }
+            
           );
           if ((await response).status === 200) {
             setTransactions((await response).data);
@@ -79,6 +84,8 @@ function HomeAuthClient() {
 
     fetchTransactions();
   }, [clientId]);
+  
+  
 
   return (
     <div>
@@ -98,7 +105,7 @@ function HomeAuthClient() {
         <h1 className="text-[white]">Histórico de transações:</h1>
         <ul>
           {transactions.map(
-            ({ nomeDonoDestino, nomeDonoOrigem, valor, descricao }, index) => (
+            ({ nomeDonoDestino, nomeDonoOrigem, valor, descricao}, index) => (
               <li key={index} className="text-[white] mb-4">
                 <p>
                   <strong>Origem:</strong> {nomeDonoOrigem}

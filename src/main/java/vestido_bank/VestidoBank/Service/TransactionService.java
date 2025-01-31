@@ -10,14 +10,17 @@ import org.springframework.web.client.ResourceAccessException;
 import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaDto;
 import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
+import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
 import vestido_bank.VestidoBank.Entity.Transaction;
+import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ConnectionFailedException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.InvalidTransaction;
 import vestido_bank.VestidoBank.Exceptions.TransactionNotFound;
+import vestido_bank.VestidoBank.Repository.ClientRepository;
 import vestido_bank.VestidoBank.Repository.ContaCorrenteRepository;
 import vestido_bank.VestidoBank.Repository.ContaPoupancaRepository;
 import vestido_bank.VestidoBank.Repository.TransactionsRepository;
@@ -28,18 +31,28 @@ public class TransactionService {
   ContaPoupancaRepository contaPoupancaRepository;
   ContaCorrenteRepository contaCorrenteRepository;
   TransactionsRepository transactionsRepository;
+  ClientRepository clientRepository;
 
   @Autowired
   public TransactionService(ContaPoupancaRepository contaPoupancaRepository,
       ContaCorrenteRepository contaCorrenteRepository,
-      TransactionsRepository transactionsRepository) {
+      TransactionsRepository transactionsRepository, ClientRepository clientRepository) {
     this.contaPoupancaRepository = contaPoupancaRepository;
     this.contaCorrenteRepository = contaCorrenteRepository;
     this.transactionsRepository = transactionsRepository;
+    this.clientRepository = clientRepository;
   }
 
   public List<Transaction> getAllTransactions() {
     return transactionsRepository.findAll();
+  }
+
+  public List<Transaction> getAllTransactionsById(Long clientId) {
+  Optional<Client> client = clientRepository.findById(clientId);
+      if(client.isEmpty()) {
+        throw new ClientNotFoundException("Não encontrado");
+      }
+      return transactionsRepository.findByClientId(clientId);
   }
 
   public Transaction getTransactionById(Long id) {
