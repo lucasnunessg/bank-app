@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import api from "../FetchApi";
 import { jwtDecode } from "jwt-decode";
 import { DecodedToken } from "../decoder/DecodedToken";
+import { Eye, EyeOff } from "lucide-react";
 
 interface Transaction {
   valor: number;
   descricao: string;
   nomeDonoDestino: string;
   nomeDonoOrigem: string;
+  date: string;
 }
 
 function HomeAuthClient() {
@@ -16,38 +18,37 @@ function HomeAuthClient() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [name, setName] = useState<string | null>(null);
   const [clientId, setClientId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
   const [showSaldo, setShowSaldo] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwtDecode<DecodedToken>(token);
-      const extractedClientId = decodedToken.clientId;
-      const extractName = decodedToken.name;
-      setClientId(extractedClientId);
-      setName(extractName);
+      setClientId(decodedToken.clientId);
+      setName(decodedToken.name);
     }
   }, []);
 
   useEffect(() => {
     const fetchSaldo = async () => {
       if (clientId !== null) {
+        setLoading(true);
         try {
           const token = localStorage.getItem("token");
           const response = await api.get(`/conta-poupanca/${clientId}/saldo`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           });
+
           if (response.status === 200) {
-            const saldo = response.data.saldo;
-            setSaldo(saldo);
-            setShowSaldo(false);
+            setSaldo(response.data.saldo);
             setError("");
           }
         } catch (error) {
           console.error("Erro ao buscar saldo:", error);
           setError("Não foi possível buscar saldo!");
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -58,25 +59,25 @@ function HomeAuthClient() {
   useEffect(() => {
     const fetchTransactions = async () => {
       if (clientId !== null) {
+        setLoading(true);
         try {
           const token = localStorage.getItem("token");
-          console.log(token);
-
-          const response = api.get(
+          const response = await api.get(
             `/conta-poupanca/${clientId}/transfers/send`,
             {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+              headers: { Authorization: `Bearer ${token}` },
             }
           );
-          if ((await response).status === 200) {
-            setTransactions((await response).data);
+
+          if (response.status === 200) {
+            setTransactions(response.data);
             setError("");
           }
-        } catch (e) {
-          console.error(e);
+        } catch (error) {
+          console.error("Erro ao buscar transações:", error);
           setError("Erro ao buscar transações");
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -90,31 +91,46 @@ function HomeAuthClient() {
 
   return (
     <div>
-      <p className="text-[28px] text-[white] text-urbanist">
-        Seja bem vindo! {name}
+      <p className="text-[28px] text-[white] font-urbanist">
+        Seja bem-vindo! {name}
       </p>
 
       {error && (
         <div className="text-red-500 text-sm text-center mt-4">{error}</div>
       )}
 
-      <div>
-        <button
+      <div className="flex flex-col items-end">
+        <a
           onClick={handleShowSaldo}
-          className="bg-blue-500 text-white p-2 rounded"
+          className="bg-blue-500 text-[white] p-2 rounded cursor-pointer"
         >
-          {showSaldo ? "Esconder Saldo" : "Mostrar Saldo"}
-        </button>
+          {" "}
+          {showSaldo ? "Esconder saldo" : "Mostrar saldo"}<br></br>
+          {showSaldo ? <EyeOff className="ml-2" /> : <Eye className="ml-2" />}
+        </a>
 
-        {showSaldo && <h1 className="text-[white]">Saldo atual R$: {saldo}</h1>}
+        {loading ? (
+          <h1 className="text-[white]">Carregando...</h1>
+        ) : (
+          showSaldo && (
+            <h1 className="text-[white] font-urbanist">
+              Saldo atual R$: {saldo}
+            </h1>
+          )
+        )}
       </div>
 
-      <div className="absolute ml-[350px]  max-w-[450px] max-h-[650px]  rounded-[8px] p-[30px] overflow-y-auto custom-scrollbar">
-        <h1 className="text-[white]">Histórico de transações:</h1>
+      <div className="absolute ml-[350px] max-w-[450px] max-h-[650px] rounded-[8px] p-[30px] overflow-y-auto custom-scrollbar">
+        <h1 className="text-[white] font-[urbanist]">
+          Histórico de transações:
+        </h1>
         <ul>
           {transactions.map(
-            ({ nomeDonoDestino, nomeDonoOrigem, valor, descricao }, index) => (
-              <li key={index} className="text-[white] mb-4">
+            (
+              { nomeDonoDestino, nomeDonoOrigem, valor, descricao, date },
+              index
+            ) => (
+              <li key={index} className="text-[white] font-[urbanist] mb-4">
                 <p>
                   <strong>Origem:</strong> {nomeDonoOrigem}
                 </p>
@@ -126,6 +142,9 @@ function HomeAuthClient() {
                 </p>
                 <p>
                   <strong>Descrição:</strong> {descricao}
+                </p>
+                <p>
+                  <strong>Data:</strong> {date}
                 </p>
               </li>
             )

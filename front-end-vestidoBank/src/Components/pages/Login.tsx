@@ -44,7 +44,10 @@ function Login() {
         email: email,
         password: password,
       });
-
+      console.log("recebendo email here: " , email);
+      console.log("recebendo password here: " , password);
+      
+      
       if (response.status === 200) {
         const token = response.data.token;
         localStorage.setItem("token", token);
@@ -108,7 +111,7 @@ function Login() {
             />
           </div>
 
-          {error && <div className="text-red-500 text-sm text-center mt-4">{error}</div>}
+          {error && <div className="text-[red] text-sm text-center mt-4">{error}</div>}
 
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center">
