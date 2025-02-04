@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "./FetchApi";
 
+
 function Transf() {
   const [valor, setValor] = useState<number | "">("");
   const [clientId, setClientId] = useState<string | number | null>(null);
@@ -28,6 +29,8 @@ function Transf() {
     }
   }, [setContaOrigemId]);
 
+
+
   useEffect(() => {
     async function fetchContasDestino() {
       if (!clientId) return;
@@ -53,6 +56,7 @@ function Transf() {
     fetchContasDestino();
   }, [clientId]);
 
+
   async function handleTransfer() {
     if (!valor || !contaDestinoId || !clientId) {
       alert("Por favor, selecione um destinatário e informe o valor.");
@@ -63,8 +67,15 @@ function Transf() {
 
     try {
       const token = localStorage.getItem("token");
+      console.log("token: " , token);
+      console.log("valor: ", valor);
+      console.log("conta destiino: " , contaDestinoId);
+      console.log("conta origem: ", contaOrigemId);
+      
+        
+ 
       const response = await api.post(
-        `/clients-bank/${clientId}/transfer/${contaDestinoId}`,
+        `/transactions/accounts/${contaOrigemId}/transfer/${contaDestinoId}`,
         { valor: Number(valor) }, 
         { headers: { Authorization: `Bearer ${token}` } } 
       );
@@ -82,6 +93,7 @@ function Transf() {
       setTransferindo(false);
     }
   }
+
 
   return (
     <div>
