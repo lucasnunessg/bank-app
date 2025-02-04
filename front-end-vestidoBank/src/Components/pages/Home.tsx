@@ -54,14 +54,11 @@ function Home() {
 
   const [currentCard, setCurrentCard] = useState(0);
 
-  // Wrap nextCard in useCallback to memoize it
   const nextCard = useCallback(() => {
     setCurrentCard((prev) => (prev + 1) % cards.length);
   }, [cards.length]);
 
-  // Wrap prevCard in useCallback to memoize it
 
-  // Automatic slide every 5 seconds
   useEffect(() => {
     const interval = setInterval(nextCard, 5000);
     return () => clearInterval(interval);

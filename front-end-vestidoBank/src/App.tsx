@@ -4,6 +4,7 @@ import Header from "./Components/Header";
 import Home from "./Components/pages/Home";
 import Login from './Components/pages/Login';
 import HomeAuthClient from './Components/pages/HomeAuthClient';
+import Transf from './Components/Transfer';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/home/auth/client" element={< HomeAuthClient />} />
+        <Route path="/transferir" element= {<Transf />} />
       </Routes>
     </div>
   </div>
