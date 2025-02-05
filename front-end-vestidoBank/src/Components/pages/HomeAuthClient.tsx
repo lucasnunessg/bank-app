@@ -83,6 +83,7 @@ function HomeAuthClient() {
     };
 
     fetchTransactions();
+
   }, [clientId]);
 
   const handleShowSaldo = () => {

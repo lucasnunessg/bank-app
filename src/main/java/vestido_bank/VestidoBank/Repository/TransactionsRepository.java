@@ -8,7 +8,7 @@ import vestido_bank.VestidoBank.Entity.Transaction;
 @Repository
 public interface TransactionsRepository extends JpaRepository<Transaction, Long> {
 
-  List<Transaction> findByClientId(Long clientId);
+  List<Transaction> findByClient_Id(Long clientId);
 
 
 }

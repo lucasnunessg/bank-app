@@ -1,6 +1,5 @@
 package vestido_bank.VestidoBank.Entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -137,9 +136,6 @@ public class Transaction {
     return client;
   }
 
-  public void setClient() {
-    this.client = client;
-  }
 
   public float getSaldoRestante() {
     return saldoRestante;

@@ -74,6 +74,7 @@ public class TransactionsController {
     }
 
     Transaction transaction = transactionCreateDto.toEntity(contaOrigem, contaDestino);
+    transaction.setClient(contaOrigem.getClient());
 
     Transaction createTransaction = transactionService.createTransactionWithPoupancaAndCorrente(
         contaOrigemId, contaDestinoId, transaction.getValor(), transaction);

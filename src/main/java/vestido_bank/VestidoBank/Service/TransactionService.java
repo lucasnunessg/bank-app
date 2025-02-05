@@ -52,7 +52,7 @@ public class TransactionService {
     if (client.isEmpty()) {
       throw new ClientNotFoundException("Não encontrado");
     }
-    return transactionsRepository.findByClientId(clientId);
+    return transactionsRepository.findByClient_Id(clientId);
   }
 
   public Transaction getTransactionById(Long id) {
