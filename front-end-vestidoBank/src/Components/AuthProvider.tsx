@@ -8,7 +8,9 @@ interface DecodedToken {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
   const [clientId, setClientId] = useState<number | null>(null);
   const [name, setName] = useState<string | null>(null);
 
@@ -30,8 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const decodedToken = jwtDecode<DecodedToken>(token);
     setToken(token);
     setClientId(decodedToken.clientId);
-    setName(decodedToken.name)
-  }
+    setName(decodedToken.name);
+  };
 
   const logout = () => {
     localStorage.removeItem("token");

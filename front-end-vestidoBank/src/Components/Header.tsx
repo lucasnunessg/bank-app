@@ -1,45 +1,29 @@
-import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { DecodedToken } from "./decoder/DecodedToken";
+import { useAuth } from "../Components/contexts/useAuth";
+
+
 
 function Header() {
-  const [clientName, setClientName] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  console.log(clientName);
-
+  const { token, logout } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
+  
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decodedToken = jwtDecode<DecodedToken>(token);
-        setClientName(decodedToken.name || decodedToken.sub);
-        setIsAuthenticated(true);
-      } catch (e) {
-        console.error("Erro ao decodificar token:", e);
-        setIsAuthenticated(false);
-      }
-    } else {
-      setIsAuthenticated(false);
-    }
-  }, [isAuthenticated]);
+ useEffect(() => {  
+  setIsAuthenticated(!!token);
+ }, [token])
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("name");
-    localStorage.removeItem("clientId");
+    logout();
     navigate("/");
-    setIsAuthenticated(false);
-    setClientName(null);
+ 
   };
 
   return (
     <div className="flex flex-row w-auto h-100vw items-center justify-between top-0 px-[32px] bg-white shadow-sm border-b-[1px] border-[#FF00FF] border-opacity-10">
       <div className="flex items-center">
-        {" "}
         {isAuthenticated ? (
           <>
             <Link to={"/"} className="no-underline">
@@ -103,7 +87,6 @@ function Header() {
             </span>
 
             <div className="ml-[auto] flex items-center">
-              {" "}
               <Link to={"/login"}>
                 <button className="flex items-center mr-[20px] rounded-full justify-center border-transparent border text-[22px] bg-transparent h-[30px] text-[white] hover:border-[#FF00FF] hover:bg-[#FF00FF] transition-all duration-300">
                   Login

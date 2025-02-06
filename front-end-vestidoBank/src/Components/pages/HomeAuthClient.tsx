@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../FetchApi";
-import { jwtDecode } from "jwt-decode";
-import { DecodedToken } from "../decoder/DecodedToken";
+import { useAuth } from "../contexts/useAuth";
+
 import { Eye, EyeOff } from "lucide-react";
 
 interface Transaction {
@@ -16,19 +16,10 @@ function HomeAuthClient() {
   const [saldo, setSaldo] = useState("");
   const [error, setError] = useState("");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [name, setName] = useState<string | null>(null);
-  const [clientId, setClientId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [showSaldo, setShowSaldo] = useState(false);
+  const { clientId, name } = useAuth();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode<DecodedToken>(token);
-      setClientId(decodedToken.clientId);
-      setName(decodedToken.name);
-    }
-  }, []);
 
   useEffect(() => {
     const fetchSaldo = async () => {
@@ -92,7 +83,7 @@ function HomeAuthClient() {
 
   return (
     <div>
-      <p className="text-[28px] text-[white] font-urbanist">
+      <p className="text-[17px] sm:text-[32px] text-[white] font-urbanist">
         Seja bem-vindo! {name}
       </p>
 
@@ -100,7 +91,7 @@ function HomeAuthClient() {
         <div className="text-red-500 text-sm text-center mt-4">{error}</div>
       )}
 
-      <div className="flex flex-col items-end">
+      <div className="flex flex-col items-end mr-[20px]">
         <a
           onClick={handleShowSaldo}
           className="bg-blue-500 text-[white] p-2 rounded cursor-pointer"
