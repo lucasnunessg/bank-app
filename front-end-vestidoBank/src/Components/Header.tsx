@@ -40,7 +40,6 @@ function Header() {
     <div className="flex flex-row w-auto h-100vw items-center justify-between top-0 px-[32px] bg-white shadow-sm border-b-[1px] border-[#FF00FF] border-opacity-10">
       <div className="flex items-center">
         {" "}
-        {/* Colocando tudo em uma linha */}
         {isAuthenticated ? (
           <>
             <Link to={"/"} className="no-underline">

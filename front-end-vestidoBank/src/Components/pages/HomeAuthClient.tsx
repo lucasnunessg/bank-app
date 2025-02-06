@@ -121,7 +121,7 @@ function HomeAuthClient() {
         )}
       </div>
 
-      <div className="absolute ml-[350px] max-w-[450px] max-h-[650px] rounded-[8px] p-[30px] overflow-y-auto custom-scrollbar">
+      <div className="absolute  max-w-[450px] max-h-[650px]  p-[30px] overflow-y-auto custom-scrollbar">
         <h1 className="text-[white] font-[urbanist]">
           Histórico de transações:
         </h1>

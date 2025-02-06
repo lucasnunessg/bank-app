@@ -16,6 +16,7 @@ function Transf() {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [transferindo, setTransferindo] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
   useEffect(() => {
     const storedClientId = localStorage.getItem("clientId");
@@ -63,6 +64,7 @@ function Transf() {
       return;
     }
 
+
     setTransferindo(true);
 
     try {
@@ -81,10 +83,14 @@ function Transf() {
       );
 
       if (response.status === 200) {
-        alert("Transferência realizada com sucesso!");
         setValor("");
         setContaDestinoId(null);
         setContaOrigemId(null);
+        setSuccessMessage(true);
+        setTimeout(() => {
+          setSuccessMessage(false);
+        }, 3000);
+
       }
     } catch (e) {
       console.error("Erro ao realizar a transferência:", e);
@@ -104,7 +110,7 @@ function Transf() {
       ) : (
         <>
           <label className="text-[white]">
-            Selecione para quem você quer enviar:
+            Lista de contatos:
           </label>
           <select
             className="text-[white]"
@@ -143,6 +149,10 @@ function Transf() {
           >
             {transferindo ? "Transferindo..." : "Confirmar Transferência"}
           </button>
+
+          {successMessage && (
+            <p className="text-[green] text-[20px] font-urbanist">Transferênca realizada com sucesso</p>
+          )}
         </>
       )}
     </div>

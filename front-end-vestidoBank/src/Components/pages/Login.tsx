@@ -1,29 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import api from "../FetchApi";
+import { useAuth } from "../contexts/useAuth";
 
-interface DecodedToken {
-  sub: string;
-  name?: string;
-  clientId: number;
-}
+
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [clientId, setClientId] = useState<string | number | null>(null);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  console.log(clientId);
-  
-  useEffect(() => {
-    const storedClientId = localStorage.getItem("clientId");
-    if (storedClientId) {
-      setClientId(JSON.parse(storedClientId));
-    }
-  }, []);
+ 
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -50,17 +39,10 @@ function Login() {
       
       if (response.status === 200) {
         const token = response.data.token;
-        localStorage.setItem("token", token);
-
-        const decodedToken = jwtDecode<DecodedToken>(token);
-        const clientName = decodedToken.name || decodedToken.sub;
-        const getClientId = decodedToken.clientId || decodedToken.sub;
-
-        setClientId(getClientId);
-        localStorage.setItem("name", clientName);
-        localStorage.setItem("clientId", JSON.stringify(getClientId));
-
+        login(token);
         navigate("/home/auth/client");
+        window.location.reload()
+
       }
     } catch (error) {
       console.error("Erro no login:", error);
