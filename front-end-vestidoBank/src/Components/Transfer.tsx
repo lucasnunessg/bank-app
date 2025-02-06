@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "./FetchApi";
+import { useAuth } from "../Components/contexts/useAuth";
+
 
 
 function Transf() {
   const [valor, setValor] = useState<number | "">("");
-  const [clientId, setClientId] = useState<string | number | null>(null);
-  const [contaOrigemId, setContaOrigemId] = useState<string | number | null>(
-    null
-  );
   const [contasDestino, setContasDestino] = useState<
     { id: number; name: string }[]
   >([]);
@@ -18,23 +16,14 @@ function Transf() {
   const [transferindo, setTransferindo] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
-  useEffect(() => {
-    const storedClientId = localStorage.getItem("clientId");
-    if (storedClientId !== null) {
-      try {
-        setClientId(JSON.parse(storedClientId));
-        setContaOrigemId(JSON.parse(storedClientId));
-      } catch (error) {
-        console.error("Erro ao parsear clientId:", error);
-      }
-    }
-  }, [setContaOrigemId]);
+  const { clientId, token } = useAuth();
 
+  const contaOrigemId = clientId;
 
 
   useEffect(() => {
     async function fetchContasDestino() {
-      if (!clientId) return;
+      if (!clientId || !token) return;
       setLoading(true);
 
       try {
@@ -55,11 +44,11 @@ function Transf() {
       }
     }
     fetchContasDestino();
-  }, [clientId]);
+  }, [clientId, token]);
 
 
   async function handleTransfer() {
-    if (!valor || !contaDestinoId || !clientId) {
+    if (!valor || !contaDestinoId || !contaOrigemId || !token)  {
       alert("Por favor, selecione um destinatário e informe o valor.");
       return;
     }
@@ -69,11 +58,7 @@ function Transf() {
 
     try {
       const token = localStorage.getItem("token");
-      console.log("token: " , token);
-      console.log("valor: ", valor);
-      console.log("conta destiino: " , contaDestinoId);
-      console.log("conta origem: ", contaOrigemId);
-      
+
         
  
       const response = await api.post(
@@ -85,7 +70,6 @@ function Transf() {
       if (response.status === 200) {
         setValor("");
         setContaDestinoId(null);
-        setContaOrigemId(null);
         setSuccessMessage(true);
         setTimeout(() => {
           setSuccessMessage(false);
