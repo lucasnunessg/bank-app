@@ -92,9 +92,11 @@ function Header() {
                   Login
                 </button>
               </Link>
+              <Link to={"/create-account"}>
               <button className="flex items-center mr-[20px] rounded-full justify-center border-transparent border text-[22px] bg-transparent h-[30px] text-[white] hover:border-[#FF00FF] hover:bg-[#FF00FF] transition-all duration-300">
                 Abra sua conta
               </button>
+              </Link>
             </div>
           </>
         )}
