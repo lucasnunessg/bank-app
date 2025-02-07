@@ -10,36 +10,38 @@ export function CreateAccount() {
   const [address, setAddress] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [errorType, setErrorType] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+
   const [success, setSuccess] = useState<boolean>(false);
 
-  const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (name === "password") {
+      setErrorType(!passwordRegex.test(value));
+    }
+    switch (name) {
+      case "name":
+        setName(value);
+        break;
+      case "cpf":
+        setCpf(value);
+        break;
+      case "contact":
+        setContact(value);
+        break;
+      case "address":
+        setAddress(value);
+        break;
+      case "email":
+        setEmail(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+    }
   };
 
-  const handleCpf = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCpf(event.target.value);
-  };
-
-  const handleContact = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContact(event.target.value);
-  };
-
-  const handleAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(event.target.value);
-  };
-
-  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-
-  console.log(email);
-  console.log(name);
-  console.log(cpf);
-  console.log(contact);
-  console.log(address);
-  console.log(email);
-  console.log(password);
 
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -48,9 +50,9 @@ export function CreateAccount() {
     const newPassword = event.target.value;
 
     if (!passwordRegex.test(newPassword)) {
-      setError(true);
+      setErrorType(true);
     } else {
-      setError(false);
+      setErrorType(false);
     }
     setPassword(newPassword);
   };
@@ -70,9 +72,11 @@ export function CreateAccount() {
         password,
       });
       if (response.status === 201) {
-        navigate("/home/auth/client");
         setSuccess(true);
         setError(false);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       }
     } catch (e) {
       console.error(e);
@@ -95,7 +99,7 @@ export function CreateAccount() {
           className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
           name="email"
           value={email}
-          onChange={handleEmail}
+          onChange={handleChange}
         />
 
         <input
@@ -104,7 +108,7 @@ export function CreateAccount() {
           className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
           name="name"
           value={name}
-          onChange={handleName}
+          onChange={handleChange}
         />
 
         <input
@@ -113,7 +117,7 @@ export function CreateAccount() {
           className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
           name="cpf"
           value={cpf}
-          onChange={handleCpf}
+          onChange={handleChange}
         />
 
         <input
@@ -122,7 +126,7 @@ export function CreateAccount() {
           className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
           name="contact"
           value={contact}
-          onChange={handleContact}
+          onChange={handleChange}
         />
 
         <input
@@ -131,7 +135,7 @@ export function CreateAccount() {
           className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
           name="address"
           value={address}
-          onChange={handleAddress}
+          onChange={handleChange}
         />
 
         <input
@@ -146,8 +150,11 @@ export function CreateAccount() {
           type="submit"
           className="bg-primary border border-[fuchsia] text-white font-urbanist rounded-full px-4 py-3 h-[54px] w-full hover:bg-[fuchsia] font-light transition-colors"
         >
-          Entrar
+          Criar conta
         </button>
+        {errorType && (
+          <p className="text-[red]">Sua senha deve ter um caractere maiúsculo, número e um caractere especial</p>
+        )}
         {error && (
           <p className="text-[red]">Houve um erro ao criar sua conta!</p>
         )}
