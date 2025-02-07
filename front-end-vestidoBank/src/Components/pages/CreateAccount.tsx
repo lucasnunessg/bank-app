@@ -33,6 +33,14 @@ export function CreateAccount() {
     setEmail(event.target.value);
   };
 
+  console.log(email);
+  console.log(name);
+  console.log(cpf);
+  console.log(contact);
+  console.log(address);
+  console.log(email);
+  console.log(password);
+
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -53,22 +61,18 @@ export function CreateAccount() {
       return;
     }
     try {
-      const response = await api.post(
-        "/clients-bank",
-        {
-          name,
-          cpf,
-          contact,
-          address,
-          email,
-          password,
-        },
-
-      );
-      if (response.status === 200) {
+      const response = await api.post("/clients-bank", {
+        name,
+        cpf,
+        contact,
+        address,
+        email,
+        password,
+      });
+      if (response.status === 201) {
+        navigate("/home/auth/client");
         setSuccess(true);
         setError(false);
-        navigate("/home/auth/client");
       }
     } catch (e) {
       console.error(e);
@@ -138,18 +142,16 @@ export function CreateAccount() {
           value={password}
           onChange={handlePassword}
         />
-
-        {error && (
-          <p className="text-[red]">Houve um erro ao criar sua conta!</p>
-        )}
-        {success && <p className="text-[green]">Conta criada com sucesso!</p>}
-
         <button
           type="submit"
           className="bg-primary border border-[fuchsia] text-white font-urbanist rounded-full px-4 py-3 h-[54px] w-full hover:bg-[fuchsia] font-light transition-colors"
         >
           Entrar
         </button>
+        {error && (
+          <p className="text-[red]">Houve um erro ao criar sua conta!</p>
+        )}
+        {success && <p className="text-[green]">Conta criada com sucesso!</p>}
       </form>
     </div>
   );
