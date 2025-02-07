@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "./FetchApi";
-import { useAuth } from "../Components/contexts/useAuth";
+import api from "../FetchApi";
+import { useAuth } from "../contexts/useAuth";
 
 
 

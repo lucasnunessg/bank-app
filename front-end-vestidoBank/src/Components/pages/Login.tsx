@@ -3,16 +3,12 @@ import { useNavigate } from "react-router-dom";
 import api from "../FetchApi";
 import { useAuth } from "../contexts/useAuth";
 
-
-
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
-
- 
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -33,16 +29,14 @@ function Login() {
         email: email,
         password: password,
       });
-      console.log("recebendo email here: " , email);
-      console.log("recebendo password here: " , password);
-      
-      
+      console.log("recebendo email here: ", email);
+      console.log("recebendo password here: ", password);
+
       if (response.status === 200) {
         const token = response.data.token;
         login(token);
         navigate("/home/auth/client");
-        window.location.reload()
-
+        window.location.reload();
       }
     } catch (error) {
       console.error("Erro no login:", error);
@@ -93,7 +87,9 @@ function Login() {
             />
           </div>
 
-          {error && <div className="text-[red] text-sm text-center mt-4">{error}</div>}
+          {error && (
+            <div className="text-[red] text-sm text-center mt-4">{error}</div>
+          )}
 
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center">

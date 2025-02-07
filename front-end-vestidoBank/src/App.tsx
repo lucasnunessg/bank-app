@@ -4,8 +4,9 @@ import Header from "./Components/Header";
 import Home from "./Components/pages/Home";
 import Login from "./Components/pages/Login";
 import HomeAuthClient from "./Components/pages/HomeAuthClient";
-import Transf from "./Components/Transfer";
-import { AuthProvider } from "./Components/AuthProvider";
+import Transf from "./Components/pages/Transfer";
+import { AuthProvider } from "./Components/provider/AuthProvider";
+import { Deposito } from "./Components/pages/Deposito";
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/home/auth/client" element={<HomeAuthClient />} />
             <Route path="/transferir" element={<Transf />} />
+            <Route path="/deposito" element={<Deposito />} />
+
           </Routes>
         </div>
       </div>

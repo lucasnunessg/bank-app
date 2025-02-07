@@ -1,6 +1,6 @@
 import { useEffect, useState, ReactNode } from "react";
 import { jwtDecode } from "jwt-decode";
-import { AuthContext } from "../Components/AuthContextType";
+import { AuthContext } from "../contexts/AuthContextType";
 
 interface DecodedToken {
   clientId: number;
