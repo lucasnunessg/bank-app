@@ -1,14 +1,11 @@
 package vestido_bank.VestidoBank.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.beans.MethodInvocationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +44,24 @@ public class ClientService implements UserDetailsService {
     return allClients.stream()
         .filter(client -> !client.getId().equals(id)) //filtra pra excluir o proprio id
         .collect(Collectors.toList()); //converte de novo p lista
+  }
+
+  public Optional <Client> findByusername(String name) {
+    Optional<Client> client = clientRepository.findByName(name);
+    if(client.isEmpty()) {
+      throw new ClientNotFoundException("Não encontrado");
+    }
+
+    return client;
+  }
+
+  public Client findByEmail(String email) {
+    Client client = clientRepository.findByEmail(email);
+        if(client == null) {
+          throw new ClientNotFoundException("Não encontrado");
+        }
+
+        return client;
   }
 
   public Client createClient(Client client) {
@@ -113,6 +128,22 @@ public class ClientService implements UserDetailsService {
 
     return client;
   }
+
+  public void savedResetToken(Long clientId, String token) {
+    Client client = getById(clientId);
+    client.setResetToken(token);
+    client.setTokenExpirity(LocalDateTime.now().plusHours(1));
+    clientRepository.save(client);
+  }
+
+  public Client validateResetToken(String token) {
+    Optional<Client> optionalPerson = clientRepository.findByResetToken(token);
+    if (optionalPerson.isEmpty() || optionalPerson.get().getTokenExpirity().isBefore(LocalDateTime.now())) {
+      throw new RuntimeException("Token inválido ou expirado.");
+    }
+    return optionalPerson.get();
+  }
+
 
 
 }

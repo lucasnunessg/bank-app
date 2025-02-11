@@ -57,6 +57,11 @@ public class DatabaseSeeder implements CommandLineRunner {
     );
 
     clients.add(
+        new Client("Lucas Pacheco Nunessss", "04294004043", "5599999999", "R. Acioli Vaz de Andrade",
+            "lucasnunespacheco2@gmail.com", passwordEncoder.encode("12345678"))
+    );
+
+    clients.add(
         new Client("Maria Silva", "12345678901", "5512345678", "Av. Paulista, 1000",
             "mariasilva@gmail.com", passwordEncoder.encode("senha123"))
     );

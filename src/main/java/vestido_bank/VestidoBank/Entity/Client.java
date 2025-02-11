@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +29,8 @@ public class Client implements UserDetails {
   private String email;
   private String password;
   private String imgUrl;
+  private String resetToken;
+  private LocalDateTime tokenExpirity;
 
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
@@ -74,6 +77,22 @@ public class Client implements UserDetails {
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of();
+  }
+
+  public String getResetToken() {
+    return resetToken;
+  }
+
+  public void setResetToken(String resetToken) {
+    this.resetToken = resetToken;
+  }
+
+  public LocalDateTime getTokenExpirity() {
+    return tokenExpirity;
+  }
+
+  public void setTokenExpirity(LocalDateTime tokenExpirity) {
+    this.tokenExpirity = tokenExpirity;
   }
 
   public String getPassword() {
