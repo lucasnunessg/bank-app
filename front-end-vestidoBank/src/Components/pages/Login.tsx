@@ -8,6 +8,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -30,14 +31,18 @@ function Login() {
         email: email,
         password: password,
       });
-      console.log("recebendo email here: ", email);
-      console.log("recebendo password here: ", password);
 
       if (response.status === 200) {
         const token = response.data.token;
         login(token);
         navigate("/home/auth/client");
         window.location.reload();
+
+        if (rememberMe) {
+          localStorage.setItem("token", token);
+        } else {
+          sessionStorage.setItem("token", token);
+        }
       }
     } catch (error) {
       console.error("Erro no login:", error);
@@ -94,12 +99,16 @@ function Login() {
 
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center">
-              <input type="checkbox" className="mr-2" />
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+              />
               <label className="text-sm font-urbanist text-[rgb(235,235,235)]">
                 Lembrar-me
               </label>
             </div>
-  
           </div>
 
           <div className="flex flex-col gap-y-[32px] sm:gap-y-4">
@@ -113,7 +122,6 @@ function Login() {
         </div>
       </form>
       <ForgotPassword />
-
     </div>
   );
 }
