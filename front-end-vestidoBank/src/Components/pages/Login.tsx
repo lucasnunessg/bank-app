@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../FetchApi";
 import { useAuth } from "../contexts/useAuth";
+import ForgotPassword from "./ForgotPassword";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -98,12 +99,7 @@ function Login() {
                 Lembrar-me
               </label>
             </div>
-            <a
-              className="text-sm font-urbanist text-[white] hover:underline cursor-pointer"
-              onClick={() => navigate("/auth/client")}
-            >
-              Esqueci a senha
-            </a>
+  
           </div>
 
           <div className="flex flex-col gap-y-[32px] sm:gap-y-4">
@@ -116,6 +112,8 @@ function Login() {
           </div>
         </div>
       </form>
+      <ForgotPassword />
+
     </div>
   );
 }
