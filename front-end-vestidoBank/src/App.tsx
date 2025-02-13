@@ -8,6 +8,7 @@ import Transf from "./Components/pages/Transfer";
 import { AuthProvider } from "./Components/provider/AuthProvider";
 import { Deposito } from "./Components/pages/Deposito";
 import { CreateAccount } from "./Components/pages/CreateAccount";
+import { ResetPassword } from "./Components/pages/ResetPassword";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/transferir" element={<Transf />} />
             <Route path="/deposito" element={<Deposito />} />
             <Route path="/create-account" element={<CreateAccount />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
           </Routes>
         </div>

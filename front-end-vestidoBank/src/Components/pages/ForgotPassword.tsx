@@ -16,12 +16,17 @@ function ForgotPassword() {
         setMessage("Um link de redefinição foi enviado ao seu e-mail");
         setError("");
       }
+      if(!response) {
+        return <p>aguarde um momento...</p>
+      }
     } catch (e) {
       console.error(e);
       setError("Não foi possível enviar o e-mail, tente novamente");
       setMessage("");
     }
   };
+
+  
 
   return (
     <div>

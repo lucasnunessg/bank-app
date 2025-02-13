@@ -1,20 +1,90 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import api from "../FetchApi";
 
 export function ResetPassword() {
-
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
   const [password, setPassword] = useState("");
+  const [messageSuccess, setMessageSuccess] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  if(!password || !confirmPassword) {
-    setError("as senhas não coincidem")
+  console.log(token);
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
+
+  useEffect(() => {
+    if (password && confirmPassword) {
+      if (password !== confirmPassword) {
+        setError("As senhas não coincidem");
+      } else {
+        setError("");
+      }
+    }
+  }, [password, confirmPassword]);
+
+  const handleNewPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (error) return; 
+
+    try {
+      const response = await api.post("/reset-password", {
+        token,
+        password,
+        confirmPassword
+      });
+
+      if (response.status === 200) {
+        setMessageSuccess("Você redefiniu sua senha.");
+        setError("");
+        setTimeout(() => {
+        navigate("/login");
+        }, 2000)
+      }
+    } catch (e) {
+      console.error(e);
+      setError("Não foi possível redefinir a senha, tente novamente.");
+      setMessageSuccess("");
+    }
+  };
+
+  if (!token) {
+    return <p className="text-[white]">Carregando...</p>;
   }
-
-  
 
   return (
     <div>
+      <h2 className="text-[white]">Redefinir senha:</h2>
+      <form onSubmit={handleNewPassword}>
+        <p className="text-[white]">Digite a sua nova senha:</p>
+        <input
+          type="password"
+          placeholder="deve ter uma letra maiúscula, números e 1 caractere especial"
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
 
+        <p className="text-[white]">Confirme sua senha:</p>
+        <input
+          type="password"
+          placeholder="digite novamente a senha"
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={confirmPassword}
+        />
+
+        {messageSuccess && <p className="text-[green]">{messageSuccess}</p>}
+        {error && <p className="text-[red]">{error}</p>}
+
+        <button type="submit" className="text-[white]" disabled={!!error}>
+          Redefinir Senha
+        </button>
+      </form>
     </div>
-  )
+  );
 }
