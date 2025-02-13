@@ -5,6 +5,7 @@ import api from "../FetchApi";
 export function ResetPassword() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
+  const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [messageSuccess, setMessageSuccess] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -64,15 +65,23 @@ export function ResetPassword() {
       <form onSubmit={handleNewPassword}>
         <p className="text-[white]">Digite a sua nova senha:</p>
         <input
-          type="password"
+          type={showPassword ? "text" : "password"} 
           placeholder="deve ter uma letra maiúscula, números e 1 caractere especial"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="text-[blue] ml-10 border-[white]"
+
+        >
+          {showPassword ? "Esconder" : "Mostrar"}
+        </button>
 
         <p className="text-[white]">Confirme sua senha:</p>
         <input
-          type="password"
+          type={showPassword ? "text" : "password"} 
           placeholder="digite novamente a senha"
           onChange={(e) => setConfirmPassword(e.target.value)}
           value={confirmPassword}
