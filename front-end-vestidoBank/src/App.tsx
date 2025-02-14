@@ -9,6 +9,7 @@ import { AuthProvider } from "./Components/provider/AuthProvider";
 import { Deposito } from "./Components/pages/Deposito";
 import { CreateAccount } from "./Components/pages/CreateAccount";
 import { ResetPassword } from "./Components/pages/ResetPassword";
+import { AccountAnalysis } from "./Components/pages/AccountAnalysis";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/deposito" element={<Deposito />} />
             <Route path="/create-account" element={<CreateAccount />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/analise" element={< AccountAnalysis />} />
 
           </Routes>
         </div>
