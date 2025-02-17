@@ -65,7 +65,7 @@ public class ClientController {
   }
 
   @GetMapping("/{id}")
-  public ClientDto getClientByid(@PathVariable Long id) {
+  public ClientDto getClientByid(@PathVariable Long id) throws ClientNotFoundException {
     return ClientDto.fromEntity(clientService.getById(id));
   }
 

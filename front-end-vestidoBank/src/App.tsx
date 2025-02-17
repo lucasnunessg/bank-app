@@ -10,6 +10,7 @@ import { Deposito } from "./Components/pages/Deposito";
 import { CreateAccount } from "./Components/pages/CreateAccount";
 import { ResetPassword } from "./Components/pages/ResetPassword";
 import { AccountAnalysis } from "./Components/pages/AccountAnalysis";
+import { Profile } from "./Components/pages/Profile";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/home/auth/client" element={<HomeAuthClient />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/transferir" element={<Transf />} />
             <Route path="/deposito" element={<Deposito />} />
             <Route path="/create-account" element={<CreateAccount />} />
