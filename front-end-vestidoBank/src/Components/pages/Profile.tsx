@@ -11,30 +11,29 @@ interface User {
 }
 
 export function Profile() {
-  const { token, clientId } = useAuth();
-  const [user, setUser] = useState<User[]>([]);
+  const { token, clientId, loading } = useAuth();
+  const [user, setUser] = useState<User | null>(null); // uso assm qdo é um so usuaroi
   const [error, setError] = useState("");
 
-  console.log("token aquii:   ", token);
-  
-  console.log(clientId);
-  
   useEffect(() => {
+    if (loading) return;
 
-    if(!token || !clientId) {
-      setError("token expirado");
+    if (!token || !clientId) {
+      setError("Token expirado ou clientId não disponível.");
       return;
-    } 
+    }
+
     const fetchData = async () => {
       try {
         const response = await api.get(`/clients-bank/${clientId}`, {
-          headers: { Authorization: `Bearer ${token}` },          
+          headers: { Authorization: `Bearer ${token}` },
         });
-        
+        console.log("Resposta da API:", response.data); 
+
         if (response.status === 200) {
           setUser(response.data);
         } else {
-          setError("Erro ao carregar os dados."); 
+          setError("Erro ao carregar os dados.");
         }
       } catch (e) {
         console.error(e);
@@ -42,27 +41,25 @@ export function Profile() {
       }
     };
 
-    if (token) {
-      fetchData();
-    }
-  }, [token, clientId]);
+    fetchData();
+  }, [token, clientId, loading]);
+
+  if (loading) {
+    return <p className="text-[white]">Carregando...</p>;
+  }
 
   return (
     <div>
       {error && <p className="text-[red]">{error}</p>}
-      {user.length > 0 ? (
-        <ul>
-          {user.map((user) => (
-            <li key={user.id}>
-              <h3 className="text-[white]">{user.name}</h3>
-              <p className="text-[white]">{user.contact}</p>
-              <p className="text-[white]">{user.address}</p>
-              <p className="text-[white]">{user.email}</p>
-            </li>
-          ))}
-        </ul>
+      {user ? ( 
+        <div>
+          <p className="text-[white]">Nome: {user.name}</p>
+          <p className="text-[white]">Contato: {user.contact}</p>
+          <p className="text-[white]">Endereço: {user.address}</p>
+          <p className="text-[white]">E-mail: {user.email}</p>
+        </div>
       ) : (
-        <p className="text-[white]">Carregando usuários...</p>
+        <p className="text-[white]">Nenhum usuário encontrado.</p>
       )}
     </div>
   );

@@ -8,11 +8,10 @@ interface DecodedToken {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token")
-  );
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [clientId, setClientId] = useState<number | null>(null);
   const [name, setName] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true); // Estado de carregamento
 
   useEffect(() => {
     if (token) {
@@ -23,7 +22,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (e) {
         console.error(e);
         logout();
+      } finally {
+        setLoading(false); // Finaliza o carregamento, independentemente do resultado
       }
+    } else {
+      setLoading(false); // Se não houver token, também finaliza o carregamento
     }
   }, [token]);
 
@@ -44,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ clientId, name, token, login, logout }}>
+    <AuthContext.Provider value={{ clientId, name, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
