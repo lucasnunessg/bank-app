@@ -9,11 +9,8 @@ export function Deposito() {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
+   const contaPoupancaId = clientId;
 
-   
-  const contaPoupancaId = clientId;
-
-  
 
   const handleDeposito = async () => {
     if (!contaPoupancaId || !clientId || !valor) return;

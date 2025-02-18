@@ -85,7 +85,7 @@ public class ClientController {
 
   @PutMapping("/{id}")
   public ClientDto updateClient(@PathVariable Long id,
-      @RequestBody CreateClientDto createClientDto) {
+      @RequestBody CreateClientDto createClientDto) throws ClientNotFoundException {
     return ClientDto.fromEntity(clientService.updateClient(id, createClientDto.toEntity()));
   }
 

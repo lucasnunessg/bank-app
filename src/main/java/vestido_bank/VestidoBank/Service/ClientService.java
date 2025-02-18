@@ -97,6 +97,7 @@ public class ClientService implements UserDetailsService {
     clientDb.setContact(client.getContact());
     clientDb.setCpf(client.getCpf());
     clientDb.setName(client.getName());
+    clientDb.setEmail(client.getEmail());
 
     return clientRepository.save(clientDb);
   }

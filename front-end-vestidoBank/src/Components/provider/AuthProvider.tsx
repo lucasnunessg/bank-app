@@ -11,7 +11,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [clientId, setClientId] = useState<number | null>(null);
   const [name, setName] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true); // Estado de carregamento
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     if (token) {
@@ -23,10 +23,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error(e);
         logout();
       } finally {
-        setLoading(false); // Finaliza o carregamento, independentemente do resultado
+        setLoading(false); 
       }
     } else {
-      setLoading(false); // Se não houver token, também finaliza o carregamento
+      setLoading(false); 
     }
   }, [token]);
 
