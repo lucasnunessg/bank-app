@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/useAuth";
 import api from "../FetchApi";
+import { ExchangeInformation } from "./ExchangeInformation";
 
 interface User {
   id: number;
@@ -14,6 +15,7 @@ export function Profile() {
   const { token, clientId, loading } = useAuth();
   const [user, setUser] = useState<User | null>(null); // uso assm qdo é um so usuaroi
   const [error, setError] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     if (loading) return;
@@ -50,15 +52,22 @@ export function Profile() {
 
   return (
     <div>
+      {!showForm ? (
+        <button onClick={() => setShowForm(true)}>Deseja alterar algum dado?</button>
+      ) : (
+        <ExchangeInformation />
+      )}
+
       {error && <p className="text-[red]">{error}</p>}
-      {user ? ( 
+
+      {!showForm && user ? (
         <div>
           <p className="text-[white]">Nome: {user.name}</p>
           <p className="text-[white]">Contato: {user.contact}</p>
           <p className="text-[white]">Endereço: {user.address}</p>
           <p className="text-[white]">E-mail: {user.email}</p>
         </div>
-      ) : (
+      ) : !showForm && (
         <p className="text-[white]">Nenhum usuário encontrado.</p>
       )}
     </div>
