@@ -53,16 +53,19 @@ function Login() {
   return (
     <div className="login-container min-h-screen bg-[#14141F]">
       <form
-        className="login-input-form w-full max-w-[690px] h-auto top-[315px] left-[615px] opacity-100 p-6 bg-[#14141F] rounded-lg mx-auto sm:top-[150px] sm:left-0"
+        className="login-input-form w-full  h-auto  opacity-100 p-6 bg-[#14141F] rounded-lg mx-auto sm:top-[150px] sm:left-0"
         onSubmit={(e) => {
           e.preventDefault();
           handleLogin();
         }}
       >
-        <h2 className="text-urbanist text-[fuchsia] text-[32px] text-center w-full absolute top-[200px] right-[0px]">
+        <h2
+          className="text-urbanist text-[fuchsia] text-[32px] flex flex-col items-center w-full 
+         "
+        >
           Vestido Bank
         </h2>
-        <div className="mt-[220px] border-[1px] border-solid border-[fuchsia] rounded-[8px] p-[30px]">
+        <div className="mt-[40px] border-[1px] border-solid border-[fuchsia] rounded-[8px] p-[30px]">
           <div className="text-center mb-4 w-full">
             <div className="flex items-center justify-center w-full mb-2 space-x-2">
               <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
@@ -77,7 +80,7 @@ function Login() {
             <input
               type="email"
               placeholder="Email"
-              className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
+              className="email-input-form w-full h-[38px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
               name="email"
               value={email}
               onChange={handleEmail}
@@ -86,7 +89,7 @@ function Login() {
             <input
               type="password"
               placeholder="Senha"
-              className="password-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
+              className="password-input-form w-full h-[38px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
               name="password"
               value={password}
               onChange={handlePassword}
@@ -108,6 +111,8 @@ function Login() {
               <label className="text-sm font-urbanist text-[rgb(235,235,235)]">
                 Lembrar-me
               </label>
+              
+              <ForgotPassword />
             </div>
           </div>
 
@@ -121,7 +126,6 @@ function Login() {
           </div>
         </div>
       </form>
-      <ForgotPassword />
     </div>
   );
 }

@@ -92,11 +92,14 @@ public class ClientService implements UserDetailsService {
 
   public Client updateClient(Long id, Client client) {
     Client clientDb = getById(id);
+    if(clientDb == null) {
+      throw new ClientNotFoundException("Cliente não encontrado!");
+    }
 
-    clientDb.setAddress(client.getAddress());
-    clientDb.setContact(client.getContact());
-    clientDb.setCpf(client.getCpf());
     clientDb.setName(client.getName());
+    clientDb.setCpf(client.getCpf());
+    clientDb.setContact(client.getContact());
+    clientDb.setAddress(client.getAddress());
     clientDb.setEmail(client.getEmail());
 
     return clientRepository.save(clientDb);

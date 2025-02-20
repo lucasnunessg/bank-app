@@ -31,8 +31,9 @@ function ForgotPassword() {
   return (
     <div>
       {!showForm && (
-        <button onClick={() => setShowForm(true)}>Esqueceu sua senha?</button>
-      )}
+        <a className="text-[white] w-full font-urbanist xl:right-[0px] text-sm font-light" onClick={() => setShowForm(true)}>
+  Esqueceu sua senha?
+</a>      )}
       {showForm && (
         <div>
           <h1 className="text-[fuchsia]">Redefinir senha:</h1>
