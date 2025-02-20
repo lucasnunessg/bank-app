@@ -1,11 +1,10 @@
 import { useState } from "react";
 import api from "../FetchApi";
 
-function ForgotPassword() {
+function ForgotPassword({ onBackToLogin }: { onBackToLogin: () => void }) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [showForm, setShowForm] = useState<boolean>(false);
 
   const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,9 +15,6 @@ function ForgotPassword() {
         setMessage("Um link de redefinição foi enviado ao seu e-mail");
         setError("");
       }
-      if(!response) {
-        return <p>aguarde um momento...</p>
-      }
     } catch (e) {
       console.error(e);
       setError("Não foi possível enviar o e-mail, tente novamente");
@@ -26,34 +22,43 @@ function ForgotPassword() {
     }
   };
 
-  
-
   return (
-    <div>
-      {!showForm && (
-        <a className="text-[white] w-full font-urbanist xl:right-[0px] text-sm font-light" onClick={() => setShowForm(true)}>
-  Esqueceu sua senha?
-</a>      )}
-      {showForm && (
-        <div>
-          <h1 className="text-[fuchsia]">Redefinir senha:</h1>
-          <form onSubmit={handleForgotPassword}>
-            <label className="text-[white]">E-mail:</label>
+    <div className="forgot-password-form w-full max-w-[350px] h-auto bg-[#14141F] border-[fuchsia] p-[10px]">
+      <h2 className="text-urbanist text-[fuchsia] text-[32px] flex flex-col items-center w-full">
+        Redefinir Senha
+      </h2>
 
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="Digite seu e-mail"
-            ></input>
-
-            <button type="submit">enviar</button>
-          </form>
-          {message && <p className="text-[green]">{message}</p>}
-          {error && <p className="text-[red]">{error}</p>}
+      <form onSubmit={handleForgotPassword}>
+        <div className="input-container mb-4 flex flex-col gap-y-[32px] sm:gap-y-4">
+          <input
+            type="email"
+            placeholder="Digite seu e-mail"
+            className="email-input-form w-full h-[38px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
-      )}
+
+        {message && <p className="text-[green] text-sm text-center mt-4">{message}</p>}
+        {error && <p className="text-[red] text-sm text-center mt-4">{error}</p>}
+
+        <div className="flex flex-col gap-y-[32px] sm:gap-y-4">
+          <button
+            type="submit"
+            className="bg-primary border border-[fuchsia] text-white font-urbanist rounded-full px-4 py-3 h-[54px] w-full hover:bg-[fuchsia] font-light transition-colors"
+          >
+            Enviar
+          </button>
+          <button
+            type="button"
+            className="bg-transparent border border-[fuchsia] text-[white] font-urbanist rounded-full px-4 py-3 h-[54px] w-full hover:bg-[fuchsia] font-light transition-colors"
+            onClick={onBackToLogin} 
+          >
+            Voltar ao Login
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

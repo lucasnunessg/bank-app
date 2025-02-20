@@ -9,6 +9,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false); 
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -51,81 +52,89 @@ function Login() {
   };
 
   return (
-    <div className="login-container min-h-screen bg-[#14141F]">
-      <form
-        className="login-input-form w-full  h-auto  opacity-100 p-6 bg-[#14141F] rounded-lg mx-auto sm:top-[150px] sm:left-0"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleLogin();
-        }}
-      >
-        <h2
-          className="text-urbanist text-[fuchsia] text-[32px] flex flex-col items-center w-full 
-         "
+    <div className="login-container min-h-screen flex items-center justify-center bg-[#14141F]">
+      {!showForgotPassword ? (
+        <form
+          className="login-input-form w-full max-w-[350px] h-auto bg-[#14141F] border-[fuchsia] p-[10px]"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
         >
-          Vestido Bank
-        </h2>
-        <div className="mt-[40px] border-[1px] border-solid border-[fuchsia] rounded-[8px] p-[30px]">
-          <div className="text-center mb-4 w-full">
-            <div className="flex items-center justify-center w-full mb-2 space-x-2">
-              <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
-              <p className="font-urbanist text-[white] text-[18px]">
-                Insira email e senha para continuar
-              </p>
-              <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
+          <h2 className="text-urbanist text-[fuchsia] text-[32px] flex flex-col items-center w-full">
+            Vestido Bank
+          </h2>
+
+          <div className="mt-6">
+            <div className="text-center mb-4 w-full">
+              <div className="flex items-center justify-center w-full mb-2 space-x-2">
+                <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
+                <p className="font-urbanist text-[white] text-[18px]">
+                  Insira suas credenciais
+                </p>
+                <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
+              </div>
             </div>
-          </div>
 
-          <div className="input-container mb-4 flex flex-col gap-y-[32px] sm:gap-y-4">
-            <input
-              type="email"
-              placeholder="Email"
-              className="email-input-form w-full h-[38px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
-              name="email"
-              value={email}
-              onChange={handleEmail}
-            />
-
-            <input
-              type="password"
-              placeholder="Senha"
-              className="password-input-form w-full h-[38px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
-              name="password"
-              value={password}
-              onChange={handlePassword}
-            />
-          </div>
-
-          {error && (
-            <div className="text-[red] text-sm text-center mt-4">{error}</div>
-          )}
-
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center">
+            <div className="input-container mb-4 flex flex-col gap-y-[32px] sm:gap-y-4">
               <input
-                type="checkbox"
-                className="mr-2"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
+                type="email"
+                placeholder="Email"
+                className="email-input-form w-full h-[38px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
+                name="email"
+                value={email}
+                onChange={handleEmail}
               />
-              <label className="text-sm font-urbanist text-[rgb(235,235,235)]">
-                Lembrar-me
-              </label>
-              
-              <ForgotPassword />
+
+              <input
+                type="password"
+                placeholder="Senha"
+                className="password-input-form w-full h-[38px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
+                name="password"
+                value={password}
+                onChange={handlePassword}
+              />
+            </div>
+
+            {error && (
+              <div className="text-[red] text-sm text-center mt-4">{error}</div>
+            )}
+
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
+                />
+                <label className="text-sm font-urbanist text-[rgb(235,235,235)]">
+                  Lembrar-me
+                </label>
+              </div>
+              <div className="ml-[20px]">
+                <a
+                  className="text-[white] w-full font-urbanist xl:right-[0px] text-sm font-light cursor-pointer"
+                  onClick={() => setShowForgotPassword(true)} 
+                >
+                  Esqueceu sua senha?
+                </a>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-y-[32px] sm:gap-y-4">
+              <button
+                type="submit"
+                className="bg-primary border border-[fuchsia] text-white font-urbanist rounded-full px-4 py-3 h-[54px] w-full hover:bg-[fuchsia] font-light transition-colors"
+              >
+                Entrar
+              </button>
             </div>
           </div>
-
-          <div className="flex flex-col gap-y-[32px] sm:gap-y-4">
-            <button
-              type="submit"
-              className="bg-primary border border-[fuchsia] text-white font-urbanist rounded-full px-4 py-3 h-[54px] w-full hover:bg-[fuchsia] font-light transition-colors"
-            >
-              Entrar
-            </button>
-          </div>
-        </div>
-      </form>
+        </form>
+      ) : (
+        <ForgotPassword onBackToLogin={() => setShowForgotPassword(false)} /> 
+      )}
     </div>
   );
 }
