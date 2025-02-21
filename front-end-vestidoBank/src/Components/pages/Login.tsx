@@ -55,7 +55,7 @@ function Login() {
     <div className="login-container min-h-screen flex items-center justify-center bg-[#14141F]">
       {!showForgotPassword ? (
         <form
-          className="login-input-form w-full max-w-[350px] h-auto bg-[#14141F] border-[fuchsia] p-[10px]"
+          className="login-input-form w-full max-w-[350px] h-auto bg-[#14141F] mt-[-100px] border-[fuchsia] p-[10px]"
           onSubmit={(e) => {
             e.preventDefault();
             handleLogin();

@@ -42,7 +42,6 @@ export function CreateAccount() {
     }
   };
 
-
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -86,74 +85,93 @@ export function CreateAccount() {
   };
 
   return (
-    <div>
+    <div className="sm:w-[490px]  h-auto bg-[#14141F] mt-[50px] min-h-screen gap-[10px] flex flex-col items-center justify-center ">
       <form
+        className="max-w-[400px] p-[20px] mt-[-200px]"
         onSubmit={(e) => {
           e.preventDefault();
           handleCreateAccount();
         }}
       >
-        <input
-          type="email"
-          placeholder="Email"
-          className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
-          name="email"
-          value={email}
-          onChange={handleChange}
-        />
+        <div className="flex items-center justify-center w-full mb-2 space-x-2">
+          <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
+          <p className="font-urbanist text-[white] text-[18px]">
+            Crie sua conta
+          </p>
 
-        <input
-          type="name"
-          placeholder="nome completo"
-          className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
-          name="name"
-          value={name}
-          onChange={handleChange}
-        />
+          <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
+        </div>
 
-        <input
-          type="cpf"
-          placeholder="insira seu CPF, sem pontos"
-          className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
-          name="cpf"
-          value={cpf}
-          onChange={handleChange}
-        />
+        <div className="space-y-[10px] w-full max-w-sm min-w-[200px]">
+          <input
+            type="email"
+            placeholder="E-mail"
+            className="w-full bg-transparent placeholder:text-[white] text-[white] text-sm border border-[white] rounded-md  py-[4px] transition duration-300 ease focus:outline-none focus:border-[fuchsia] hover:border-[fuchsia] shadow-sm focus:shadow"
+            name="email"
+            value={email}
+            onChange={handleChange}
+          />
 
-        <input
-          type="contact"
-          placeholder="número para contato"
-          className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
-          name="contact"
-          value={contact}
-          onChange={handleChange}
-        />
+          <input
+            type="name"
+            placeholder="Nome completo"
+            className="w-full bg-transparent placeholder:text-[white] text-[white] text-sm border border-[white] rounded-md  py-[4px] transition duration-300 ease focus:outline-none focus:border-[fuchsia] hover:border-[fuchsia] shadow-sm focus:shadow"
+            name="name"
+            value={name}
+            onChange={handleChange}
+          />
 
-        <input
-          type="address"
-          placeholder="endereço completo"
-          className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
-          name="address"
-          value={address}
-          onChange={handleChange}
-        />
+          <input
+            type="cpf"
+            placeholder="Seu CPF, sem pontos"
+            className="w-full bg-transparent placeholder:text-[white] text-[white] text-sm border border-[white] rounded-md  py-[4px] transition duration-300 ease focus:outline-none focus:border-[fuchsia] hover:border-[fuchsia] shadow-sm focus:shadow"
+            name="cpf"
+            value={cpf}
+            onChange={handleChange}
+          />
 
-        <input
-          type="password"
-          placeholder="sua senha. Ela deve conter caractéres maiúsculo e 1 caractere especial"
-          className="email-input-form w-full h-[48px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
-          name="password"
-          value={password}
-          onChange={handlePassword}
-        />
-        <button
-          type="submit"
-          className="bg-primary border border-[fuchsia] text-white font-urbanist rounded-full px-4 py-3 h-[54px] w-full hover:bg-[fuchsia] font-light transition-colors"
-        >
-          Criar conta
-        </button>
+          <input
+            type="contact"
+            placeholder="Contato"
+            className="w-full bg-transparent placeholder:text-[white] text-[white] text-sm border border-[white] rounded-md  py-[4px] transition duration-300 ease focus:outline-none focus:border-[fuchsia] hover:border-[fuchsia] shadow-sm focus:shadow"
+            name="contact"
+            value={contact}
+            onChange={handleChange}
+          />
+
+          <input
+            type="address"
+            placeholder="Endereço"
+            className="w-full bg-transparent placeholder:text-[white] text-[white] text-sm border border-[white] rounded-md  py-[4px] transition duration-300 ease focus:outline-none focus:border-[fuchsia] hover:border-[fuchsia] shadow-sm focus:shadow"
+            name="address"
+            value={address}
+            onChange={handleChange}
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            className="w-full bg-transparent placeholder:text-[white] text-[white] text-sm border border-[white] rounded-md  py-[4px] transition duration-300 ease focus:outline-none focus:border-[fuchsia] hover:border-[fuchsia] shadow-sm focus:shadow"
+            name="password"
+            value={password}
+            onChange={handlePassword}
+          />
+          <div className="flex flex-col items-center ">
+          <button
+            type="submit"
+            className="bg-transparent hover:bg-[fuchsia] text-[white] font-semibold hover:text-[white] py-2 px-4 border border-[white] hover:border-transparent rounded"
+          >
+            Criar conta
+          </button>
+          </div>
+
+        </div>
+
         {errorType && (
-          <p className="text-[red]">Sua senha deve ter um caractere maiúsculo, número e um caractere especial</p>
+          <p className="text-[yellow]">
+            Sua senha deve ter um caractere maiúsculo, número e um caractere
+            especial
+          </p>
         )}
         {error && (
           <p className="text-[red]">Houve um erro ao criar sua conta!</p>

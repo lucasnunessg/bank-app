@@ -51,7 +51,7 @@ function Header() {
           </>
         ) : (
           <>
-          <div className="flex items-center  gap-[30px] ">
+          <div className="flex items-center gap-[10px] ">
           <Link to={"/"} className="no-underline">
               <span className="text-[fuchsia]">Vestido Bank</span>
             </Link>
