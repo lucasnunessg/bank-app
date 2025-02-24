@@ -112,6 +112,17 @@ public class ContaPoupancaController {
     return transaction.stream().map(TransferDto::fromTransaction).toList();
   }
 
+  @PutMapping("/{contaPoupancaId}/aplicar-rendimento")
+  public ResponseEntity<ContaPoupanca> aplicarRendimento(@PathVariable Long contaPoupancaId) {
+
+  ContaPoupanca contaPoupanca = contaPoupancaService.rendimentoConta(contaPoupancaId);
+      if(contaPoupanca == null) {
+        throw new ContaPoupancaNotFoundException("Não foi possivel encontrar a conta");
+      }
+      contaPoupancaService.salvar(contaPoupanca);
+    return ResponseEntity.ok(contaPoupanca);
+  }
+
   @PostMapping("/{contaPoupancaId}/client/{clientId}/deposit")
   public ResponseEntity<ContaPoupancaDto> deposito(@PathVariable Long contaPoupancaId,
       @PathVariable Long clientId, @RequestBody

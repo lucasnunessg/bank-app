@@ -64,6 +64,16 @@ public class ContaPoupancaService {
     return contaPoupancaRepository.save(contaPoupanca);
   }
 
+  public ContaPoupanca rendimentoConta(Long contaId) {
+    ContaPoupanca contaPoupanca = contaPoupancaRepository.findById(contaId)
+        .orElseThrow(() -> new ContaPoupancaNotFoundException("Conta não encontrada!"));
+
+    contaPoupanca.aplicarRendimento();
+    return contaPoupancaRepository.save(contaPoupanca);
+
+
+  }
+
   public ContaPoupanca depositar(Long contaId, float valor) {
     ContaPoupanca contaPoupanca = contaPoupancaRepository.findById(contaId)
         .orElseThrow(() -> new ContaPoupancaNotFoundException("Conta não encontrada!"));

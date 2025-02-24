@@ -92,12 +92,26 @@ public class DatabaseSeeder implements CommandLineRunner {
   private List<ContaCorrente> seedContaCorrente(List<Client> clients) {
     List<ContaCorrente> contasCorrentes = new ArrayList<>();
 
+    // Datas de criação simuladas para cada conta corrente
+    List<LocalDateTime> datasCriacao = List.of(
+        LocalDateTime.of(2022, 1, 1, 0, 0), // 1º de janeiro de 2022
+        LocalDateTime.of(2022, 6, 15, 0, 0), // 15 de junho de 2022
+        LocalDateTime.of(2023, 3, 10, 0, 0), // 10 de março de 2023
+        LocalDateTime.of(2021, 12, 25, 0, 0), // 25 de dezembro de 2021
+        LocalDateTime.of(2023, 7, 1, 0, 0), // 1º de julho de 2023
+        LocalDateTime.of(2020, 5, 20, 0, 0), // 20 de maio de 2020
+        LocalDateTime.of(2023, 9, 5, 0, 0) // 5 de setembro de 2023
+    );
+
     // Cria uma conta corrente para cada cliente com saldo inicial de 5000
-    for (Client client : clients) {
+    for (int i = 0; i < clients.size(); i++) {
+      Client client = clients.get(i);
+      LocalDateTime dataCriacao = datasCriacao.get(i);
+
       ContaCorrente contaCorrente = new ContaCorrente(
           5000.0f, // Saldo inicial
           1000.0f, // Limite
-          LocalDateTime.now().minusDays(clients.indexOf(client) * 2), // Data de criação variável
+          dataCriacao, // Data de criação específica
           client
       );
       contasCorrentes.add(contaCorrente);
@@ -109,14 +123,32 @@ public class DatabaseSeeder implements CommandLineRunner {
   private List<ContaPoupanca> seedContaPoupanca(List<Client> clients) {
     List<ContaPoupanca> contasPoupancas = new ArrayList<>();
 
+    // Datas de criação simuladas para cada conta poupança
+    List<LocalDateTime> datasCriacao = List.of(
+        LocalDateTime.of(2022, 1, 1, 0, 0), // 1º de janeiro de 2022
+        LocalDateTime.of(2022, 6, 15, 0, 0), // 15 de junho de 2022
+        LocalDateTime.of(2023, 3, 10, 0, 0), // 10 de março de 2023
+        LocalDateTime.of(2021, 12, 25, 0, 0), // 25 de dezembro de 2021
+        LocalDateTime.of(2023, 7, 1, 0, 0), // 1º de julho de 2023
+        LocalDateTime.of(2020, 5, 20, 0, 0), // 20 de maio de 2020
+        LocalDateTime.of(2023, 9, 5, 0, 0) // 5 de setembro de 2023
+    );
+
     // Cria uma conta poupança para cada cliente com saldo inicial de 5000
-    for (Client client : clients) {
+    for (int i = 0; i < clients.size(); i++) {
+      Client client = clients.get(i);
+      LocalDateTime dataCriacao = datasCriacao.get(i);
+
       ContaPoupanca contaPoupanca = new ContaPoupanca(
           5000.0f, // Saldo inicial
-          0.5f, // Rendimento mensal
-          LocalDateTime.now().minusDays(clients.indexOf(client) * 3), // Data de criação variável
+          0.5f, // Rendimento mensal (0,5%)
+          dataCriacao, // Data de criação específica
           client
       );
+
+      // Aplica o rendimento desde a data de criação até a data atual
+      contaPoupanca.aplicarRendimento();
+
       contasPoupancas.add(contaPoupanca);
     }
 
@@ -126,6 +158,17 @@ public class DatabaseSeeder implements CommandLineRunner {
   private List<Transaction> seedTransaction(List<ContaCorrente> contasCorrentes,
       List<ContaPoupanca> contasPoupancas) {
     List<Transaction> transactions = new ArrayList<>();
+
+    // Datas de transação simuladas
+    List<LocalDateTime> datasTransacao = List.of(
+        LocalDateTime.of(2023, 1, 15, 10, 0), // 15 de janeiro de 2023
+        LocalDateTime.of(2023, 2, 20, 14, 30), // 20 de fevereiro de 2023
+        LocalDateTime.of(2023, 3, 25, 9, 15), // 25 de março de 2023
+        LocalDateTime.of(2023, 4, 10, 16, 45), // 10 de abril de 2023
+        LocalDateTime.of(2023, 5, 5, 11, 0), // 5 de maio de 2023
+        LocalDateTime.of(2023, 6, 30, 13, 20), // 30 de junho de 2023
+        LocalDateTime.of(2023, 7, 15, 8, 0) // 15 de julho de 2023
+    );
 
     // Cria transações entre contas correntes e poupanças de diferentes clientes
     for (int i = 0; i < contasCorrentes.size(); i++) {
@@ -145,7 +188,7 @@ public class DatabaseSeeder implements CommandLineRunner {
           null, // Conta poupança como destino (não se aplica)
           null, // Conta poupança como origem (não se aplica)
           100.0f, // Valor da transação
-          LocalDateTime.now().minusHours(i * 2), // Data/hora variável
+          datasTransacao.get(i), // Data/hora específica
           "Transferência para outro cliente (corrente)", // Descrição
           contaCorrenteOrigem.getSaldo() - 100.0f // Saldo restante na conta de origem
       );
@@ -159,7 +202,7 @@ public class DatabaseSeeder implements CommandLineRunner {
           contaPoupancaDestino, // Conta poupança como destino
           contaPoupancaOrigem, // Conta poupança como origem
           50.0f, // Valor da transação
-          LocalDateTime.now().minusHours(i * 3), // Data/hora variável
+          datasTransacao.get(i).plusDays(1), // Data/hora específica (1 dia após a primeira transação)
           "Transferência para outro cliente (poupança)", // Descrição
           contaPoupancaOrigem.getSaldo() - 50.0f // Saldo restante na conta de origem
       );

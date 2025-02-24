@@ -76,11 +76,11 @@ function Login() {
               </div>
             </div>
 
-            <div className="input-container mb-4 flex flex-col gap-y-[32px] sm:gap-y-4">
+            <div className="space-y-[15px] w-full max-w-sm min-w-[200px]">
               <input
                 type="email"
                 placeholder="Email"
-                className="email-input-form w-full h-[38px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
+                className="w-full bg-transparent placeholder:text-[white] text-[white] text-sm border border-[white] rounded-md  py-[4px] transition duration-300 ease focus:outline-none focus:border-[fuchsia] hover:border-[fuchsia] shadow-sm focus:shadow"
                 name="email"
                 value={email}
                 onChange={handleEmail}
@@ -89,7 +89,7 @@ function Login() {
               <input
                 type="password"
                 placeholder="Senha"
-                className="password-input-form w-full h-[38px] px-4 rounded-[8px] border-[1px] border-solid border-[rgb(52,52,68)] bg-[#F5F5DC] placeholder:bg-[#F5F5DC] placeholder:text-black focus:font-normal font-urbanist text-[black] placeholder:font-normal placeholder:text-[14px] font-normal"
+                className="w-full bg-transparent placeholder:text-[white] text-[white] text-sm border border-[white] rounded-md  py-[4px] transition duration-300 ease focus:outline-none focus:border-[fuchsia] hover:border-[fuchsia] shadow-sm focus:shadow"
                 name="password"
                 value={password}
                 onChange={handlePassword}
@@ -108,13 +108,13 @@ function Login() {
                   checked={rememberMe}
                   onChange={() => setRememberMe(!rememberMe)}
                 />
-                <label className="text-sm font-urbanist text-[rgb(235,235,235)]">
+                <label className="text-sm font-urbanist text-[14px] text-[rgb(235,235,235)]">
                   Lembrar-me
                 </label>
               </div>
               <div className="ml-[20px]">
                 <a
-                  className="text-[white] w-full font-urbanist xl:right-[0px] text-sm font-light cursor-pointer"
+                  className="text-[white] w-full font-urbanist xl:right-[0px] text-[14px] text-sm font-light cursor-pointer"
                   onClick={() => setShowForgotPassword(true)} 
                 >
                   Esqueceu sua senha?
@@ -122,11 +122,11 @@ function Login() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-[32px] sm:gap-y-4">
+            <div className="flex flex-col items-center mt-[10px]">
               <button
                 type="submit"
-                className="bg-primary border border-[fuchsia] text-white font-urbanist rounded-full px-4 py-3 h-[54px] w-full hover:bg-[fuchsia] font-light transition-colors"
-              >
+                className="bg-transparent hover:bg-[fuchsia] text-[white] font-semibold hover:text-[white] py-2 px-4 border border-[white] hover:border-transparent rounded"
+                >
                 Entrar
               </button>
             </div>

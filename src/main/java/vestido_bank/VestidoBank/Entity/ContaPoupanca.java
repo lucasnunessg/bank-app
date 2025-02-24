@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
 import vestido_bank.VestidoBank.Exceptions.SakeInvalid;
@@ -20,6 +22,7 @@ public class ContaPoupanca {
   private float saldo;
   private float rendimentoMensal;
   private LocalDateTime data_criacao;
+  private LocalDateTime dataUltimaAtt;
 
   @ManyToOne
   @JoinColumn(name = "client_id")
@@ -29,8 +32,9 @@ public class ContaPoupanca {
       Client client) {
     this.saldo = saldo;
     this.rendimentoMensal = rendimentoMensal;
-    this.data_criacao = data_criacao;
+    this.data_criacao = LocalDateTime.now();
     this.client = client;
+    this.dataUltimaAtt = LocalDateTime.now();
   }
 
   public ContaPoupanca() {
@@ -38,7 +42,32 @@ public class ContaPoupanca {
   }
 
   public float aplicarRendimento() {
-    return this.saldo += saldo * rendimentoMensal;
+    LocalDateTime agora = LocalDateTime.now();
+
+    if (this.dataUltimaAtt == null) {
+      throw new IllegalStateException("Data da última atualização não pode ser nula.");
+    }
+
+    // Calcula o número de dias desde a última atualização
+    long diasUltimaAtualizacao = Duration.between(this.dataUltimaAtt, agora).toDays();
+
+    // Converte os valores para BigDecimal
+    BigDecimal saldoAtual = BigDecimal.valueOf(this.saldo);
+    BigDecimal rendimentoMensal = BigDecimal.valueOf(this.rendimentoMensal);
+    BigDecimal diasNoMes = BigDecimal.valueOf(30);
+
+    BigDecimal rendimentoDiario = BigDecimal.valueOf(Math.pow(1 + rendimentoMensal.doubleValue(), 1.0 / 30) - 1);
+
+    // Calcula o rendimento total proporcional aos dias
+    BigDecimal rendimentoTotal = saldoAtual.multiply(rendimentoDiario)
+        .multiply(BigDecimal.valueOf(diasUltimaAtualizacao));
+
+    // Atualiza o saldo
+    this.saldo = saldoAtual.add(rendimentoTotal).floatValue();
+
+    this.dataUltimaAtt = agora;
+
+    return this.saldo;
   }
 
   public Long getId() {
@@ -63,6 +92,14 @@ public class ContaPoupanca {
 
   public void setRendimentoMensal(float rendimentoMensal) {
     this.rendimentoMensal = rendimentoMensal;
+  }
+
+  public LocalDateTime getDataUltimaAtt() {
+    return dataUltimaAtt;
+  }
+
+  public void setDataUltimaAtt(LocalDateTime dataUltimaAtt) {
+    this.dataUltimaAtt = dataUltimaAtt;
   }
 
   public LocalDateTime getData_criacao() {
