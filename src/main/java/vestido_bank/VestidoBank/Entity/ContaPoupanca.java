@@ -42,7 +42,7 @@ public class ContaPoupanca {
 
   }
 
-  public BigDecimal aplicarRendimento() {
+  public void aplicarRendimento() {
     LocalDateTime agora = LocalDateTime.now();
 
     if (this.dataUltimaAtt == null) {
@@ -63,12 +63,13 @@ public class ContaPoupanca {
     // Aplica o rendimento diário de forma linear
     BigDecimal rendimentoTotal = saldoAtual.multiply(rendimentoDiario.multiply(new BigDecimal(diasUltimaAtualizacao))).add(saldoAtual);
 
+    // Atualiza o saldo
     this.saldo = rendimentoTotal.floatValue();
 
+    // Atualiza a data da última atualização
     this.dataUltimaAtt = agora;
-
-    return rendimentoTotal;
   }
+
 
   public Long getId() {
     return id;
@@ -79,7 +80,9 @@ public class ContaPoupanca {
   }
 
   public float getSaldo() {
-    return saldo;
+    this.aplicarRendimento();
+
+    return this.saldo;
   }
 
   public void setSaldo(float saldo) {

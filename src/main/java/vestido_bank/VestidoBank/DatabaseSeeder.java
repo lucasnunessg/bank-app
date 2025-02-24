@@ -142,13 +142,12 @@ public class DatabaseSeeder implements CommandLineRunner {
       ContaPoupanca contaPoupanca = new ContaPoupanca(
           5000.0f, // Saldo inicial
           0.5f, // Rendimento mensal (0,5%)
+
           dataCriacao, // Data de criação específica
           client
       );
 
-      // Aplica o rendimento desde a data de criação até a data atual
-      contaPoupanca.aplicarRendimento();
-
+      // Não aplica o rendimento aqui
       contasPoupancas.add(contaPoupanca);
     }
 

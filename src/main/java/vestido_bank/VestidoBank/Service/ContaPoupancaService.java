@@ -1,12 +1,14 @@
 package vestido_bank.VestidoBank.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import org.springframework.stereotype.Service;
-import vestido_bank.VestidoBank.Controller.Dto.ResponseAccountSaldo;
 import vestido_bank.VestidoBank.Entity.Client;
-import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
@@ -71,8 +73,37 @@ public class ContaPoupancaService {
     contaPoupanca.aplicarRendimento();
     return contaPoupancaRepository.save(contaPoupanca);
 
-
   }
+
+  public BigDecimal getRendimentoTotal(Long contaId) {
+    ContaPoupanca contaPoupanca = contaPoupancaRepository.findById(contaId)
+        .orElseThrow(() -> new ContaPoupancaNotFoundException("Conta não encontrada"));
+
+    // Saldo inicial da conta
+    BigDecimal saldoInicial = new BigDecimal("5000.0");
+
+    // Taxa de rendimento mensal (em decimal)
+    BigDecimal rendimentoMensal = new BigDecimal("0.005");
+
+    // Data de criação da conta
+    LocalDateTime dataCriacao = contaPoupanca.getData_criacao();
+
+    // Data atual
+    LocalDateTime dataAtual = LocalDateTime.now();
+
+    // Calcula o número de meses desde a criação da conta
+    long mesesDecorridos = Duration.between(dataCriacao, dataAtual).toDays() / 30;
+
+    // Calcula o rendimento total usando juros compostos
+    BigDecimal fatorRendimento = BigDecimal.ONE.add(rendimentoMensal);
+    BigDecimal rendimentoTotal = saldoInicial.multiply(fatorRendimento.pow((int) mesesDecorridos)).subtract(saldoInicial);
+
+    // Arredonda o resultado para 2 casas decimais
+    rendimentoTotal = rendimentoTotal.setScale(2, RoundingMode.HALF_UP);
+
+    return rendimentoTotal;
+  }
+
 
   public ContaPoupanca depositar(Long contaId, float valor) {
     ContaPoupanca contaPoupanca = contaPoupancaRepository.findById(contaId)

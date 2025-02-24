@@ -1,5 +1,6 @@
 package vestido_bank.VestidoBank.Controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,13 +115,26 @@ public class ContaPoupancaController {
 
   @PutMapping("/{contaPoupancaId}/aplicar-rendimento")
   public ResponseEntity<ContaPoupanca> aplicarRendimento(@PathVariable Long contaPoupancaId) {
+    ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(contaPoupancaId);
 
-  ContaPoupanca contaPoupanca = contaPoupancaService.rendimentoConta(contaPoupancaId);
-      if(contaPoupanca == null) {
-        throw new ContaPoupancaNotFoundException("Não foi possivel encontrar a conta");
-      }
-      contaPoupancaService.salvar(contaPoupanca);
+    // Aplica o rendimento
+    contaPoupanca.aplicarRendimento();
+
+    // Salva a conta com o saldo atualizado
+    contaPoupanca = contaPoupancaService.salvar(contaPoupanca);
+
     return ResponseEntity.ok(contaPoupanca);
+  }
+
+  @GetMapping("/{contaPoupancaId}/rendimento")
+  public ResponseEntity<BigDecimal> getRendimento(@PathVariable Long contaPoupancaId) {
+    BigDecimal contaPoupanca = contaPoupancaService.getRendimentoTotal(contaPoupancaId);
+    if(contaPoupanca == null) {
+      throw new ContaPoupancaNotFoundException("Não achado");
+    }
+
+    return ResponseEntity.ok(contaPoupanca);
+
   }
 
   @PostMapping("/{contaPoupancaId}/client/{clientId}/deposit")
