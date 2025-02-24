@@ -7,6 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
@@ -32,16 +33,16 @@ public class ContaPoupanca {
       Client client) {
     this.saldo = saldo;
     this.rendimentoMensal = rendimentoMensal;
-    this.data_criacao = LocalDateTime.now();
+    this.data_criacao = data_criacao;
     this.client = client;
-    this.dataUltimaAtt = LocalDateTime.now();
+    this.dataUltimaAtt = data_criacao;
   }
 
   public ContaPoupanca() {
 
   }
 
-  public float aplicarRendimento() {
+  public BigDecimal aplicarRendimento() {
     LocalDateTime agora = LocalDateTime.now();
 
     if (this.dataUltimaAtt == null) {
@@ -52,22 +53,21 @@ public class ContaPoupanca {
     long diasUltimaAtualizacao = Duration.between(this.dataUltimaAtt, agora).toDays();
 
     // Converte os valores para BigDecimal
-    BigDecimal saldoAtual = BigDecimal.valueOf(this.saldo);
-    BigDecimal rendimentoMensal = BigDecimal.valueOf(this.rendimentoMensal);
-    BigDecimal diasNoMes = BigDecimal.valueOf(30);
+    BigDecimal saldoAtual = new BigDecimal(String.valueOf(this.saldo));
+    BigDecimal rendimentoMensal = new BigDecimal(String.valueOf(this.rendimentoMensal));
+    BigDecimal diasNoMes = new BigDecimal("30");
 
-    BigDecimal rendimentoDiario = BigDecimal.valueOf(Math.pow(1 + rendimentoMensal.doubleValue(), 1.0 / 30) - 1);
+    // Calcula o rendimento diário (rendimento mensal dividido por 30 dias e por 100 para converter para decimal)
+    BigDecimal rendimentoDiario = rendimentoMensal.divide(diasNoMes, 10, RoundingMode.HALF_UP).divide(new BigDecimal("100"), 10, RoundingMode.HALF_UP);
 
-    // Calcula o rendimento total proporcional aos dias
-    BigDecimal rendimentoTotal = saldoAtual.multiply(rendimentoDiario)
-        .multiply(BigDecimal.valueOf(diasUltimaAtualizacao));
+    // Aplica o rendimento diário de forma linear
+    BigDecimal rendimentoTotal = saldoAtual.multiply(rendimentoDiario.multiply(new BigDecimal(diasUltimaAtualizacao))).add(saldoAtual);
 
-    // Atualiza o saldo
-    this.saldo = saldoAtual.add(rendimentoTotal).floatValue();
+    this.saldo = rendimentoTotal.floatValue();
 
     this.dataUltimaAtt = agora;
 
-    return this.saldo;
+    return rendimentoTotal;
   }
 
   public Long getId() {
