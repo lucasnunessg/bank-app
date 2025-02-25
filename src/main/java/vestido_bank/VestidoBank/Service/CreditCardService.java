@@ -4,22 +4,29 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.CreditCard;
+import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.CreditCardNotFoundExceptions;
+import vestido_bank.VestidoBank.Repository.ClientRepository;
 import vestido_bank.VestidoBank.Repository.CreditCardRepository;
 
 @Service
 public class CreditCardService {
 
   private CreditCardRepository creditCardRepository;
+  private ClientService clientService;
+  private ClientRepository clientRepository;
 
   @Autowired
-  public CreditCardService(CreditCardRepository creditCardRepository) {
+  public CreditCardService(CreditCardRepository creditCardRepository, ClientService clientService, ClientRepository clientRepository) {
     this.creditCardRepository = creditCardRepository;
+    this.clientService = clientService;
+    this.clientRepository = clientRepository;
   }
 
   public List<CreditCard> getAllCredits() {
-   return creditCardRepository.findAll();
+    return creditCardRepository.findAll();
   }
 
   public CreditCard findById(Long id) {
@@ -29,6 +36,15 @@ public class CreditCardService {
   }
 
   public CreditCard createCard(Long clientId, CreditCard creditCard) {
+
+    Optional<Client> client = clientRepository.findById(clientId);
+    if(client.isEmpty()) {
+      throw new ClientNotFoundException("Não foi possível encontrar cliente");
+    }
+
+    creditCard.setClient(
+        client.get()
+    );
     return creditCardRepository.save(creditCard);
   }
 
@@ -45,10 +61,11 @@ public class CreditCardService {
   }
 
   public CreditCard deleteCard(Long id) {
-  CreditCard creditCard = findById(id);
+    CreditCard creditCard = findById(id);
 
     creditCardRepository.delete(creditCard);
     return creditCard;
   }
+
 
 }

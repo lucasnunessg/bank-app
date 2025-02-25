@@ -13,6 +13,7 @@ import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ConnectionFailedException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.CreditCardNotFoundExceptions;
 import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.InvalidPassword;
@@ -50,6 +51,12 @@ public class GlobalControllerAdvice {
 
   @ExceptionHandler({ClientNotFoundException.class})
   public ResponseEntity<String> handleNotFoundClient(RuntimeException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(ex.getMessage());
+  }
+
+  @ExceptionHandler({CreditCardNotFoundExceptions.class})
+  public ResponseEntity<String> handleNotFoundCreditCard(RuntimeException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(ex.getMessage());
   }

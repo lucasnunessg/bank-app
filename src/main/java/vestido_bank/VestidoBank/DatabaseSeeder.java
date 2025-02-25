@@ -57,7 +57,8 @@ public class DatabaseSeeder implements CommandLineRunner {
     );
 
     clients.add(
-        new Client("Lucas Pacheco Nunessss", "04294004043", "5599999999", "R. Acioli Vaz de Andrade",
+        new Client("Lucas Pacheco Nunessss", "04294004043", "5599999999",
+            "R. Acioli Vaz de Andrade",
             "lucasnunespacheco2@gmail.com", passwordEncoder.encode("12345678"))
     );
 
@@ -147,7 +148,7 @@ public class DatabaseSeeder implements CommandLineRunner {
           dataCriacao, // Data de criação específica
           client
       );
-    contaPoupanca.aplicarRendimento();
+      contaPoupanca.aplicarRendimento();
       // Não aplica o rendimento aqui
       contasPoupancas.add(contaPoupanca);
     }
@@ -202,7 +203,8 @@ public class DatabaseSeeder implements CommandLineRunner {
           contaPoupancaDestino, // Conta poupança como destino
           contaPoupancaOrigem, // Conta poupança como origem
           50.0f, // Valor da transação
-          datasTransacao.get(i).plusDays(1), // Data/hora específica (1 dia após a primeira transação)
+          datasTransacao.get(i).plusDays(1),
+          // Data/hora específica (1 dia após a primeira transação)
           "Transferência para outro cliente (poupança)", // Descrição
           contaPoupancaOrigem.getSaldo() - 50.0f // Saldo restante na conta de origem
       );

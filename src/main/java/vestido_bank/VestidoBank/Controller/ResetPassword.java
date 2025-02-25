@@ -37,7 +37,7 @@ public class ResetPassword {
       clientService.updateClient(client.getId(), client);
       return ResponseEntity.ok("Senha alterada com sucesso");
 
-    }catch(RuntimeException e) {
+    } catch (RuntimeException e) {
       return ResponseEntity.badRequest().body("Erro ao alterar senha");
     }
   }

@@ -129,7 +129,7 @@ public class ContaPoupancaController {
   @GetMapping("/{contaPoupancaId}/rendimento")
   public ResponseEntity<BigDecimal> getRendimento(@PathVariable Long contaPoupancaId) {
     BigDecimal contaPoupanca = contaPoupancaService.getRendimentoTotal(contaPoupancaId);
-    if(contaPoupanca == null) {
+    if (contaPoupanca == null) {
       throw new ContaPoupancaNotFoundException("Não achado");
     }
 

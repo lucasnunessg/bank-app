@@ -28,7 +28,8 @@ public class CreditCard {
   @JoinColumn(name = "client_id", nullable = false)
   private Client client;
 
-  public CreditCard(BigDecimal limite, BigDecimal faturaAtual, LocalDate dataVencimento, String status, Client client) {
+  public CreditCard(BigDecimal limite, BigDecimal faturaAtual, LocalDate dataVencimento,
+      String status, Client client) {
     this.limite = limite;
     this.faturaAtual = faturaAtual;
     this.dataVencimento = dataVencimento;

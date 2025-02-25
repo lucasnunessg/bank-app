@@ -96,7 +96,8 @@ public class ContaPoupancaService {
 
     // Calcula o rendimento total usando juros compostos
     BigDecimal fatorRendimento = BigDecimal.ONE.add(rendimentoMensal);
-    BigDecimal rendimentoTotal = saldoInicial.multiply(fatorRendimento.pow((int) mesesDecorridos)).subtract(saldoInicial);
+    BigDecimal rendimentoTotal = saldoInicial.multiply(fatorRendimento.pow((int) mesesDecorridos))
+        .subtract(saldoInicial);
 
     // Arredonda o resultado para 2 casas decimais
     rendimentoTotal = rendimentoTotal.setScale(2, RoundingMode.HALF_UP);

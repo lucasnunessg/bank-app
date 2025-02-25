@@ -58,10 +58,12 @@ public class ContaPoupanca {
     BigDecimal diasNoMes = new BigDecimal("30");
 
     // Calcula o rendimento diário (rendimento mensal dividido por 30 dias e por 100 para converter para decimal)
-    BigDecimal rendimentoDiario = rendimentoMensal.divide(diasNoMes, 10, RoundingMode.HALF_UP).divide(new BigDecimal("100"), 10, RoundingMode.HALF_UP);
+    BigDecimal rendimentoDiario = rendimentoMensal.divide(diasNoMes, 10, RoundingMode.HALF_UP)
+        .divide(new BigDecimal("100"), 10, RoundingMode.HALF_UP);
 
     // Aplica o rendimento diário de forma linear
-    BigDecimal rendimentoTotal = saldoAtual.multiply(rendimentoDiario.multiply(new BigDecimal(diasUltimaAtualizacao))).add(saldoAtual);
+    BigDecimal rendimentoTotal = saldoAtual.multiply(
+        rendimentoDiario.multiply(new BigDecimal(diasUltimaAtualizacao))).add(saldoAtual);
 
     // Atualiza o saldo
     this.saldo = rendimentoTotal.floatValue();

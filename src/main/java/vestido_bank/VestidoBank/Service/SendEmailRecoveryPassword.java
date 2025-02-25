@@ -33,7 +33,7 @@ public class SendEmailRecoveryPassword {
           }
         });
 
-    try{
+    try {
 
       Message mimeMessage = new MimeMessage(session);
       mimeMessage.setFrom(new InternetAddress(username));

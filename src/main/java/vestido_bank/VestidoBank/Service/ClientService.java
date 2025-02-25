@@ -46,9 +46,9 @@ public class ClientService implements UserDetailsService {
         .collect(Collectors.toList()); //converte de novo p lista
   }
 
-  public Optional <Client> findByusername(String name) {
+  public Optional<Client> findByusername(String name) {
     Optional<Client> client = clientRepository.findByName(name);
-    if(client.isEmpty()) {
+    if (client.isEmpty()) {
       throw new ClientNotFoundException("Não encontrado");
     }
 
@@ -57,11 +57,11 @@ public class ClientService implements UserDetailsService {
 
   public Client findByEmail(String email) {
     Client client = clientRepository.findByEmail(email);
-        if(client == null) {
-          throw new ClientNotFoundException("Não encontrado");
-        }
+    if (client == null) {
+      throw new ClientNotFoundException("Não encontrado");
+    }
 
-        return client;
+    return client;
   }
 
   public Client createClient(Client client) {
@@ -92,7 +92,7 @@ public class ClientService implements UserDetailsService {
 
   public Client updateClient(Long id, Client client) {
     Client clientDb = getById(id);
-    if(clientDb == null) {
+    if (clientDb == null) {
       throw new ClientNotFoundException("Cliente não encontrado!");
     }
 
@@ -142,12 +142,12 @@ public class ClientService implements UserDetailsService {
 
   public Client validateResetToken(String token) {
     Optional<Client> optionalPerson = clientRepository.findByResetToken(token);
-    if (optionalPerson.isEmpty() || optionalPerson.get().getTokenExpirity().isBefore(LocalDateTime.now())) {
+    if (optionalPerson.isEmpty() || optionalPerson.get().getTokenExpirity()
+        .isBefore(LocalDateTime.now())) {
       throw new RuntimeException("Token inválido ou expirado.");
     }
     return optionalPerson.get();
   }
-
 
 
 }

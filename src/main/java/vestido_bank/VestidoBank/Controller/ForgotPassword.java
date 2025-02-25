@@ -23,35 +23,38 @@ public class ForgotPassword {
   ClientService clientService;
 
   @Autowired
-  public ForgotPassword(SendEmailRecoveryPassword sendEmailRecoveryPassword, ClientService clientService) {
+  public ForgotPassword(SendEmailRecoveryPassword sendEmailRecoveryPassword,
+      ClientService clientService) {
     this.sendEmailRecoveryPassword = sendEmailRecoveryPassword;
     this.clientService = clientService;
   }
 
-@PostMapping
+  @PostMapping
   public ResponseEntity<String> forgotPassword(@RequestBody @Valid EmailDto emailDto) {
     String email = emailDto.email();
-  Client clientOptional = clientService.findByEmail(email);
-  if(clientOptional == null) {
-    return ResponseEntity.badRequest().body("Não encontrado");
+    Client clientOptional = clientService.findByEmail(email);
+    if (clientOptional == null) {
+      return ResponseEntity.badRequest().body("Não encontrado");
+    }
+
+    Client client = clientOptional;
+
+    String token = UUID.randomUUID().toString();
+
+    clientService.savedResetToken(client.getId(), token);
+
+    String resetLink = "http://localhost:5173/reset-password?token=" + token;
+
+    String subject = "Redefinição de senha";
+    String message = "Olá, " + client.getName() + ",\n\n" +
+        "Clique no link abaixo para redefinir sua senha:\n" + resetLink + "\n\n" +
+        "Se você não solicitou esta ação, por favor ignore este e-mail.";
+
+    sendEmailRecoveryPassword.sendEmail(client.getEmail(), subject, message);
+
+    return ResponseEntity.ok(
+        "Link para redefinição de senha enviado com sucesso para o e-mail registrado.");
   }
-
-  Client client = clientOptional;
-
-  String token = UUID.randomUUID().toString();
-
-  clientService.savedResetToken(client.getId(), token);
-
-  String resetLink = "http://localhost:5173/reset-password?token=" + token;
-
-  String subject = "Redefinição de senha";
-  String message = "Olá, " + client.getName() + ",\n\n" +
-      "Clique no link abaixo para redefinir sua senha:\n" + resetLink + "\n\n" +
-      "Se você não solicitou esta ação, por favor ignore este e-mail.";
-
-  sendEmailRecoveryPassword.sendEmail(client.getEmail(), subject, message);
-
-  return ResponseEntity.ok("Link para redefinição de senha enviado com sucesso para o e-mail registrado.");  }
 
 
 }
