@@ -113,6 +113,7 @@ public class DatabaseSeeder implements CommandLineRunner {
           1000.0f, // Limite
           dataCriacao, // Data de criação específica
           client
+
       );
       contasCorrentes.add(contaCorrente);
     }
@@ -146,7 +147,7 @@ public class DatabaseSeeder implements CommandLineRunner {
           dataCriacao, // Data de criação específica
           client
       );
-
+    contaPoupanca.aplicarRendimento();
       // Não aplica o rendimento aqui
       contasPoupancas.add(contaPoupanca);
     }

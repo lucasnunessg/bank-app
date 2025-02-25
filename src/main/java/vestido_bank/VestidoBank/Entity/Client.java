@@ -40,6 +40,8 @@ public class Client implements UserDetails {
   @OneToMany(mappedBy = "client")
   private List<Transaction> transactions;
 
+  @OneToMany(mappedBy = "client")
+  private List<CreditCard> creditCards;
 
   @OneToMany(mappedBy = "client")
   private List<ContaPoupanca> contaPoupanca;
@@ -151,6 +153,14 @@ public class Client implements UserDetails {
 
   public String getEmail() {
     return email;
+  }
+
+  public List<CreditCard> getCreditCards() {
+    return creditCards;
+  }
+
+  public void setCreditCards(List<CreditCard> creditCards) {
+    this.creditCards = creditCards;
   }
 
   public void setEmail(String email) {
