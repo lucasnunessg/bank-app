@@ -2,9 +2,11 @@ package vestido_bank.VestidoBank.Controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +58,25 @@ public class CreditCardController {
     }
 
     return creditCardService.createCard(clientId, creditCard);
+  }
+
+  @PutMapping("/{creditCardId}/edit")
+  public CreditCard editCardCard(@PathVariable Long creditCardId, @RequestBody CreditCard creditCard) {
+    CreditCard creditCard1 = creditCardService.findById(creditCardId);
+    if(creditCard1 == null) {
+      throw new CreditCardNotFoundExceptions("Não foi possível encontrar cartão de crédito");
+    }
+    return creditCardService.updateCard(creditCard1.getId(), creditCard);
+  }
+
+  @DeleteMapping("/{creditCardId}/delete")
+  public CreditCard deleteCard(@PathVariable Long creditCardId) throws CreditCardNotFoundExceptions {
+    CreditCard creditCard = creditCardService.findById(creditCardId);
+    if(creditCard == null) {
+      throw  new CreditCardNotFoundExceptions("Não encontrado!");
+    }
+
+    return creditCardService.deleteCard(creditCard.getId());
   }
 
 }
