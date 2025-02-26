@@ -48,14 +48,19 @@ public class CreditCardService {
     return creditCardRepository.save(creditCard);
   }
 
-  public CreditCard updateCard(Long id, CreditCard creditCard) {
+  public CreditCard updateCard(Long id, Long clientId, CreditCard creditCard) {
     CreditCard creditCard1 = findById(id);
+    Client client = clientService.getById(clientId); // Recupera o cliente pelo ID
 
-    creditCard.setClient(creditCard.getClient());
-    creditCard.setDataVencimento(creditCard.getDataVencimento());
-    creditCard.setFaturaAtual(creditCard.getFaturaAtual());
-    creditCard.setLimite(creditCard.getLimite());
-    creditCard.setStatus(creditCard.getStatus());
+    if (client == null) {
+      throw new ClientNotFoundException("Cliente não encontrado");
+    }
+
+    creditCard1.setDataVencimento(creditCard.getDataVencimento());
+    creditCard1.setFaturaAtual(creditCard.getFaturaAtual());
+    creditCard1.setLimite(creditCard.getLimite());
+    creditCard1.setStatus(creditCard.getStatus());
+    creditCard1.setClient(client);
 
     return creditCardRepository.save(creditCard1);
   }

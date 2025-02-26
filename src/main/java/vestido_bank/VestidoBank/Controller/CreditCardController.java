@@ -65,13 +65,21 @@ public class CreditCardController {
     return CreditCardDto.fromEntity(newCard);
   }
 
-  @PutMapping("/{creditCardId}/edit")
-  public CreditCard editCardCard(@PathVariable Long creditCardId, @RequestBody CreditCard creditCard) {
+  @PutMapping("/{clientId}/{creditCardId}/edit")
+  public CreditCardDto editCardCard(@PathVariable Long creditCardId, @PathVariable Long clientId, @RequestBody CreditCard creditCard) throws RuntimeException {
     CreditCard creditCard1 = creditCardService.findById(creditCardId);
     if(creditCard1 == null) {
       throw new CreditCardNotFoundExceptions("Não foi possível encontrar cartão de crédito");
     }
-    return creditCardService.updateCard(creditCard1.getId(), creditCard);
+
+    Client client = clientService.getById(clientId);
+    if(client == null) {
+      throw new ClientNotFoundException("Não encontrado");
+    }
+
+   CreditCard credit = creditCardService.updateCard(creditCard1.getId(), clientId, creditCard);
+
+    return CreditCardDto.fromEntity(credit);
   }
 
   @DeleteMapping("/{creditCardId}/delete")
