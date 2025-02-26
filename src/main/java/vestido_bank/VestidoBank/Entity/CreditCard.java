@@ -37,6 +37,8 @@ public class CreditCard {
     this.client = client;
   }
 
+  public CreditCard(){}
+
   public Long getId() {
     return id;
   }

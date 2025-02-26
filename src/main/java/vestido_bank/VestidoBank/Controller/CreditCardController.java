@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vestido_bank.VestidoBank.Controller.Dto.CreditCardCreateDto;
+import vestido_bank.VestidoBank.Controller.Dto.CreditCardDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.CreditCard;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
@@ -31,25 +33,26 @@ public class CreditCardController {
   }
 
   @GetMapping
-  public List<CreditCard> getAllCredits() {
-    return creditCardService.getAllCredits();
-
+  public List<CreditCardDto> getAllCredits() {
+   List<CreditCard> creditCard =  creditCardService.getAllCredits();
+     return creditCard.stream().map(CreditCardDto::fromEntity)
+         .toList();
   }
 
   @GetMapping("/{id}")
-  public CreditCard getCreditById(@PathVariable Long id) throws CreditCardNotFoundExceptions {
+  public CreditCardDto getCreditById(@PathVariable Long id) throws CreditCardNotFoundExceptions {
     CreditCard creditCard = creditCardService.findById(id);
         if(creditCard == null) {
           throw new CreditCardNotFoundExceptions("Não foi possível encontrar");
         }
 
-        return creditCard;
+     return CreditCardDto.fromEntity(creditCard);
   }
 
   @PostMapping("/{clientId}/create/credit-card")
-  public CreditCard createCreditCard(
+  public CreditCardDto createCreditCard(
       @PathVariable Long clientId,
-      @RequestBody CreditCard creditCard
+      @RequestBody CreditCardCreateDto creditCardCreate
   ) throws ClientNotFoundException {
 
     Client client = clientService.getById(clientId);
@@ -57,7 +60,9 @@ public class CreditCardController {
       throw new ClientNotFoundException("Cliente não encontrado, tente novamente");
     }
 
-    return creditCardService.createCard(clientId, creditCard);
+    CreditCard newCard = creditCardCreate.toEntity(client);
+    newCard = creditCardService.createCard(clientId, newCard);
+    return CreditCardDto.fromEntity(newCard);
   }
 
   @PutMapping("/{creditCardId}/edit")
