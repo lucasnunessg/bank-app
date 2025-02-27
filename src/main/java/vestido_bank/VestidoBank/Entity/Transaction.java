@@ -37,6 +37,14 @@ public class Transaction {
   @JoinColumn(name = "conta_poupanca_origem_id")
   private ContaPoupanca contaPoupancaOrigem;
 
+  @ManyToOne
+  @JoinColumn(name = "credit_card_origem_id")
+  private CreditCard creditCardOrigem;
+
+  @ManyToOne
+  @JoinColumn(name = "credit_card_destino_id")
+  private CreditCard creditCardDestino;
+
   private float valor;
 
   private LocalDateTime data_hora;
@@ -50,7 +58,7 @@ public class Transaction {
   }
 
   public Transaction(Client client, ContaCorrente contaCorrenteOrigem,
-      ContaCorrente contaCorrenteDestino,
+      ContaCorrente contaCorrenteDestino, CreditCard creditCardOrigem, CreditCard creditCardDestino,
       ContaPoupanca contaPoupancaDestino, ContaPoupanca contaPoupancaOrigem, float valor,
       LocalDateTime data_hora, String descricao, float saldoRestante) {
     this.client = client;
@@ -61,6 +69,8 @@ public class Transaction {
     this.valor = valor;
     this.data_hora = data_hora;
     this.descricao = descricao;
+    this.creditCardOrigem = creditCardOrigem;
+    this.creditCardDestino = creditCardDestino;
   }
 
   public Long getId() {
@@ -106,6 +116,22 @@ public class Transaction {
 
   public void setContaPoupancaOrigem(ContaPoupanca contaPoupancaOrigem) {
     this.contaPoupancaOrigem = contaPoupancaOrigem;
+  }
+
+  public CreditCard getCreditCardOrigem() {
+    return creditCardOrigem;
+  }
+
+  public void setCreditCardOrigem(CreditCard creditCardOrigem) {
+    this.creditCardOrigem = creditCardOrigem;
+  }
+
+  public CreditCard getCreditCardDestino() {
+    return creditCardDestino;
+  }
+
+  public void setCreditCardDestino(CreditCard creditCardDestino) {
+    this.creditCardDestino = creditCardDestino;
   }
 
   public float getValor() {

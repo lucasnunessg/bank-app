@@ -34,19 +34,19 @@ public class CreditCardController {
 
   @GetMapping
   public List<CreditCardDto> getAllCredits() {
-   List<CreditCard> creditCard =  creditCardService.getAllCredits();
-     return creditCard.stream().map(CreditCardDto::fromEntity)
-         .toList();
+    List<CreditCard> creditCard = creditCardService.getAllCredits();
+    return creditCard.stream().map(CreditCardDto::fromEntity)
+        .toList();
   }
 
   @GetMapping("/{id}")
   public CreditCardDto getCreditById(@PathVariable Long id) throws CreditCardNotFoundExceptions {
     CreditCard creditCard = creditCardService.findById(id);
-        if(creditCard == null) {
-          throw new CreditCardNotFoundExceptions("Não foi possível encontrar");
-        }
+    if (creditCard == null) {
+      throw new CreditCardNotFoundExceptions("Não foi possível encontrar");
+    }
 
-     return CreditCardDto.fromEntity(creditCard);
+    return CreditCardDto.fromEntity(creditCard);
   }
 
   @PostMapping("/{clientId}/create/credit-card")
@@ -66,27 +66,29 @@ public class CreditCardController {
   }
 
   @PutMapping("/{clientId}/{creditCardId}/edit")
-  public CreditCardDto editCardCard(@PathVariable Long creditCardId, @PathVariable Long clientId, @RequestBody CreditCard creditCard) throws RuntimeException {
+  public CreditCardDto editCardCard(@PathVariable Long creditCardId, @PathVariable Long clientId,
+      @RequestBody CreditCard creditCard) throws RuntimeException {
     CreditCard creditCard1 = creditCardService.findById(creditCardId);
-    if(creditCard1 == null) {
+    if (creditCard1 == null) {
       throw new CreditCardNotFoundExceptions("Não foi possível encontrar cartão de crédito");
     }
 
     Client client = clientService.getById(clientId);
-    if(client == null) {
+    if (client == null) {
       throw new ClientNotFoundException("Não encontrado");
     }
 
-   CreditCard credit = creditCardService.updateCard(creditCard1.getId(), clientId, creditCard);
+    CreditCard credit = creditCardService.updateCard(creditCard1.getId(), clientId, creditCard);
 
     return CreditCardDto.fromEntity(credit);
   }
 
   @DeleteMapping("/{creditCardId}/delete")
-  public CreditCard deleteCard(@PathVariable Long creditCardId) throws CreditCardNotFoundExceptions {
+  public CreditCard deleteCard(@PathVariable Long creditCardId)
+      throws CreditCardNotFoundExceptions {
     CreditCard creditCard = creditCardService.findById(creditCardId);
-    if(creditCard == null) {
-      throw  new CreditCardNotFoundExceptions("Não encontrado!");
+    if (creditCard == null) {
+      throw new CreditCardNotFoundExceptions("Não encontrado!");
     }
 
     return creditCardService.deleteCard(creditCard.getId());

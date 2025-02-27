@@ -1,5 +1,6 @@
 package vestido_bank.VestidoBank.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +14,20 @@ import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
+import vestido_bank.VestidoBank.Entity.CreditCard;
 import vestido_bank.VestidoBank.Entity.Transaction;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ConnectionFailedException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.CreditCardNotFoundExceptions;
 import vestido_bank.VestidoBank.Exceptions.InvalidTransaction;
+import vestido_bank.VestidoBank.Exceptions.SaldoInsuficienteException;
 import vestido_bank.VestidoBank.Exceptions.TransactionNotFound;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import vestido_bank.VestidoBank.Repository.ContaCorrenteRepository;
 import vestido_bank.VestidoBank.Repository.ContaPoupancaRepository;
+import vestido_bank.VestidoBank.Repository.CreditCardRepository;
 import vestido_bank.VestidoBank.Repository.TransactionsRepository;
 
 @Service
@@ -32,15 +37,18 @@ public class TransactionService {
   ContaCorrenteRepository contaCorrenteRepository;
   TransactionsRepository transactionsRepository;
   ClientRepository clientRepository;
+  CreditCardRepository creditCardRepository;
 
   @Autowired
   public TransactionService(ContaPoupancaRepository contaPoupancaRepository,
       ContaCorrenteRepository contaCorrenteRepository,
-      TransactionsRepository transactionsRepository, ClientRepository clientRepository) {
+      TransactionsRepository transactionsRepository, ClientRepository clientRepository,
+      CreditCardRepository creditCardRepository) {
     this.contaPoupancaRepository = contaPoupancaRepository;
     this.contaCorrenteRepository = contaCorrenteRepository;
     this.transactionsRepository = transactionsRepository;
     this.clientRepository = clientRepository;
+    this.creditCardRepository = creditCardRepository;
   }
 
   public List<Transaction> getAllTransactions() {
@@ -102,5 +110,57 @@ public class TransactionService {
 
 
   }
+
+  public Transaction pagarFaturaComSaldo(Long clientId, Long contaPoupancaId,
+      Long cartaoDeCreditoId, float valor) {
+    Optional<Client> client = clientRepository.findById(clientId);
+    if (client.isEmpty()) {
+      throw new ClientNotFoundException("Não0 foi possível encontrar cliente");
+    }
+    Optional<ContaPoupanca> contaPoupanca = contaPoupancaRepository.findById(contaPoupancaId);
+    if (contaPoupanca.isEmpty()) {
+      throw new ContaCorrentNotFoundException("Não encontrado");
+    }
+    Optional<CreditCard> creditCard = creditCardRepository.findById(cartaoDeCreditoId);
+    if (creditCard.isEmpty()) {
+      throw new CreditCardNotFoundExceptions("Não encontrado");
+    }
+
+    ContaPoupanca contaPoupanca1 = contaPoupanca.get();
+
+    if (contaPoupanca1.getSaldo() < valor) {
+      throw new SaldoInsuficienteException("Valor não suficiente");
+    }
+
+    if (valor <= 0) {
+      throw new IllegalArgumentException("O valor deve ser positivo.");
+    }
+
+    contaPoupanca1.setSaldo(contaPoupanca1.getSaldo() - valor);
+    contaPoupancaRepository.save(contaPoupanca1);
+
+    CreditCard creditCard1 = creditCard.get();
+
+    creditCard1.setFaturaAtual(creditCard1.getFaturaAtual().subtract(new BigDecimal(valor)));
+    creditCardRepository.save(creditCard1);
+
+    Transaction transacao = new Transaction(
+            client.get(),
+            null,
+            null,
+        creditCard1,
+            null,
+            null,
+        contaPoupanca1,
+            valor,
+            LocalDateTime.now(),
+            "Pagamento de fatura do cartão de crédito",
+            contaPoupanca1.getSaldo()
+        );
+
+    return transactionsRepository.save(transacao);
+
+  }
+
 
 }

@@ -19,7 +19,8 @@ public class CreditCardService {
   private ClientRepository clientRepository;
 
   @Autowired
-  public CreditCardService(CreditCardRepository creditCardRepository, ClientService clientService, ClientRepository clientRepository) {
+  public CreditCardService(CreditCardRepository creditCardRepository, ClientService clientService,
+      ClientRepository clientRepository) {
     this.creditCardRepository = creditCardRepository;
     this.clientService = clientService;
     this.clientRepository = clientRepository;
@@ -38,7 +39,7 @@ public class CreditCardService {
   public CreditCard createCard(Long clientId, CreditCard creditCard) {
 
     Optional<Client> client = clientRepository.findById(clientId);
-    if(client.isEmpty()) {
+    if (client.isEmpty()) {
       throw new ClientNotFoundException("Não foi possível encontrar cliente");
     }
 
@@ -68,6 +69,7 @@ public class CreditCardService {
   public CreditCard deleteCard(Long id) {
     CreditCard creditCard = findById(id);
 
+    creditCard.setClient(null);
     creditCardRepository.delete(creditCard);
     return creditCard;
   }

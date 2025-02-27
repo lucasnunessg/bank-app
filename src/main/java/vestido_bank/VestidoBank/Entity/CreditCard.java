@@ -5,9 +5,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class CreditCard {
@@ -28,6 +30,13 @@ public class CreditCard {
   @JoinColumn(name = "client_id", nullable = false)
   private Client client;
 
+  @OneToMany(mappedBy = "creditCardOrigem")
+  private List<Transaction> creditCardOrigem;
+
+  @OneToMany(mappedBy = "creditCardDestino")
+  private List<Transaction> creditCardDestino;
+
+
   public CreditCard(BigDecimal limite, BigDecimal faturaAtual, LocalDate dataVencimento,
       String status, Client client) {
     this.limite = limite;
@@ -37,7 +46,8 @@ public class CreditCard {
     this.client = client;
   }
 
-  public CreditCard(){}
+  public CreditCard() {
+  }
 
   public Long getId() {
     return id;
@@ -85,5 +95,23 @@ public class CreditCard {
 
   public void setClient(Client client) {
     this.client = client;
+  }
+
+  public List<Transaction> getCreditCardOrigem() {
+    return creditCardOrigem;
+  }
+
+  public void setCreditCardOrigem(
+      List<Transaction> creditCardOrigem) {
+    this.creditCardOrigem = creditCardOrigem;
+  }
+
+  public List<Transaction> getCreditCardDestino() {
+    return creditCardDestino;
+  }
+
+  public void setCreditCardDestino(
+      List<Transaction> creditCardDestino) {
+    this.creditCardDestino = creditCardDestino;
   }
 }
