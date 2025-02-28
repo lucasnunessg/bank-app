@@ -186,13 +186,14 @@ public class DatabaseSeeder implements CommandLineRunner {
           contaCorrenteOrigem.getClient(), // Cliente associado à transação (origem)
           contaCorrenteOrigem, // Conta corrente como origem
           contaCorrenteDestino, // Conta corrente como destino
+          null, // Cartão de crédito como origem (não se aplica)
+          null, // Cartão de crédito como destino (não se aplica)
           null, // Conta poupança como destino (não se aplica)
           null, // Conta poupança como origem (não se aplica)
           100.0f, // Valor da transação
           datasTransacao.get(i), // Data/hora específica
           "Transferência para outro cliente (corrente)", // Descrição
           contaCorrenteOrigem.getSaldo() - 100.0f // Saldo restante na conta de origem
-
       );
       transactions.add(transaction1);
 
@@ -201,11 +202,12 @@ public class DatabaseSeeder implements CommandLineRunner {
           contaPoupancaOrigem.getClient(), // Cliente associado à transação (origem)
           null, // Conta corrente como origem (não se aplica)
           null, // Conta corrente como destino (não se aplica)
+          null, // Cartão de crédito como origem (não se aplica)
+          null, // Cartão de crédito como destino (não se aplica)
           contaPoupancaDestino, // Conta poupança como destino
           contaPoupancaOrigem, // Conta poupança como origem
           50.0f, // Valor da transação
-          datasTransacao.get(i).plusDays(1),
-          // Data/hora específica (1 dia após a primeira transação)
+          datasTransacao.get(i).plusDays(1), // Data/hora específica (1 dia após a primeira transação)
           "Transferência para outro cliente (poupança)", // Descrição
           contaPoupancaOrigem.getSaldo() - 50.0f // Saldo restante na conta de origem
       );

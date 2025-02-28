@@ -11,6 +11,7 @@ import org.springframework.web.client.ResourceAccessException;
 import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteDto;
 import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaDto;
 import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
+import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaResponse;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
@@ -111,55 +112,39 @@ public class TransactionService {
 
   }
 
-  public Transaction pagarFaturaComSaldo(Long clientId, Long contaPoupancaId,
-      Long cartaoDeCreditoId, float valor) {
-    Optional<Client> client = clientRepository.findById(clientId);
-    if (client.isEmpty()) {
-      throw new ClientNotFoundException("Não0 foi possível encontrar cliente");
-    }
-    Optional<ContaPoupanca> contaPoupanca = contaPoupancaRepository.findById(contaPoupancaId);
-    if (contaPoupanca.isEmpty()) {
-      throw new ContaCorrentNotFoundException("Não encontrado");
-    }
-    Optional<CreditCard> creditCard = creditCardRepository.findById(cartaoDeCreditoId);
-    if (creditCard.isEmpty()) {
-      throw new CreditCardNotFoundExceptions("Não encontrado");
+  @Transactional
+  public PagamentoFaturaResponse pagarFaturaComSaldo(Client client, ContaPoupanca contaPoupanca, CreditCard creditCard, float valor, String descricao) {
+    if (contaPoupanca.getSaldo() < valor) {
+      throw new SaldoInsuficienteException("Saldo insuficiente na conta poupança");
     }
 
-    ContaPoupanca contaPoupanca1 = contaPoupanca.get();
+    contaPoupanca.setSaldo(contaPoupanca.getSaldo() - valor);
+    contaPoupancaRepository.save(contaPoupanca);
 
-    if (contaPoupanca1.getSaldo() < valor) {
-      throw new SaldoInsuficienteException("Valor não suficiente");
-    }
-
-    if (valor <= 0) {
-      throw new IllegalArgumentException("O valor deve ser positivo.");
-    }
-
-    contaPoupanca1.setSaldo(contaPoupanca1.getSaldo() - valor);
-    contaPoupancaRepository.save(contaPoupanca1);
-
-    CreditCard creditCard1 = creditCard.get();
-
-    creditCard1.setFaturaAtual(creditCard1.getFaturaAtual().subtract(new BigDecimal(valor)));
-    creditCardRepository.save(creditCard1);
+    creditCard.setFaturaAtual(creditCard.getFaturaAtual().subtract(new BigDecimal(valor)));
+    creditCardRepository.save(creditCard);
 
     Transaction transacao = new Transaction(
-            client.get(),
-            null,
-            null,
-        creditCard1,
-            null,
-            null,
-        contaPoupanca1,
-            valor,
-            LocalDateTime.now(),
-            "Pagamento de fatura do cartão de crédito",
-            contaPoupanca1.getSaldo()
-        );
+        client,
+        null,
+        null,
+        creditCard,
+        null,
+        null,
+        contaPoupanca,
+        valor,
+        LocalDateTime.now(),
+        descricao,
+        contaPoupanca.getSaldo()
+    );
+    transactionsRepository.save(transacao);
 
-    return transactionsRepository.save(transacao);
-
+    return new PagamentoFaturaResponse(
+        creditCard.getId(),
+        creditCard.getFaturaAtual(),
+        new BigDecimal(contaPoupanca.getSaldo()),
+        "Pagamento realizado com sucesso!"
+    );
   }
 
 

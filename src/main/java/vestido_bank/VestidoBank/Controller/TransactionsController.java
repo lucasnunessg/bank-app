@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaDto;
+import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaResponse;
 import vestido_bank.VestidoBank.Controller.Dto.TransactionCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.TransactionDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
+import vestido_bank.VestidoBank.Entity.CreditCard;
 import vestido_bank.VestidoBank.Entity.Transaction;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
@@ -24,6 +27,7 @@ import vestido_bank.VestidoBank.Exceptions.InvalidTransaction;
 import vestido_bank.VestidoBank.Service.ClientService;
 import vestido_bank.VestidoBank.Service.ContaCorrenteService;
 import vestido_bank.VestidoBank.Service.ContaPoupancaService;
+import vestido_bank.VestidoBank.Service.CreditCardService;
 import vestido_bank.VestidoBank.Service.TransactionService;
 
 @RestController
@@ -34,15 +38,17 @@ public class TransactionsController {
   ContaPoupancaService contaPoupancaService;
   ContaCorrenteService contaCorrenteService;
   ClientService clientService;
+  CreditCardService creditCardService;
 
   @Autowired
   public TransactionsController(TransactionService transactionService,
       ContaPoupancaService contaPoupancaService, ContaCorrenteService contaCorrenteService,
-      ClientService clientService) {
+      ClientService clientService, CreditCardService creditCardService) {
     this.transactionService = transactionService;
     this.contaPoupancaService = contaPoupancaService;
     this.contaCorrenteService = contaCorrenteService;
     this.clientService = clientService;
+    this.creditCardService = creditCardService;
   }
 
   @GetMapping
@@ -79,6 +85,28 @@ public class TransactionsController {
     Transaction createTransaction = transactionService.createTransactionWithPoupancaAndCorrente(
         contaOrigemId, contaDestinoId, transaction.getValor(), transaction);
     return ResponseEntity.ok(TransactionDto.fromEntity(createTransaction));
+  }
+
+  @PostMapping("/payments-with-creditcard")
+  public ResponseEntity<PagamentoFaturaResponse> pagarFaturaComSaldo(
+      @RequestBody PagamentoFaturaDto pagamentoFaturaDto) {
+    if (pagamentoFaturaDto.valor() <= 0) {
+      throw new IllegalArgumentException("O valor deve ser positivo.");
+    }
+
+    Client client = clientService.getById(pagamentoFaturaDto.clientId());
+    ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(pagamentoFaturaDto.contaPoupancaId());
+    CreditCard creditCard = creditCardService.findById(pagamentoFaturaDto.cartaoDeCreditoId());
+
+    PagamentoFaturaResponse response = transactionService.pagarFaturaComSaldo(
+        client,
+        contaPoupanca,
+        creditCard,
+        pagamentoFaturaDto.valor(),
+        pagamentoFaturaDto.descricao()
+    );
+
+    return ResponseEntity.ok(response);
   }
 
 }
