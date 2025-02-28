@@ -15,6 +15,7 @@ import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaDto;
 import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaResponse;
 import vestido_bank.VestidoBank.Controller.Dto.TransactionCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.TransactionDto;
+import vestido_bank.VestidoBank.Controller.Dto.TransactionWithCreditCardDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
@@ -94,6 +95,7 @@ public class TransactionsController {
       throw new IllegalArgumentException("O valor deve ser positivo.");
     }
 
+
     Client client = clientService.getById(pagamentoFaturaDto.clientId());
     ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(pagamentoFaturaDto.contaPoupancaId());
     CreditCard creditCard = creditCardService.findById(pagamentoFaturaDto.cartaoDeCreditoId());
@@ -107,6 +109,12 @@ public class TransactionsController {
     );
 
     return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/with-credit-card")
+  public ResponseEntity<List<TransactionWithCreditCardDto>> getAllTransactionsWithCreditCard() {
+    List<TransactionWithCreditCardDto> transactions = transactionService.getAllTransactionsWithCreditCard();
+    return ResponseEntity.ok(transactions);
   }
 
 }

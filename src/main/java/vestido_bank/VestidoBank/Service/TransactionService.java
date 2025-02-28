@@ -3,15 +3,14 @@ package vestido_bank.VestidoBank.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import vestido_bank.VestidoBank.Controller.Dto.ContaCorrenteDto;
-import vestido_bank.VestidoBank.Controller.Dto.ContaPoupancaDto;
-import vestido_bank.VestidoBank.Controller.Dto.DepositAndSakeDto;
 import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaResponse;
+import vestido_bank.VestidoBank.Controller.Dto.TransactionWithCreditCardDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
@@ -21,7 +20,6 @@ import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ConnectionFailedException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
-import vestido_bank.VestidoBank.Exceptions.CreditCardNotFoundExceptions;
 import vestido_bank.VestidoBank.Exceptions.InvalidTransaction;
 import vestido_bank.VestidoBank.Exceptions.SaldoInsuficienteException;
 import vestido_bank.VestidoBank.Exceptions.TransactionNotFound;
@@ -63,6 +61,34 @@ public class TransactionService {
     }
     return transactionsRepository.findByClient_Id(clientId);
   }
+
+  public List<TransactionWithCreditCardDto> getAllTransactionsWithCreditCard() {
+    List<Transaction> transactions = creditCardRepository.findAllWithCreditCard();
+
+    return transactions.stream()
+        .map(this::toTransactionWithCreditCardDto)
+        .collect(Collectors.toList());
+  }
+
+  private TransactionWithCreditCardDto toTransactionWithCreditCardDto(Transaction transaction) {
+    Long creditCardId = transaction.getCreditCardOrigem() != null
+        ? transaction.getCreditCardOrigem().getId()
+        : transaction.getCreditCardDestino().getId();
+
+    BigDecimal faturaAtual = transaction.getCreditCardOrigem() != null
+        ? transaction.getCreditCardOrigem().getFaturaAtual()
+        : transaction.getCreditCardDestino().getFaturaAtual();
+
+    return new TransactionWithCreditCardDto(
+        transaction.getId(),
+        creditCardId,
+        new BigDecimal(transaction.getValor()),
+        transaction.getData_hora(),
+        transaction.getDescricao(),
+        faturaAtual
+    );
+  }
+
 
   public Transaction getTransactionById(Long id) {
     Optional<Transaction> transaction = transactionsRepository.findById(id);
@@ -111,6 +137,8 @@ public class TransactionService {
 
 
   }
+
+
 
   @Transactional
   public PagamentoFaturaResponse pagarFaturaComSaldo(Client client, ContaPoupanca contaPoupanca, CreditCard creditCard, float valor, String descricao) {
