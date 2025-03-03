@@ -117,10 +117,8 @@ public class ContaPoupancaController {
   public ResponseEntity<ContaPoupanca> aplicarRendimento(@PathVariable Long contaPoupancaId) {
     ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(contaPoupancaId);
 
-    // Aplica o rendimento
     contaPoupanca.aplicarRendimento();
 
-    // Salva a conta com o saldo atualizado
     contaPoupanca = contaPoupancaService.salvar(contaPoupanca);
 
     return ResponseEntity.ok(contaPoupanca);

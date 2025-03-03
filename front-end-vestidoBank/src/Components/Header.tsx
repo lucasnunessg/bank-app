@@ -7,7 +7,7 @@ function Header() {
   const { token, logout } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para controlar o menu hambúrguer
+  const [isMenuOpen, setIsMenuOpen] = useState(false); 
 
   const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ function Header() {
   };
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen); // Alternar a visibilidade do menu
+    setIsMenuOpen(!isMenuOpen); 
   };
 
   return (
@@ -48,7 +48,7 @@ function Header() {
                   src="/hambergermenu.png"
                   alt="Menu"
                   className="w-8 h-8 cursor-pointer"
-                  onClick={toggleMenu} // Adicionar evento de clique
+                  onClick={toggleMenu} 
                 />
                 {isMenuOpen && (
                   <div className="absolute top-full left-0 right-0 bg-black p-4 flex flex-col gap-2 z-10">
