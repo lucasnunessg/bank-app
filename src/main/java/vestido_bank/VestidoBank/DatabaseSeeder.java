@@ -170,10 +170,9 @@ public class DatabaseSeeder implements CommandLineRunner {
     List<CreditCard> creditCards = new ArrayList<>();
 
     for (Client client : clients) {
-      // Gera valores aleatórios para a fatura aberta e o limite
-      BigDecimal faturaAtual = BigDecimal.valueOf(random.nextDouble() * 1000); // Fatura entre 0 e 1000
-      BigDecimal limite = BigDecimal.valueOf(2000 + random.nextDouble() * 3000); // Limite entre 2000 e 5000
-      LocalDate dataVencimento = LocalDate.now().plusMonths(1); // Vencimento em 1 mês
+      BigDecimal faturaAtual = BigDecimal.valueOf(random.nextDouble() * 1000);
+      BigDecimal limite = BigDecimal.valueOf(2000 + random.nextDouble() * 3000);
+      LocalDate dataVencimento = LocalDate.now().plusMonths(1);
 
       CreditCard creditCard = new CreditCard(
           limite,

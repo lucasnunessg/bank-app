@@ -1,5 +1,6 @@
 package vestido_bank.VestidoBank.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,11 @@ public class CreditCardService {
     creditCard.setClient(null);
     creditCardRepository.delete(creditCard);
     return creditCard;
+  }
+
+  public List<BigDecimal> getFaturaAtual(Long clientId) {
+
+    return creditCardRepository.findFaturasAtuaisByClientId(clientId);
   }
 
 
