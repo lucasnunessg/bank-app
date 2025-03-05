@@ -1,18 +1,23 @@
 package vestido_bank.VestidoBank;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.ContaCorrente;
 import vestido_bank.VestidoBank.Entity.ContaPoupanca;
+import vestido_bank.VestidoBank.Entity.CreditCard;
 import vestido_bank.VestidoBank.Entity.Transaction;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
 import vestido_bank.VestidoBank.Repository.ContaCorrenteRepository;
 import vestido_bank.VestidoBank.Repository.ContaPoupancaRepository;
+import vestido_bank.VestidoBank.Repository.CreditCardRepository;
 import vestido_bank.VestidoBank.Repository.TransactionsRepository;
 
 @Component
@@ -22,16 +27,21 @@ public class DatabaseSeeder implements CommandLineRunner {
   private final ContaCorrenteRepository contaCorrenteRepository;
   private final TransactionsRepository transactionsRepository;
   private final ClientRepository clientRepository;
+  private final CreditCardRepository creditCardRepository;
   private final PasswordEncoder passwordEncoder;
+  private final Random random = new Random();
 
   public DatabaseSeeder(ContaPoupancaRepository contaPoupancaRepository,
       ContaCorrenteRepository contaCorrenteRepository,
       TransactionsRepository transactionsRepository,
-      ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
+      ClientRepository clientRepository,
+      CreditCardRepository creditCardRepository,
+      PasswordEncoder passwordEncoder) {
     this.contaPoupancaRepository = contaPoupancaRepository;
     this.contaCorrenteRepository = contaCorrenteRepository;
     this.transactionsRepository = transactionsRepository;
     this.clientRepository = clientRepository;
+    this.creditCardRepository = creditCardRepository;
     this.passwordEncoder = passwordEncoder;
   }
 
@@ -44,8 +54,11 @@ public class DatabaseSeeder implements CommandLineRunner {
     List<ContaCorrente> contasCorrentes = seedContaCorrente(clients);
     List<ContaPoupanca> contasPoupancas = seedContaPoupanca(clients);
 
-    // Cria transações entre as contas
-    List<Transaction> transactions = seedTransaction(contasCorrentes, contasPoupancas);
+    // Cria cartões de crédito para cada cliente
+    List<CreditCard> creditCards = seedCreditCards(clients);
+
+    // Cria transações entre as contas e com cartões de crédito
+    List<Transaction> transactions = seedTransaction(contasCorrentes, contasPoupancas, creditCards);
   }
 
   private List<Client> seedClient() {
@@ -114,7 +127,6 @@ public class DatabaseSeeder implements CommandLineRunner {
           1000.0f, // Limite
           dataCriacao, // Data de criação específica
           client
-
       );
       contasCorrentes.add(contaCorrente);
     }
@@ -144,20 +156,41 @@ public class DatabaseSeeder implements CommandLineRunner {
       ContaPoupanca contaPoupanca = new ContaPoupanca(
           5000.0f, // Saldo inicial
           0.5f, // Rendimento mensal (0,5%)
-
           dataCriacao, // Data de criação específica
           client
       );
       contaPoupanca.aplicarRendimento();
-      // Não aplica o rendimento aqui
       contasPoupancas.add(contaPoupanca);
     }
 
     return contaPoupancaRepository.saveAll(contasPoupancas);
   }
 
+  private List<CreditCard> seedCreditCards(List<Client> clients) {
+    List<CreditCard> creditCards = new ArrayList<>();
+
+    for (Client client : clients) {
+      // Gera valores aleatórios para a fatura aberta e o limite
+      BigDecimal faturaAtual = BigDecimal.valueOf(random.nextDouble() * 1000); // Fatura entre 0 e 1000
+      BigDecimal limite = BigDecimal.valueOf(2000 + random.nextDouble() * 3000); // Limite entre 2000 e 5000
+      LocalDate dataVencimento = LocalDate.now().plusMonths(1); // Vencimento em 1 mês
+
+      CreditCard creditCard = new CreditCard(
+          limite,
+          faturaAtual,
+          dataVencimento,
+          "active",
+          client
+      );
+      creditCards.add(creditCard);
+    }
+
+    return creditCardRepository.saveAll(creditCards);
+  }
+
   private List<Transaction> seedTransaction(List<ContaCorrente> contasCorrentes,
-      List<ContaPoupanca> contasPoupancas) {
+      List<ContaPoupanca> contasPoupancas,
+      List<CreditCard> creditCards) {
     List<Transaction> transactions = new ArrayList<>();
 
     // Datas de transação simuladas
@@ -175,6 +208,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     for (int i = 0; i < contasCorrentes.size(); i++) {
       ContaCorrente contaCorrenteOrigem = contasCorrentes.get(i);
       ContaPoupanca contaPoupancaOrigem = contasPoupancas.get(i);
+      CreditCard creditCard = creditCards.get(i);
 
       // O índice do cliente de destino é o próximo cliente na lista (circular)
       int j = (i + 1) % contasCorrentes.size();
@@ -212,6 +246,22 @@ public class DatabaseSeeder implements CommandLineRunner {
           contaPoupancaOrigem.getSaldo() - 50.0f // Saldo restante na conta de origem
       );
       transactions.add(transaction2);
+
+      // Transação de compra com cartão de crédito
+      Transaction transaction3 = new Transaction(
+          creditCard.getClient(), // Cliente associado à transação
+          null, // Conta corrente como origem (não se aplica)
+          null, // Conta corrente como destino (não se aplica)
+          creditCard, // Cartão de crédito como origem
+          null, // Cartão de crédito como destino (não se aplica)
+          null, // Conta poupança como destino (não se aplica)
+          null, // Conta poupança como origem (não se aplica)
+          (float) (random.nextDouble() * 500), // Valor da transação (entre 0 e 500)
+          datasTransacao.get(i).plusHours(2), // Data/hora específica (2 horas após a primeira transação)
+          "Compra com cartão de crédito", // Descrição
+          creditCard.getFaturaAtual().floatValue() // Saldo restante na fatura
+      );
+      transactions.add(transaction3);
     }
 
     return transactionsRepository.saveAll(transactions);

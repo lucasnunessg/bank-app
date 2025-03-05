@@ -3,6 +3,7 @@ import api from "../FetchApi";
 import { useAuth } from "../contexts/useAuth";
 
 import { Eye, EyeOff } from "lucide-react";
+import { Rendimento } from "./Rendimento";
 
 interface Transaction {
   valor: number;
@@ -18,7 +19,7 @@ function HomeAuthClient() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
   const [showSaldo, setShowSaldo] = useState(false);
-  const { clientId, name } = useAuth();
+  const { clientId, name, token } = useAuth();
 
 
   useEffect(() => {
@@ -26,7 +27,6 @@ function HomeAuthClient() {
       if (clientId !== null) {
         setLoading(true);
         try {
-          const token = localStorage.getItem("token");
           const response = await api.get(`/conta-poupanca/${clientId}/saldo`, {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -45,7 +45,7 @@ function HomeAuthClient() {
     };
 
     fetchSaldo();
-  }, [clientId]);
+  }, [clientId, token]);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -112,6 +112,9 @@ function HomeAuthClient() {
         )}
       </div>
 
+        <div>
+          <Rendimento />
+        </div>
       <div className="absolute  max-w-[450px] max-h-[650px]  p-[30px] overflow-y-auto custom-scrollbar">
         <h1 className="text-[white] font-[urbanist]">
           Histórico de transações:
