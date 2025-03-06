@@ -89,7 +89,7 @@ public class TransactionsController {
     return ResponseEntity.ok(TransactionDto.fromEntity(createTransaction));
   }
 
-  @PostMapping("/{clientId}/{contaPoupancaId}/{cartaoDeCreditoId}/payments-with-creditcard")
+  @PostMapping("")
   public ResponseEntity<PagamentoFaturaResponse> pagarFaturaComSaldo(@PathVariable Long clientId,
       @PathVariable Long contaPoupancaId, @PathVariable Long cartaoDeCreditoId,
       @RequestBody FaturaRequestDto faturaRequestDto) {
