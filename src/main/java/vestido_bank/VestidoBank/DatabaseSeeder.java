@@ -240,7 +240,8 @@ public class DatabaseSeeder implements CommandLineRunner {
           contaPoupancaDestino, // Conta poupança como destino
           contaPoupancaOrigem, // Conta poupança como origem
           50.0f, // Valor da transação
-          datasTransacao.get(i).plusDays(1), // Data/hora específica (1 dia após a primeira transação)
+          datasTransacao.get(i).plusDays(1),
+          // Data/hora específica (1 dia após a primeira transação)
           "Transferência para outro cliente (poupança)", // Descrição
           contaPoupancaOrigem.getSaldo() - 50.0f // Saldo restante na conta de origem
       );
@@ -256,7 +257,8 @@ public class DatabaseSeeder implements CommandLineRunner {
           null, // Conta poupança como destino (não se aplica)
           null, // Conta poupança como origem (não se aplica)
           (float) (random.nextDouble() * 500), // Valor da transação (entre 0 e 500)
-          datasTransacao.get(i).plusHours(2), // Data/hora específica (2 horas após a primeira transação)
+          datasTransacao.get(i).plusHours(2),
+          // Data/hora específica (2 horas após a primeira transação)
           "Compra com cartão de crédito", // Descrição
           creditCard.getFaturaAtual().floatValue() // Saldo restante na fatura
       );

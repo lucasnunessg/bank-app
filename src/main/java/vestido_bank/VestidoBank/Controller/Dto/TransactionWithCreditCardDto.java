@@ -11,4 +11,5 @@ public record TransactionWithCreditCardDto(
     String descricao,
     BigDecimal faturaAtual
 ) {
+
 }

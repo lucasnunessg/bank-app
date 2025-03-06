@@ -97,7 +97,7 @@ public class CreditCardController {
   }
 
   @GetMapping("/{clientId}/fatura-atual")
-  public ResponseEntity <List<BigDecimal>> getFaturaAtualByClientId(@PathVariable Long clientId) {
+  public ResponseEntity<List<BigDecimal>> getFaturaAtualByClientId(@PathVariable Long clientId) {
     List<BigDecimal> getFatura = creditCardService.getFaturaAtual(clientId);
     return ResponseEntity.ok(getFatura);
   }

@@ -139,9 +139,9 @@ public class TransactionService {
   }
 
 
-
   @Transactional
-  public PagamentoFaturaResponse pagarFaturaComSaldo(Client client, ContaPoupanca contaPoupanca, CreditCard creditCard, float valor, String descricao) {
+  public PagamentoFaturaResponse pagarFaturaComSaldo(Client client, ContaPoupanca contaPoupanca,
+      CreditCard creditCard, float valor, String descricao) {
     if (contaPoupanca.getSaldo() < valor) {
       throw new SaldoInsuficienteException("Saldo insuficiente na conta poupança");
     }

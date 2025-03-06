@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vestido_bank.VestidoBank.Controller.Dto.FaturaRequestDto;
 import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaDto;
 import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaResponse;
 import vestido_bank.VestidoBank.Controller.Dto.TransactionCreateDto;
@@ -88,24 +89,24 @@ public class TransactionsController {
     return ResponseEntity.ok(TransactionDto.fromEntity(createTransaction));
   }
 
-  @PostMapping("/payments-with-creditcard")
-  public ResponseEntity<PagamentoFaturaResponse> pagarFaturaComSaldo(
-      @RequestBody PagamentoFaturaDto pagamentoFaturaDto) {
-    if (pagamentoFaturaDto.valor() <= 0) {
+  @PostMapping("/{clientId}/{contaPoupancaId}/{cartaoDeCreditoId}/payments-with-creditcard")
+  public ResponseEntity<PagamentoFaturaResponse> pagarFaturaComSaldo(@PathVariable Long clientId,
+      @PathVariable Long contaPoupancaId, @PathVariable Long cartaoDeCreditoId,
+      @RequestBody FaturaRequestDto faturaRequestDto) {
+    Client client = clientService.getById(clientId);
+    ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(contaPoupancaId);
+    CreditCard creditCard = creditCardService.findById(cartaoDeCreditoId);
+    if (faturaRequestDto.valor() <= 0) {
       throw new IllegalArgumentException("O valor deve ser positivo.");
     }
 
-
-    Client client = clientService.getById(pagamentoFaturaDto.clientId());
-    ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(pagamentoFaturaDto.contaPoupancaId());
-    CreditCard creditCard = creditCardService.findById(pagamentoFaturaDto.cartaoDeCreditoId());
 
     PagamentoFaturaResponse response = transactionService.pagarFaturaComSaldo(
         client,
         contaPoupanca,
         creditCard,
-        pagamentoFaturaDto.valor(),
-        pagamentoFaturaDto.descricao()
+        faturaRequestDto.valor(),
+        faturaRequestDto.descricao()
     );
 
     return ResponseEntity.ok(response);

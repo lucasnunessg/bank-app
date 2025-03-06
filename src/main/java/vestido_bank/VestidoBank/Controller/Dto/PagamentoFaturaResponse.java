@@ -8,4 +8,5 @@ public record PagamentoFaturaResponse(
     BigDecimal saldoContaPoupanca,
     String mensagem
 ) {
+
 }
