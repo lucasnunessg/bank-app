@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
+import vestido_bank.VestidoBank.Controller.Dto.BuyFaturaResponse;
 import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaResponse;
 import vestido_bank.VestidoBank.Controller.Dto.TransactionWithCreditCardDto;
 import vestido_bank.VestidoBank.Entity.Client;
@@ -20,7 +21,9 @@ import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ConnectionFailedException;
 import vestido_bank.VestidoBank.Exceptions.ContaCorrentNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.ContaPoupancaNotFoundException;
+import vestido_bank.VestidoBank.Exceptions.CreditCardNotFoundExceptions;
 import vestido_bank.VestidoBank.Exceptions.InvalidTransaction;
+import vestido_bank.VestidoBank.Exceptions.LimiteInsuficienteException;
 import vestido_bank.VestidoBank.Exceptions.SaldoInsuficienteException;
 import vestido_bank.VestidoBank.Exceptions.TransactionNotFound;
 import vestido_bank.VestidoBank.Repository.ClientRepository;
@@ -62,6 +65,20 @@ public class TransactionService {
     return transactionsRepository.findByClient_Id(clientId);
   }
 
+  public List<TransactionWithCreditCardDto> getAllTransactionsByClientId(Long clientId) {
+    Optional<Client> client = clientRepository.findById(clientId);
+    if (client.isEmpty()) {
+      throw new ClientNotFoundException("Cliente não encontrado");
+    }
+
+    List<Transaction> transactions = transactionsRepository.findByClient_Id(clientId);
+
+    return transactions.stream()
+        .filter(transaction -> transaction.getCreditCardOrigem() != null || transaction.getCreditCardDestino() != null)
+        .map(this::toTransactionWithCreditCardDto)
+        .collect(Collectors.toList());
+  }
+
   public List<TransactionWithCreditCardDto> getAllTransactionsWithCreditCard() {
     List<Transaction> transactions = creditCardRepository.findAllWithCreditCard();
 
@@ -70,7 +87,12 @@ public class TransactionService {
         .collect(Collectors.toList());
   }
 
+
   private TransactionWithCreditCardDto toTransactionWithCreditCardDto(Transaction transaction) {
+    if (transaction.getCreditCardOrigem() == null && transaction.getCreditCardDestino() == null) {
+      throw new IllegalStateException("Both creditCardOrigem and creditCardDestino are null for transaction with id: " + transaction.getId());
+    }
+
     Long creditCardId = transaction.getCreditCardOrigem() != null
         ? transaction.getCreditCardOrigem().getId()
         : transaction.getCreditCardDestino().getId();
@@ -88,7 +110,6 @@ public class TransactionService {
         faturaAtual
     );
   }
-
 
   public Transaction getTransactionById(Long id) {
     Optional<Transaction> transaction = transactionsRepository.findById(id);
@@ -138,6 +159,41 @@ public class TransactionService {
 
   }
 
+  @Transactional
+  public BuyFaturaResponse buyWithCredit(CreditCard creditCard, float valor) {
+    BigDecimal valorBigDecimal = new BigDecimal(valor);
+
+    if (creditCard.getLimite().compareTo(valorBigDecimal) < 0) {
+      throw new LimiteInsuficienteException("Limite do cartão insuficiente para realizar a compra.");
+    }
+
+    creditCard.setFaturaAtual(creditCard.getFaturaAtual().add(valorBigDecimal));
+    creditCardRepository.save(creditCard);
+
+    Client client = creditCard.getClient();
+
+    Transaction transacao = new Transaction(
+        client,
+        null,
+        null,
+        creditCard,
+        null,
+        null,
+        null,
+        valor,
+        LocalDateTime.now(),
+        "Compra com cartão de crédito",
+        valorBigDecimal.floatValue()
+    );
+    transactionsRepository.save(transacao);
+
+    return new BuyFaturaResponse(
+        creditCard.getId(),
+        creditCard.getFaturaAtual(),
+        "Compra realizada com sucesso!"
+    );
+  }
+
 
   @Transactional
   public PagamentoFaturaResponse pagarFaturaComSaldo(Client client, ContaPoupanca contaPoupanca,
@@ -174,6 +230,8 @@ public class TransactionService {
         "Pagamento realizado com sucesso!"
     );
   }
+
+
 
 
 }

@@ -26,7 +26,7 @@ export function PageFatura(){
   
     try {
       const response = await api.post(
-        `/${clientId}/${contaPoupancaId}/${cartaoDeCreditoId}/payments-with-creditcard`,
+        `/transactions/accounts/${clientId}/${contaPoupancaId}/${cartaoDeCreditoId}/payments-with-creditcard`,
         {
           valor: valorNumerico, 
           descricao,
@@ -54,17 +54,18 @@ export function PageFatura(){
         pagarFaturaComSaldo();
       }}>
                 <div>
-          <label htmlFor="valor">Valor:</label>
+          <label htmlFor="valor" className="text-[white]">Valor:</label>
           <input
             type="number"
             id="valor"
+            className="text-[white]"
             value={valor}
             onChange={handleValor}
             required
           />
         </div>
         <div>
-          <label htmlFor="descricao">Descrição:</label>
+          <label htmlFor="descricao" className="text-[white]">Descrição:</label>
           <input
             type="text"
             id="descricao"
@@ -73,9 +74,9 @@ export function PageFatura(){
             required
           />
         </div>
-        <button type="submit">Pagar Fatura</button>
-      {successMessage && <p>{successMessage}</p>}
-      {error && <p>{error}</p>}
+        <button type="submit" className="text-[white]">Pagar Fatura</button>
+      {successMessage && <p className="text-[green]">{successMessage}</p>}
+      {error && <p className="text-[red]">{error}</p>}
 
       </form>
 

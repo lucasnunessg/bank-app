@@ -240,31 +240,49 @@ public class DatabaseSeeder implements CommandLineRunner {
           contaPoupancaDestino, // Conta poupança como destino
           contaPoupancaOrigem, // Conta poupança como origem
           50.0f, // Valor da transação
-          datasTransacao.get(i).plusDays(1),
-          // Data/hora específica (1 dia após a primeira transação)
+          datasTransacao.get(i).plusDays(1), // Data/hora específica (1 dia após a primeira transação)
           "Transferência para outro cliente (poupança)", // Descrição
           contaPoupancaOrigem.getSaldo() - 50.0f // Saldo restante na conta de origem
       );
       transactions.add(transaction2);
 
-      // Transação de compra com cartão de crédito
-      Transaction transaction3 = new Transaction(
-          creditCard.getClient(), // Cliente associado à transação
-          null, // Conta corrente como origem (não se aplica)
-          null, // Conta corrente como destino (não se aplica)
-          creditCard, // Cartão de crédito como origem
-          null, // Cartão de crédito como destino (não se aplica)
-          null, // Conta poupança como destino (não se aplica)
-          null, // Conta poupança como origem (não se aplica)
-          (float) (random.nextDouble() * 500), // Valor da transação (entre 0 e 500)
-          datasTransacao.get(i).plusHours(2),
-          // Data/hora específica (2 horas após a primeira transação)
-          "Compra com cartão de crédito", // Descrição
-          creditCard.getFaturaAtual().floatValue() // Saldo restante na fatura
+      // Transações fictícias de compras com cartão de crédito
+      List<String> estabelecimentos = List.of(
+          "Supermercado Preço Bom",
+          "Restaurante Sabor da Casa",
+          "Loja de Eletrônicos TechWorld",
+          "Posto de Gasolina Shell",
+          "Livraria Leitura",
+          "Cinema Cineplex",
+          "Loja de Roupas FashionStyle"
       );
-      transactions.add(transaction3);
+
+      for (int k = 0; k < estabelecimentos.size(); k++) {
+        String estabelecimento = estabelecimentos.get(k);
+        float valorCompra = (float) (random.nextDouble() * 200 + 10); // Valor entre 10 e 210
+        LocalDateTime dataCompra = datasTransacao.get(i).plusHours(k + 2); // Horários diferentes
+
+        Transaction transactionCompra = new Transaction(
+            creditCard.getClient(), // Cliente associado à transação
+            null, // Conta corrente como origem (não se aplica)
+            null, // Conta corrente como destino (não se aplica)
+            creditCard, // Cartão de crédito como origem
+            null, // Cartão de crédito como destino (não se aplica)
+            null, // Conta poupança como destino (não se aplica)
+            null, // Conta poupança como origem (não se aplica)
+            valorCompra, // Valor da compra
+            dataCompra, // Data/hora específica
+            "Compra no " + estabelecimento, // Descrição
+            creditCard.getFaturaAtual().floatValue() // Saldo restante na fatura
+        );
+        transactions.add(transactionCompra);
+
+        // Atualiza a fatura do cartão de crédito
+        creditCard.setFaturaAtual(creditCard.getFaturaAtual().add(BigDecimal.valueOf(valorCompra)));
+      }
     }
 
+    // Salva todas as transações no banco de dados
     return transactionsRepository.saveAll(transactions);
   }
 }

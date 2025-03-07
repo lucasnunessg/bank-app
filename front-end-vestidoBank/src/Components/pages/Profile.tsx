@@ -28,7 +28,6 @@ export function Profile() {
         const response = await api.get(`/clients-bank/${clientId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("Resposta da API:", response.data); 
 
         if (response.status === 200) {
           setUser(response.data);

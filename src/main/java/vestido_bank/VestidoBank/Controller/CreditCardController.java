@@ -12,14 +12,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vestido_bank.VestidoBank.Controller.Dto.BuyFaturaResponse;
 import vestido_bank.VestidoBank.Controller.Dto.CreditCardCreateDto;
 import vestido_bank.VestidoBank.Controller.Dto.CreditCardDto;
+import vestido_bank.VestidoBank.Controller.Dto.FaturaRequestDto;
 import vestido_bank.VestidoBank.Entity.Client;
 import vestido_bank.VestidoBank.Entity.CreditCard;
 import vestido_bank.VestidoBank.Exceptions.ClientNotFoundException;
 import vestido_bank.VestidoBank.Exceptions.CreditCardNotFoundExceptions;
 import vestido_bank.VestidoBank.Service.ClientService;
 import vestido_bank.VestidoBank.Service.CreditCardService;
+import vestido_bank.VestidoBank.Service.TransactionService;
 
 @RestController
 @RequestMapping("/credit-card")
@@ -27,11 +30,13 @@ public class CreditCardController {
 
   private CreditCardService creditCardService;
   private ClientService clientService;
+  private TransactionService transactionService;
 
   @Autowired
-  public CreditCardController(CreditCardService creditCardService, ClientService clientService) {
+  public CreditCardController(CreditCardService creditCardService, ClientService clientService, TransactionService transactionService) {
     this.creditCardService = creditCardService;
     this.clientService = clientService;
+    this.transactionService = transactionService;
   }
 
   @GetMapping
@@ -100,6 +105,27 @@ public class CreditCardController {
   public ResponseEntity<List<BigDecimal>> getFaturaAtualByClientId(@PathVariable Long clientId) {
     List<BigDecimal> getFatura = creditCardService.getFaturaAtual(clientId);
     return ResponseEntity.ok(getFatura);
+  }
+
+  @PostMapping("/{clientId}/{cartaoDeCreditoId}/buy-with-credit")
+  public ResponseEntity<BuyFaturaResponse> buyWithCredit(
+      @PathVariable Long clientId,
+      @PathVariable Long cartaoDeCreditoId,
+      @RequestBody FaturaRequestDto faturaRequestDto
+  ) {
+    Client client = clientService.getById(clientId);
+    CreditCard creditCard = creditCardService.findById(cartaoDeCreditoId);
+
+    if (faturaRequestDto.valor() <= 0) {
+      throw new IllegalArgumentException("O valor deve ser positivo.");
+    }
+
+    BuyFaturaResponse response = transactionService.buyWithCredit(
+        creditCard,
+        faturaRequestDto.valor()
+    );
+
+    return ResponseEntity.ok(response);
   }
 
 }

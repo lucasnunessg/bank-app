@@ -18,6 +18,7 @@ import vestido_bank.VestidoBank.Exceptions.DepositInvalid;
 import vestido_bank.VestidoBank.Exceptions.EmailDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.InvalidPassword;
 import vestido_bank.VestidoBank.Exceptions.InvalidTransaction;
+import vestido_bank.VestidoBank.Exceptions.LimiteInsuficienteException;
 import vestido_bank.VestidoBank.Exceptions.NameOrEmailDuplicateException;
 import vestido_bank.VestidoBank.Exceptions.SakeInvalid;
 
@@ -106,6 +107,16 @@ public class GlobalControllerAdvice {
           .append(" ");
     }
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage.toString());
+  }
+
+  @ExceptionHandler(LimiteInsuficienteException.class)
+  public ResponseEntity<String> handleLimiteInsuficiente(LimiteInsuficienteException ex) {
+    return ResponseEntity.badRequest().body(ex.getMessage());
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
+    return ResponseEntity.badRequest().body(ex.getMessage());
   }
 
 }

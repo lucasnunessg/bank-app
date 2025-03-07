@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../FetchApi";
+import { Link } from "react-router-dom";
+
 import { useAuth } from "../contexts/useAuth";
 
 import { Eye, EyeOff } from "lucide-react";
 import { Rendimento } from "./Rendimento";
-import { Fatura } from "./Fatura";
+import { Fatura } from "./FaturaAtual";
 
 interface Transaction {
   valor: number;
@@ -116,6 +118,10 @@ function HomeAuthClient() {
         <div>
           <Rendimento />
           <Fatura />
+          
+          <Link to={"/fatura-details"} className="no-underline">
+            <span className="text-[white]">ver detalhes da fatura</span>
+          </Link>
         </div>
       <div className="absolute  max-w-[450px] max-h-[650px]  p-[30px] overflow-y-auto custom-scrollbar">
         <h1 className="text-[white] font-[urbanist]">

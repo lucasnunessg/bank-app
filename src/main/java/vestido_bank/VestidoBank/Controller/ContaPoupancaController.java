@@ -106,13 +106,15 @@ public class ContaPoupancaController {
   public List<TransferDto> getTransfersSendAccount(@PathVariable Long clientId) {
     Client client = clientService.getById(clientId);
     if (client == null) {
-      throw new ClientNotFoundException("Não encontrado");
+      throw new ClientNotFoundException("Cliente não encontrado");
     }
-    List<Transaction> transaction = transactionService.getAllTransactionsById(clientId);
 
-    return transaction.stream().map(TransferDto::fromTransaction).toList();
+   List<Transaction> transactions = transactionService.getAllTransactionsById(clientId);
+
+    return transactions.stream()
+        .map(TransferDto::fromTransaction)
+        .toList();
   }
-
   @PutMapping("/{contaPoupancaId}/aplicar-rendimento")
   public ResponseEntity<ContaPoupanca> aplicarRendimento(@PathVariable Long contaPoupancaId) {
     ContaPoupanca contaPoupanca = contaPoupancaService.getPoupancaById(contaPoupancaId);

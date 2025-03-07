@@ -11,6 +11,7 @@ import { CreateAccount } from "./Components/pages/CreateAccount";
 import { ResetPassword } from "./Components/pages/ResetPassword";
 import { AccountAnalysis } from "./Components/pages/AccountAnalysis";
 import { Profile } from "./Components/pages/Profile";
+import { PageFatura } from "./Components/pages/PageFatura";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/create-account" element={<CreateAccount />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/analise" element={< AccountAnalysis />} />
+            <Route path="/fatura-details" element={<PageFatura />} />
 
           </Routes>
         </div>

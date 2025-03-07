@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vestido_bank.VestidoBank.Controller.Dto.BuyFaturaResponse;
 import vestido_bank.VestidoBank.Controller.Dto.FaturaRequestDto;
 import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaDto;
 import vestido_bank.VestidoBank.Controller.Dto.PagamentoFaturaResponse;
@@ -89,7 +90,8 @@ public class TransactionsController {
     return ResponseEntity.ok(TransactionDto.fromEntity(createTransaction));
   }
 
-  @PostMapping("")
+
+  @PostMapping("/{clientId}/{contaPoupancaId}/{cartaoDeCreditoId}/payments-with-creditcard")
   public ResponseEntity<PagamentoFaturaResponse> pagarFaturaComSaldo(@PathVariable Long clientId,
       @PathVariable Long contaPoupancaId, @PathVariable Long cartaoDeCreditoId,
       @RequestBody FaturaRequestDto faturaRequestDto) {
@@ -110,6 +112,13 @@ public class TransactionsController {
     );
 
     return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/{clientId}/credit")
+  public ResponseEntity<List<TransactionWithCreditCardDto>> getTransactionsById(@PathVariable Long clientId) throws ClientNotFoundException {
+
+    List<TransactionWithCreditCardDto> transaction = transactionService.getAllTransactionsByClientId(clientId);
+    return ResponseEntity.ok(transaction);
   }
 
   @GetMapping("/with-credit-card")
