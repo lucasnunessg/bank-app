@@ -2,13 +2,26 @@ import { useState } from "react";
 import { useAuth } from "../contexts/useAuth";
 import api from "../FetchApi";
 
+
+
 export function PageFatura(){
+
+  interface Transaction {
+    valor: number;
+    descricao: string;
+    nomeDonoDestino: string;
+    faturaAtual: number;
+    dataHora: string;
+  }
+
   
+
   const { clientId, token } = useAuth();
   const [valor, setValor] = useState("");
   const [descricao, setDescricao] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
+  // const [transactions, setTransactions] = useState<Transaction[]>([]); 
 
   const contaPoupancaId = clientId;
   const cartaoDeCreditoId = clientId;

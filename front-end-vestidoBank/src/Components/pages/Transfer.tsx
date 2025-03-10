@@ -83,7 +83,7 @@ function Transf() {
       {loading ? (
         <p className="text-[fuchsia]">Carregando contas disponíveis...</p>
       ) : (
-        <div className="w-full bg-[#111]  rounded-2xl shadow-lg gap-[20px]">
+        <div className="w-full bg-[#111] rounded-2xl shadow-lg gap-[20px]">
           <label className="text-[white] flex flex-col items-center block mb-2">Lista de contatos:</label>
           <select
             className="w-full p-2 mb-4 rounded-md bg-[#222] text-[fuchsia] border border-[fuchsia]"
