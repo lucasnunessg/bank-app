@@ -16,9 +16,8 @@ import { PageFatura } from "./Components/pages/PageFatura";
 function App() {
   return (
     <AuthProvider>
-      <div className="flex flex-col min-h-screen bg-[#14141F]">
-        <Header />
-        <div className="flex-grow">
+<div className="flex flex-col h-full min-h-screen bg-[#14141F]">        <Header />
+<div className="flex-grow overflow-y-auto">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />

@@ -41,7 +41,7 @@ export function AccountAnalysis() {
         const saldoData = Object.values(saldo.data) as number[];
         const transferDataFormatted = transfers.data.map((item: Transfer) => ({
           valor: item.valor,
-          date: item.date.split('/').reverse().join('-'), // Formato yyyy-mm-dd
+          date: item.date.split('/').reverse().join('-'), 
         }));
 
         setSaldoData(saldoData);
@@ -64,11 +64,11 @@ export function AccountAnalysis() {
     let saldoAtual = saldoData[0]; 
 
     transferData.forEach((transfer) => {
-      saldoAcumulado.push(saldoAtual); 
+      saldoAcumulado.push(Number(saldoAtual.toFixed(2))); 
       saldoAtual -= transfer.valor; 
     });
 
-    saldoAcumulado.push(saldoAtual);
+    saldoAcumulado.push(Number(saldoAtual.toFixed(2)));
 
     return [
       {
@@ -78,7 +78,7 @@ export function AccountAnalysis() {
       },
       {
         name: "Transferências",
-        data: transferData.map((transfer) => transfer.valor),
+        data: transferData.map((transfer) => Number(transfer.valor.toFixed(2))),
         color: "#FF4560",
       },
     ];
@@ -110,13 +110,16 @@ export function AccountAnalysis() {
       title: {
         text: "Valores",
       },
+      labels: {
+        formatter: (val) => val.toFixed(2), 
+      },
     },
     fill: {
       opacity: 1,
     },
     tooltip: {
       y: {
-        formatter: (val) => `R$ ${val}`,
+        formatter: (val) => `R$ ${val.toFixed(2)}`, 
       },
     },
   }), [transferData]);
@@ -124,7 +127,7 @@ export function AccountAnalysis() {
   return (
     <div>
       {isLoading && <p>Carregando dados...</p>}
-      <Chart options={options} series={series} type="bar" height={350} />
+      <Chart options={options} series={series} type="bar" height={250} width={333} />
       {messageError && <p className="text-[red]">{messageError}</p>}
     </div>
   );

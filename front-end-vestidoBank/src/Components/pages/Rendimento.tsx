@@ -10,9 +10,7 @@ export function Rendimento(){
   const { clientId, token } = useAuth();
 
 const contaPoupancaId = clientId;
-console.log(token);
-console.log(clientId);
-console.log(contaPoupancaId);
+
 
 
 
@@ -41,7 +39,7 @@ try{
 
   return (
     <div>
-      <h2 className="text-[white]">Seu total de rendimento até a presente data é:</h2>
+      <h2 className="text-[white]">Total de investimentos:</h2>
         <p className="text-[white]">
           R$ {valor}
         </p>

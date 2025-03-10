@@ -34,11 +34,11 @@ function Header() {
   };
 
   return (
-    <div className="border-b border-[fuchsia] flex flex-row justify-between items-center p-4 relative">
+    <div className="border-b border-[purple] flex flex-row justify-between items-center p-4 relative">
       {isAuthenticated ? (
         <>
           <Link to={"/"} className="no-underline">
-            <span className="text-[fuchsia]">Vestido Bank</span>
+            <span className="text-[purple]">Vestido Bank</span>
           </Link>
 
           <div className="flex items-center gap-4">
@@ -96,7 +96,7 @@ function Header() {
         <>
           <div className="flex items-center gap-[10px]">
             <Link to={"/"} className="no-underline">
-              <span className="text-[fuchsia]">Vestido Bank</span>
+              <span className="text-[purple]">Vestido Bank</span>
             </Link>
 
             {!isMobile && <span className="text-[white]">Atendimento</span>}

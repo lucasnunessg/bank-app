@@ -74,6 +74,7 @@ export function PageFatura(){
   
       if (response.status === 200) {
         setTransactions(response.data);
+        setError("")
       }
     } catch (e) {
       console.error(e);
