@@ -104,14 +104,22 @@ export function AccountAnalysis() {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: transferData.map((item) => item.date), 
+      categories: transferData.map((item) => item.date),
+      labels: {
+        style: {
+          colors: "white", // Altera a cor das legendas das datas para branco
+        },
+      },
     },
     yaxis: {
       title: {
         text: "Valores",
       },
       labels: {
-        formatter: (val) => val.toFixed(2), 
+        formatter: (val) => val.toFixed(2),
+        style: {
+          colors: "white", // Altera a cor das legendas do eixo Y para branco (opcional)
+        },
       },
     },
     fill: {
@@ -119,7 +127,7 @@ export function AccountAnalysis() {
     },
     tooltip: {
       y: {
-        formatter: (val) => `R$ ${val.toFixed(2)}`, 
+        formatter: (val) => `R$ ${val.toFixed(2)}`,
       },
     },
   }), [transferData]);
@@ -128,7 +136,7 @@ export function AccountAnalysis() {
     <div>
       {isLoading && <p>Carregando dados...</p>}
       <Chart options={options} series={series} type="bar" height={250} width={333} />
-      {messageError && <p className="text-[red]">{messageError}</p>}
+      {messageError && <p className="text-[red] flex justify-center">{messageError}</p>}
     </div>
   );
 }

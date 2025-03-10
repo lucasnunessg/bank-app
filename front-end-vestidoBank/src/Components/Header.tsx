@@ -37,7 +37,7 @@ function Header() {
     <div className="border-b border-[purple] flex flex-row justify-between items-center p-4 relative">
       {isAuthenticated ? (
         <>
-          <Link to={"/"} className="no-underline">
+          <Link to={"/home/auth/client"} className="no-underline">
             <span className="text-[purple]">Vestido Bank</span>
           </Link>
 
