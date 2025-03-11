@@ -73,7 +73,11 @@ export function Saque() {
 
   return (
     <div className="flex flex-col items-center  gap-[20px] p-[20px]  rounded-lg shadow-lg">
-      <p className="text-[white]">Saldo atual: R$ {saldo}</p>
+      <div className="flex justify-between items-center gap-[36px]">
+      <p className="text-[white]">Saldo atual: </p>
+      <p className="text-[white]">R$ {saldo}</p>  
+      </div>
+      
 
       <div className="flex items-center gap-2">
         <div className="text-[white] text-[22px] sm:text-[28px] font-bold flex items-center">
@@ -88,7 +92,7 @@ export function Saque() {
         <img
           src="/lapiis.png"
           alt="Ícone"
-          className="w-[10px] h-[20px] sm:w-[30px] sm:h-[50px]"
+          className="w-[18px] h-[20px] sm:w-[30px] sm:h-[50px] flex flex-col"
         />
       </div>
 
@@ -104,10 +108,12 @@ export function Saque() {
         </p>
       )}
 
+
+
      <button
         onClick={sakeMoney}
         disabled={isLoading}
-        className="w-[80px] p-3 rounded-lg bg-[#00E396] text-[white] font-semibold hover:bg-[#00C48C] disabled:bg-[#6B6B8A] disabled:cursor-not-allowed transition-all duration-300"
+        className="w-[80px] p-3 rounded-lg bg-[purple] border solid border-bg-[pink] text-[white] font-semibold hover:bg-[pink] disabled:bg-[#6B6B8A] disabled:cursor-not-allowed transition-all duration-300"
       >
         {isLoading ? "Processando..." : "Sacar dinheiro"}
       </button>
