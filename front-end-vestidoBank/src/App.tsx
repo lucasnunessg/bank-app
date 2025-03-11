@@ -12,6 +12,7 @@ import { ResetPassword } from "./Components/pages/ResetPassword";
 import { AccountAnalysis } from "./Components/pages/AccountAnalysis";
 import { Profile } from "./Components/pages/Profile";
 import { PageFatura } from "./Components/pages/PageFatura";
+import { Saque } from "./Components/pages/Saque";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/analise" element={< AccountAnalysis />} />
             <Route path="/fatura-details" element={<PageFatura />} />
+            <Route path="/sake-money" element={<Saque />} />
 
           </Routes>
         </div>

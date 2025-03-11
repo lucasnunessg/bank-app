@@ -118,7 +118,7 @@ export function PageFatura(){
         </div>
         <button type="submit" className="text-[white]">Pagar Fatura</button>
 
-        <p className="text-[white]">Resumo da fatura:</p>
+        <p className="text-[white]">Gastos com cartão de crédito:</p>
         {transactions.map((transaction) => (
           <div key={transaction.id}>
             <p className="text-[white]">Descrição: {transaction.descricao} </p>

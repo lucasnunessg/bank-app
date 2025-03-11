@@ -23,6 +23,7 @@ function Transf() {
       if (!clientId || !token) return;
       setLoading(true);
 
+
       try {
         const token = localStorage.getItem("token");
         const response = await api.get(
@@ -46,6 +47,8 @@ function Transf() {
   async function handleTransfer() {
     if (!valor || !contaDestinoId || !contaOrigemId || !token) {
       alert("Por favor, selecione um destinatário e informe o valor.");
+      console.log(handleTransfer);
+      
       return;
     }
 

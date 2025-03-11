@@ -45,12 +45,10 @@ function HomeAuthClient() {
 
   return (
     <div className="flex flex-col items-center p-4">
-      {/* Mensagem de boas-vindas */}
       <p className="text-[20px] sm:text-[32px] text-[white] font-urbanist text-center mb-4">
         Seja bem-vindo! {name}
       </p>
 
-      {/* Carregamento ou exibição do saldo */}
       {loading ? (
         <h1 className="text-[white] text-[18px] sm:text-[24px] text-center">
           Carregando...
@@ -63,7 +61,6 @@ function HomeAuthClient() {
         )
       )}
 
-      {/* Botão "Mostrar saldo" */}
       <div className="flex justify-center w-full mb-6">
         <a
           onClick={handleShowSaldo}
@@ -74,7 +71,6 @@ function HomeAuthClient() {
         </a>
       </div>
 
-      {/* Links de Transferência e Extrato */}
       <div className="flex justify-around w-full max-w-[400px] mb-6">
         <Link
           className="no-underline text-[white] flex flex-col items-center"
@@ -102,7 +98,7 @@ function HomeAuthClient() {
 
         <Link
           className="no-underline text-[white] flex flex-col items-center"
-          to={"/fatura-details"}
+          to={"/sake-money"}
         >
           <img
             src="/remove-money.png"
