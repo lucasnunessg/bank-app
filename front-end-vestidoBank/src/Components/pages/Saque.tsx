@@ -73,14 +73,14 @@ export function Saque() {
 
   return (
     <div className="flex flex-col items-center  gap-[20px] p-[20px]  rounded-lg shadow-lg">
-      <div className="flex justify-between items-center gap-[36px]">
+      <div className="flex justify-between items-center p-[16px]">
       <p className="text-[white]">Saldo atual: </p>
       <p className="text-[white]">R$ {saldo}</p>  
       </div>
       
 
       <div className="flex items-center gap-2">
-        <div className="text-[white] text-[22px] sm:text-[28px] font-bold flex items-center">
+        <div className="text-[white] text-[22px] sm:text-[28px] font-bold flex items-center ">
           R${" "}
           <input
             type="text"
@@ -92,7 +92,7 @@ export function Saque() {
         <img
           src="/lapiis.png"
           alt="Ícone"
-          className="w-[18px] h-[20px] sm:w-[30px] sm:h-[50px] flex flex-col"
+          className="w-[18px] h-[20px] sm:w-[30px] sm:h-[50px] p-[16px] flex flex-col"
         />
       </div>
 

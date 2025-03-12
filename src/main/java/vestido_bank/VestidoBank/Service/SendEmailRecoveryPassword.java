@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class SendEmailRecoveryPassword {
 
   private final String username = "lucasnunespacheco@gmail.com";
-  private final String password = "oxtx wtkk bkjn xctt";
+  private final String password = "gzgr nixc chhn ezvz";
 
   public void sendEmail(String to, String subject, String message) {
 

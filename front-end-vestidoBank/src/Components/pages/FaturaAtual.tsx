@@ -41,9 +41,9 @@ const { clientId, token } = useAuth();
     ) : (
       <>
         {fatura.length > 0 && (
-          <div>
-            <p className="text-[white]">Fatura atual:</p>
-            <p className="text-[white]">{fatura[0]}</p>
+          <div className="">
+            <p className="text-[white] flex flex-col items-center">Fatura atual:</p>
+            <p className="text-[white] flex flex-col items-center">{fatura[0]}</p>
           </div>
         )}
         {error && <p className="text-[red]">{error}</p>}

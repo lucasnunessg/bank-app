@@ -85,9 +85,9 @@ export function CreateAccount() {
   };
 
   return (
-    <div className="sm:w-[490px]  h-auto bg-[#14141F] mt-[50px] min-h-screen gap-[10px] flex flex-col items-center justify-center ">
+    <div className="sm:w-[490px]  h-auto bg-[#14141F] mt-[50px] min-h-screen gap-[16px] flex flex-col items-center justify-center ">
       <form
-        className="max-w-[400px] p-[20px] mt-[-200px]"
+        className="max-w-[400px] p-[16px] mt-[-200px]"
         onSubmit={(e) => {
           e.preventDefault();
           handleCreateAccount();
@@ -102,7 +102,7 @@ export function CreateAccount() {
           <hr className="border-t border-[rgb(52,52,68)] flex-grow" />
         </div>
 
-        <div className="space-y-[10px] w-full max-w-sm min-w-[200px]">
+        <div className="space-y-[10px] w-full max-w-sm min-w-[200px] mb-[16px]">
           <input
             type="email"
             placeholder="E-mail"

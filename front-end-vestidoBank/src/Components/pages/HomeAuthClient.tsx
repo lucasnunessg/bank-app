@@ -121,20 +121,17 @@ function HomeAuthClient() {
         </Link>
       </div>
 
-      {/* Mensagem de erro */}
       {error && (
         <div className="text-red-500 text-[14px] sm:text-[16px] text-center mb-4">
           {error}
         </div>
       )}
 
-      {/* Componentes Rendimento e Fatura */}
       <div className="w-full max-w-[600px] mb-6">
         <Rendimento />
         <Fatura />
       </div>
 
-      {/* Link para detalhes da fatura */}
       <div className="text-center mb-6">
         <Link to={"/fatura-details"} className="no-underline">
           <span className="text-[white] text-[14px] sm:text-[16px] hover:text-[#FF00FF] hover:underline transition-all duration-300">
@@ -143,7 +140,6 @@ function HomeAuthClient() {
         </Link>
       </div>
 
-      {/* Análise da conta */}
       <div className="w-full max-w-[600px] mb-6">
         <p className="text-[white] text-[18px] sm:text-[24px] text-center mb-4">
           Análise de sua conta:

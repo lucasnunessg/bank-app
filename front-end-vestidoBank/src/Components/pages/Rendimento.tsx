@@ -38,9 +38,9 @@ try{
   },[contaPoupancaId, token])
 
   return (
-    <div>
-      <h2 className="text-[white]">Total de investimentos:</h2>
-        <p className="text-[white]">
+    <div className="bg-[#1E1E2F]">
+      <h2 className="text-[white] ml-[20px]">Total de investimentos:</h2>
+        <p className="text-[white] ml-[20px]">
           R$ {valor}
         </p>
       {error && <p className="text-[red]">{error}</p>}
